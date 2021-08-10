@@ -1,2 +1,3 @@
-# Maktab 53 Python Django first project
+# Blogify
+## info
 this is Maktab52 Python-Django boot camp first project
