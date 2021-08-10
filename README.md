@@ -2,11 +2,14 @@
 
 ## Introduction
 this is Maktab52 Python-Django boot camp first project
+
+## Instructor
+Mr Farzanmehr
 ## Team members
-* pooria asareha
-* hamidreza mohammadi
-* sina esmaili
-* seyed sina sadeghesfahani
+* Pooria Asareha
+* Hamidreza Mohammadi
+* Sina Esmaili
+* Seyed Sina Sadeghesfahani
 
 ## install project
 
