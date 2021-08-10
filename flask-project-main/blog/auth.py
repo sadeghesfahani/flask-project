@@ -1,4 +1,5 @@
 import functools
+from os import error
 import re
 from typing import NoReturn
 
@@ -11,12 +12,29 @@ from flask import render_template
 from flask import request
 from flask import session
 from flask import url_for
+from flask import Flask
+
+from flask_mail import Mail, Message
 
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
 from blog.db import get_db
 import pymongo
+
+#------- this codes are for send email -----------
+app = Flask(__name__)
+mail= Mail(app)
+
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'sinaesmaili216@gmail.com'
+app.config['MAIL_PASSWORD'] = 'rqbtkkehicgpelrf'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
+#-----------------------------------
+
 
 
 #create database
@@ -62,31 +80,68 @@ def load_logged_in_user():
 
 
 
+
+
+
+
+
+    
+
+#create 100 random code to send to user email to register 
+import random
+code = random.randint(111111,999999)
+
+
 @bp.route("/register", methods=("GET", "POST"))
 def register():
-    if request.method == "GET":
-        return render_template("auth/register.html")
-    else:
+    if request.method == "POST":
         
-        #session["username"] = request.form["username"]
+        #check if username exist
+        if not user_col.find({"username":request.form["username"]}):
+            user_info = {
+                "first_name":request.form["first_name"],
+                "last_name":request.form["last_name"],
+                "username":request.form["username"],
+                "password":generate_password_hash(request.form["password"],"sha256"),
+                "email":request.form["email"],
+                "addres":request.form["address"],
+                "social":[{
+                    "instagram":request.form["instagram"],
+                    "telegram":request.form["telegram"]
+                }]
+            }
+
+            email = request.form.get("email")
+            msg = Message('Register Code', sender='sinaesmaili216@gmail.com', recipients=[email])
+            msg.body = f"yor code for register is {code}"
+            mail.send(msg)
+
+            user_col.insert_one(user_info)
+            flash("your account created successfuly")
+        else:
+            flash("username exist")
+
+
+        return redirect(url_for("auth.get_code"))
+        #return redirect(url_for("index"))
         
-        user_info = {
-            "first_name":request.form["first_name"],
-            "last_name":request.form["last_name"],
-            "username":request.form["username"],
-            "password":generate_password_hash(request.form["password"],"sha256"),
-            "email":request.form["email"],
-            "addres":request.form["address"],
-            "social":[{
-                "instagram":request.form["instagram"],
-                "telegram":request.form["telegram"]
-            }]
-        }
+    return render_template("auth/register.html")
 
-        user_col.insert_one(user_info)
 
-        flash("your account created successfuly")
-        return redirect(url_for("index"))
+
+
+
+#The user does not need to have access to this view address
+@bp.route("/get-code", methods=["GET", "POST"])
+def get_code():
+    if request.method == "POST":
+        usercode = int(request.form["get_code"])
+        if usercode == code:
+            return redirect(url_for("index"))
+        else:
+            error = "inccorect code"
+            flash(error)
+    return render_template("enter_password.html")
 
 
 @bp.route("/login", methods=("GET", "POST"))
@@ -123,8 +178,3 @@ def logout():
 
 
 
-@bp.route("show")
-def show():
-    user = user_col.find({"username":"saman"})
-    user = [i for i in user]
-    return render_template("show.html", user=user)
