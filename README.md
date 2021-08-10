@@ -7,3 +7,7 @@ this is Maktab52 Python-Django boot camp first project
 * hamidreza mohammadi
 * sina esmaili
 * seyed sina sadeghesfahani
+
+## install project
+
+`<addr>` $ pip install -e .
