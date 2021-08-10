@@ -37,4 +37,6 @@ flask run | flask run
 
 ## Project road map
 
-- [ ] phase 1
+- [x] phase 1 (deadline: 22th mordad)
+- [ ] phase 2 (deadline: 29th mordad)
+- [ ] phase 3 (deadline: 5th shahrivar)
