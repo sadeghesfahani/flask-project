@@ -21,5 +21,6 @@ windows | linux
 mkdir myproject | $ mkdir myproject
 cd myproject | $ cd myproject
 py -3 -m venv venv | $ python3 -m venv venv
+venv\Scripts\activate | venv/bin/activate
 
 4. set variables needed to start project with flask
