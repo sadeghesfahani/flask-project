@@ -18,8 +18,8 @@ first thing first, you need to install the project properly and the following st
 
 windows | linux
 --------|----------
-asdf
-asdas | asdad
-asdasd
+> mkdir myproject | $ mkdir myproject
+> cd myproject | $ cd myproject
+> py -3 -m venv venv | $ python3 -m venv venv
 
 4. set variables needed to start project with flask
