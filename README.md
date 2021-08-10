@@ -42,6 +42,12 @@ flask run | flask run
 * database design
 * index page
 * authentication
+Task | in charge
+-----|----------
+index (front) | sadeghesfahani
+index (back)  | Asareha
+authentication (front) | Mohammadi
+authentication (back) | Esmaili
 - [ ] phase 2 (deadline: 29th mordad)
 * create and edit posts
 * unpublish and delete posts
