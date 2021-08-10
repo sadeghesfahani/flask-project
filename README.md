@@ -18,6 +18,8 @@ first thing first, you need to install the project properly and the following st
 
 windows | linux
 --------|----------
-asdf | asdad
+asdf
+asdas | asdad
+asdasd
 
 4. set variables needed to start project with flask
