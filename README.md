@@ -37,4 +37,4 @@ flask run | flask run
 
 ## Project road map
 
-[] phase 1
+[ ] phase 1
