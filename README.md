@@ -43,4 +43,11 @@ flask run | flask run
 * index page
 * authentication
 - [ ] phase 2 (deadline: 29th mordad)
+* create and edit posts
+* unpublish and delete posts
+* category view
+* user panel
 - [ ] phase 3 (deadline: 5th shahrivar)
+* like and dislike
+* search engine
+* debug
