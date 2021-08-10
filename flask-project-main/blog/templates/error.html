@@ -1,0 +1,6 @@
+{% if error %}
+    <h1>{{ error }}</h1>
+{% else %}
+    <a href="{{ url_for('index') }}">Home</a>
+    <h1>loged in</h1>
+{% endif %}

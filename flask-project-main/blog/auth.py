@@ -68,7 +68,7 @@ def register():
         return render_template("auth/register.html")
     else:
         
-        session["username"] = request.form["username"]
+        #session["username"] = request.form["username"]
         
         user_info = {
             "first_name":request.form["first_name"],
@@ -85,31 +85,35 @@ def register():
 
         user_col.insert_one(user_info)
 
-        name= request.form["first_name"]
-
-        return render_template("add_user.html", name=name)
+        flash("your account created successfuly")
+        return redirect(url_for("index"))
 
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
-    if request.method == "GET":
-        return render_template("auth/login.html")
-    else:
-        username = request.form["username_login"]
-        if username in session["username"]:
-            user = user_col.find({"username":username})
-            user = [i for i in user]
+    error = None
+    if request.method == "POST": 
+        error = None
 
+        username = request.form["username_login"]
+        user = user_col.find({"username":username})
+        user = [i for i in user]
+
+        if user:
             if not check_password_hash(user[0]["password"], request.form["password_login"]):
                 error = "inccorect password"
             elif user[0]["username"] != request.form["username_login"]:
                 error = "inccorect username"
             else:
-                error = None
+                session["username"] = request.form["username_login"]
+                return redirect(url_for("index"))
         else:
-            error = "username not avilable"
-        return render_template("login.html", error=error)
-     
+            error = "inccorect username"
+
+        flash(error)
+
+    return render_template("auth/login.html")
+
 
 @bp.route("/logout")
 def logout():
@@ -119,3 +123,8 @@ def logout():
 
 
 
+@bp.route("show")
+def show():
+    user = user_col.find({"username":"saman"})
+    user = [i for i in user]
+    return render_template("show.html", user=user)
