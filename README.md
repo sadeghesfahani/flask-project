@@ -34,3 +34,7 @@ windows | linux
 set FLASK_APP=blog | export FLASK_APP=blog
 set FLASK_ENV=development | export FLASK_ENV=development
 flask run | flask run
+
+## Project road map
+
+[] phase 1
