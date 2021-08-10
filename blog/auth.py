@@ -51,7 +51,7 @@ def register():
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
-    pass
+    return render_template('auth/login.html')
 
 @bp.route("/logout")
 def logout():
