@@ -38,5 +38,9 @@ flask run | flask run
 ## Project road map
 
 - [x] phase 1 (deadline: 22th mordad)
+* github repository
+* database design
+* index page
+* authentication
 - [ ] phase 2 (deadline: 29th mordad)
 - [ ] phase 3 (deadline: 5th shahrivar)
