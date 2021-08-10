@@ -24,7 +24,8 @@ py -3 -m venv venv | $ python3 -m venv venv
 venv\Scripts\activate | venv/bin/activate
 
 4. install flask into your environment by `< pip install flask>` or `< py pip install flask>` or `< python pip install flask>`
-4. set variables needed to start project with flask
+5. set variables needed to start project with flask
+
 windows | linux
 --------|----------
 set FLASK_APP=blog | export FLASK_APP=blog
