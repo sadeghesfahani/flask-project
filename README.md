@@ -42,7 +42,7 @@ flask run | flask run
 * database design
 * index page
 * authentication
-* 
+ 
 Task | in charge
 -----|----------
 index (front) | sadeghesfahani
