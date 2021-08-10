@@ -1,0 +1,16 @@
+
+
+{% block content %}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+{% if name %}
+<h1>your account created successfully!!! {{name}}</h1>
+<a href="{{ url_for('index') }}"></a>
+
+
+
+
+
+{% endif %}
+{% endblock %}
