@@ -14,7 +14,9 @@ first thing first, you need to install the project properly and the following st
 
 1. install the project with powerfull python install packages tool pip.
 `< pip install -e .>`  or `< py -m pip install -e .>` or `< python -m pip install -e .>`
-2. create virtual environment to isolate your project with following steps windows | linux
+2. create virtual environment to isolate your project with following steps 
+
+windows | linux
 --------|----------
 mkdir myproject | $ mkdir myproject
 cd myproject | $ cd myproject
