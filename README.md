@@ -17,6 +17,7 @@ first thing first, you need to install the project properly and the following st
 2. create virtual environment to isolate your project with following steps 
 
 windows | linux
+--------|----------
 asdf | asdad
 
 4. set variables needed to start project with flask
