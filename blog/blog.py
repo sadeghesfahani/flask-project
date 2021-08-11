@@ -19,7 +19,7 @@ UPLOADS_PATH = 'static/media'
 @bp.route("/")
 def index():
     user=g.user
-    return render_template("blog/index.html",user=user)
+    return render_template("blog/index.html",data=get_essentials())
 
 
 
@@ -33,3 +33,8 @@ def user():
     return render_template("blog/user.html")
 
 
+
+def get_essentials():
+    data=dict()
+    data['user']= g.user if g.user else None
+    return data

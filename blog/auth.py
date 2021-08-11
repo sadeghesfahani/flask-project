@@ -90,7 +90,7 @@ def register():
         return redirect(url_for("auth.login"))
         # return redirect(url_for("index"))
 
-    return redirect(url_for('index'))
+    return render_template("auth/login.html", req='register',data=get_essentials())
 
 
 @bp.route("/login", methods=("GET", "POST"))
@@ -111,12 +111,15 @@ def login():
                 session['user_id'] = str(user['_id'])
                 print("session done")
                 return redirect(url_for('index'))
+            else:
+                return render_template("auth/login.html", req='login', data=get_essentials(),
+                                       error=True)
         else:
             error = "loginf failed"
 
-        flash(error)
 
-    return render_template("auth/login.html")
+
+    return render_template("auth/login.html", req='login',data=get_essentials(),error=True if error else False)
 
 
 @bp.route("/logout")
@@ -137,3 +140,9 @@ def check_username():
             return 'ok'
     else:
         return redirect(url_for('index'))
+
+
+def get_essentials():
+    data = dict()
+    data['user'] = g.user if g.user else None
+    return data

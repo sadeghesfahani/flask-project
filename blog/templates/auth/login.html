@@ -2,7 +2,11 @@
 
 {% block content %}
 
-
+    {% if error %}
+    <div class="alert alert-danger position-fixed" role="alert" id="alert">
+        نام کاربری یا کلمه عبور اشتباه است
+    </div>
+    {% endif %}
     <div class="card text-center mx-auto mt-5 mb-5 rounded">
 
 
@@ -11,6 +15,7 @@
 
         <div class="card-body p-0">
             <div class="tab-content">
+
                 <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
 
@@ -132,13 +137,24 @@
             </div>
 
             <ul class="nav justify-content-center nav-fill p-0 m-0" id="myTab" role="tablist">
-                <li class="nav-item border" role="presentation">
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                       aria-controls="home" aria-selected="true">ثبت نام</a>
+                {% if req=='register' %}
+                    <li class="nav-item border table-active" role="presentation">
+
+                        {% else %}
+
+                    <li class="nav-item border" role="presentation">
+                {% endif %}
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                   aria-controls="home" aria-selected="true">ثبت نام</a>
                 </li>
-                <li class="nav-item border table-active" role="presentation">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                       aria-controls="profile" aria-selected="false">ورود</a>
+                {% if req=='login' %}
+                    <li class="nav-item border table-active" role="presentation">
+
+                        {% else %}
+                    <li class="nav-item border" role="presentation">
+                {% endif %}
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
+                   aria-controls="profile" aria-selected="false">ورود</a>
                 </li>
 
             </ul>
@@ -152,19 +168,29 @@
 
                                 $("#username_info").addClass('d-block')
                                 $("#username").addClass('is-invalid')
-                            } else{
+                            } else {
 
-                            $("#username_info").removeClass('d-block')
-                            $("#username").removeClass('is-invalid')
+                                $("#username_info").removeClass('d-block')
+                                $("#username").removeClass('is-invalid')
                                 $("#username").addClass('is-valid')
-                        }}
+                            }
+                        }
                     )
                 })
 
-                $(function () {
-                    $('#myTab li:last-child a').tab('show');
 
-                })
+
+                {% if req=='register' %}
+                    $(function () {
+                        $('#myTab li:first-child a').tab('show');
+
+                    })
+                {% else %}
+                    $(function () {
+                        $('#myTab li:last-child a').tab('show');
+
+                    })
+                {% endif %}
                 $("#myTab li").click(function () {
                     $("#myTab li").removeClass('table-active');
                     $(this).addClass('table-active');
@@ -200,11 +226,13 @@
                         $("#email_info").addClass("d-block")
                         event.preventDefault()
                     }
-                    if($("#username").hasClass('is-invalid')){
+                    if ($("#username").hasClass('is-invalid')) {
                         event.preventDefault()
                     }
 
                 })
+
+                setTimeout( function() { $("#alert").fadeOut(); }, 2000);
             </script>
 
 

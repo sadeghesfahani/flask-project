@@ -27,7 +27,7 @@
 <!--  menu   -->
 
 <nav class="navbar navbar-expand-md navbar-light bg-transparent">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="{{ url_for('index') }}">
         نام وبسایت
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -53,10 +53,38 @@
                     <a class="dropdown-item" href="#">Something else here</a>
                 </div>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#"></a>
+
+{#            <li class="nav-item">#}
+{#                <a class="nav-link" href="#">ورود</a>#}
+{#            </li>#}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="auth" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ناحیه کاربری
+                </a>
+
+                {% if data.user == none %}
+                <div class="dropdown-menu" aria-labelledby="auth">
+
+                    <a class="dropdown-item" href="{{ url_for('auth.login') }}">ورود</a>
+                    <a class="dropdown-item" href="{{ url_for('auth.register') }}">ثبت نام</a>
+
+                </div>
+                {% else %}
+
+                <div class="dropdown-menu" aria-labelledby="auth">
+
+                    <a class="dropdown-item" href="#">پروفایل</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ url_for('auth.logout') }}">خروج</a>
+
+                </div>
+
+                {% endif %}
             </li>
         </ul>
+
+        {{ data.user.first_name }}
         <form class="form-inline my-2 my-lg-0 mr-auto">
             <input class="form-control mr-sm-2" type="search" placeholder="جست و جو" aria-label="جست و جو">
             <button class="btn btn-outline-secondary my-2 my-sm-0 mr-2" type="submit">جست و جو</button>
