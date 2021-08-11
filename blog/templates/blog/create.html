@@ -2,6 +2,7 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static',filename='css/normal.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/create.css') }}">
 {% endblock %}
 
 
@@ -46,24 +47,85 @@
             </form>
 
         </div>
-    <div class="card mt-3">
+        <div class="card mt-3">
 
-        <div class="card-header">
-            <h4>دسته بندی</h4>
-        </div>
-        <div class="card-body">
+            <div class="card-header ">
+                <h4>دسته بندی</h4>
+            </div>
+            <div class="card-body p-0 rounded-0">
 
-        </div>
 
-        <div class="card-footer">
-            <a id="add_category">افزودن جدید</a>
+                <div id="accordion">
+                    <div class="card" rounded-0>
+                        <div class="card-header bg-transparent rounded-0" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
+                                        aria-expanded="true" aria-controls="collapseOne">
+                                    دسته اصلی ۱
+                                </button>
+                            </h5>
+                        </div>
+
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                زیر دسته ۱
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card rounded-0">
+                        <div class="card-header bg-transparent" id="headingTwo">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
+                                        aria-expanded="false" aria-controls="collapseTwo">
+                                    دسته اصلی ۲
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                            <div class="card-body">
+                                زیر دسته ۲
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card rounded-0">
+                        <div class="card-header bg-transparent" id="headingThree">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link collapsed" data-toggle="collapse"
+                                        data-target="#collapseThree" aria-expanded="false"
+                                        aria-controls="collapseThree">
+                                    دسته اصلی ۳
+                                </button>
+                            </h5>
+                        </div>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                             data-parent="#accordion">
+                            <div class="card-body">
+                                زیر دسته ۳
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="card-footer">
+                <a id="add_category">افزودن جدید</a>
+            </div>
         </div>
-    </div>
 
     </div>
 
     <div class="col-12 col-md-9">
-        content
+        <div class="card mt-5">
+            <div class="card-header">
+                محتوای پست
+            </div>
+            <div class="card-body">
+
+            </div>
+        </div>
     </div>
 
 
@@ -73,5 +135,15 @@
 
 
 
+    <script>
+        var toggler = document.getElementsByClassName("caret");
+        var i;
 
+        for (i = 0; i < toggler.length; i++) {
+            toggler[i].addEventListener("click", function () {
+                this.parentElement.querySelector(".nested").classList.toggle("active");
+                this.classList.toggle("caret-down");
+            });
+        }
+    </script>
 {% endblock %}
