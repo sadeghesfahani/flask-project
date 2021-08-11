@@ -1,37 +1,16 @@
 import functools
-import random
 from bson import ObjectId
 from flask import Blueprint
-from flask import flash
 from flask import g
 from flask import redirect
 from flask import render_template
 from flask import request
 from flask import session
 from flask import url_for
-from flask import Flask
-from flask_mail import Mail, Message
 from werkzeug.security import check_password_hash
-from werkzeug.security import generate_password_hash
-from email.message import EmailMessage
-from blog.db import get_db
-import smtplib
+from blog.db import get_db, create_user, User
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
-
-# ------- this codes are for send email -----------
-app = Flask(__name__)
-
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'sinaesmaili216@gmail.com'
-app.config['MAIL_PASSWORD'] = '$eyedsina335099'
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-mail = Mail(app)
-
-
-# -----------------------------------
 
 
 def login_required(view):
@@ -56,70 +35,32 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = get_db().user.find_one({"_id": ObjectId(user_id)})
+        g.user = User.objects(id=ObjectId(user_id))[0]
 
 
 @bp.route("/register", methods=("GET", "POST"))
 def register():
     if request.method == "POST":
-        db = get_db()
-        code = random.randint(111111, 999999)
-        # check if username exist
-        print(db.user.count({"username": request.form["username"]}))
-        if not db.user.count({"username": request.form["username"]}):
-            user_info = {
-                "first_name": request.form["first_name"],
-                "last_name": request.form["last_name"],
-                "username": request.form["username"],
-                "password": generate_password_hash(request.form["password"], "sha256"),
-                "email": request.form["email"],
-                "addres": request.form["address"],
-                "social": [{
-                    "instagram": request.form["instagram"],
-                    "telegram": request.form["telegram"]
-                }],
-                'activated': False,
-                'activation_code': code
-            }
-
-            db.user.insert_one(user_info)
-            email = request.form.get("email")
+        if not User.objects(username=request.form["username"]).count():
+            create_user(request.form["username"], request.form["password"], request.form["first_name"],
+                        request.form["last_name"], request.form["email"], request.form["address"],
+                        request.form["instagram"], request.form["telegram"])
             return redirect(url_for('index'))
-        else:
-            flash("username exist")
-        return redirect(url_for("auth.login"))
-        # return redirect(url_for("index"))
-
-    return render_template("auth/login.html", req='register',data=get_essentials())
+    return render_template("auth/login.html", req='register', data=get_essentials())
 
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
     error = None
     if request.method == "POST":
-        error = None
-        db = get_db()
-        username = request.form["username_login"]
-        user = db.user.find({"username": username})
-        password = request.form['password_login']
-        user = [i for i in user]
-        print(user)
-        if user:
-            user = user[0]
-            if user['username'] == username and check_password_hash(user['password'], password):
-                # print(user['_id'])
-                session['user_id'] = str(user['_id'])
-                print("session done")
-                return redirect(url_for('index'))
-            else:
-                return render_template("auth/login.html", req='login', data=get_essentials(),
-                                       error=True)
+        user = User.objects(username=request.form["username_login"])
+        if user and check_password_hash(user[0].password, request.form['password_login']):
+            session['user_id'] = str(user[0].id)
+            return redirect(url_for('index'))
         else:
-            error = "loginf failed"
-
-
-
-    return render_template("auth/login.html", req='login',data=get_essentials(),error=True if error else False)
+            return render_template("auth/login.html", req='login', data=get_essentials(),
+                                   error=True)
+    return render_template("auth/login.html", req='login', data=get_essentials(), error=True if error else False)
 
 
 @bp.route("/logout")
@@ -132,9 +73,7 @@ def logout():
 @bp.route('/check', methods=("GET", "POST"))
 def check_username():
     if request.method == "POST":
-        username = request.form['username']
-        db = get_db()
-        if db.user.count({'username': username}):
+        if User.objects(username=request.form['username']).count():
             return 'exist'
         else:
             return 'ok'

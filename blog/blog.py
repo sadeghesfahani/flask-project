@@ -30,6 +30,7 @@ def create_post():
 
 @bp.route("/user")
 def user():
+
     return render_template("blog/user.html")
 
 
@@ -38,3 +39,4 @@ def get_essentials():
     data=dict()
     data['user']= g.user if g.user else None
     return data
+
