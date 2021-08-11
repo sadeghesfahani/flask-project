@@ -18,8 +18,8 @@ UPLOADS_PATH = 'static/media'
 
 @bp.route("/")
 def index():
-
-    return render_template("blog/index.html")
+    user=g.user
+    return render_template("blog/index.html",user=user)
 
 
 

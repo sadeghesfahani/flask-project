@@ -14,7 +14,7 @@
                 <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
 
-                    <form class="m-4" method="post">
+                    <form class="m-4" method="post" action="{{ url_for('auth.register') }}">
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
                                 <label for="first_name">نام</label>
@@ -37,7 +37,9 @@
                                 <input type="text" class="form-control" name="username" id="username" value=""
                                        required oninvalid="this.setCustomValidity('لطفا یک نام کاربری انتخاب کنید')"
                                        onchange="this.setCustomValidity('')">
-
+                                <div id="username_info" class="invalid-feedback">
+                                    نام کاربری موجود است
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="password">کلمه عبور</label>
@@ -91,30 +93,24 @@
                 </div>
 
 
-
-
-
-
-
-
-
-
                 <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 
 
-                    <form class="m-4" method="post">
+                    <form class="m-4" method="post" action="{{ url_for('auth.login') }}">
 
                         <div class="form-row">
                             <div class="col-md-6 mb-3">
                                 <label for="username_login">نام کاربری</label>
-                                <input type="text" class="form-control" name="username_login" id="username_login" value=""
+                                <input type="text" class="form-control" name="username_login" id="username_login"
+                                       value=""
                                        required oninvalid="this.setCustomValidity('لطفا یک نام کاربری را وارد کنید')"
                                        onchange="this.setCustomValidity('')">
 
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="password_login">کلمه عبور</label>
-                                <input type="password" class="form-control" id="password_login" name="password_login" value=""
+                                <input type="password" class="form-control" id="password_login" name="password_login"
+                                       value=""
                                        required oninvalid="this.setCustomValidity('لطفا رمز عبور خود را وارد کنید')"
                                        onchange="this.setCustomValidity('')">
                                 <div id="password_info" class="invalid-feedback">
@@ -129,16 +125,6 @@
                         </div>
                         <button id="login" class="btn btn-primary" type="submit">ورود</button>
                     </form>
-
-
-
-
-
-
-
-
-
-
 
 
                 </div>
@@ -159,6 +145,22 @@
 
 
             <script>
+
+                $("#username").change(function () {
+                    $.post("http://127.0.0.1:5000{{ url_for('auth.check_username') }}", {username: $("#username").val()}, function (data) {
+                            if (data == 'exist') {
+
+                                $("#username_info").addClass('d-block')
+                                $("#username").addClass('is-invalid')
+                            } else{
+
+                            $("#username_info").removeClass('d-block')
+                            $("#username").removeClass('is-invalid')
+                                $("#username").addClass('is-valid')
+                        }}
+                    )
+                })
+
                 $(function () {
                     $('#myTab li:last-child a').tab('show');
 
@@ -175,7 +177,6 @@
                 })
 
 
-
                 $("#email").keyup(function () {
                     $("#email").removeClass("is-invalid");
                     $("#email_info").removeClass('d-block');
@@ -188,15 +189,20 @@
                     if (password.length < 7) {
                         $("#password").addClass("is-invalid");
                         $("#password_info").removeClass('d-block');
+                        event.preventDefault()
                     }
                     let email = $("#email").val();
                     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                     if(re.test(email)){
+                    if (re.test(email)) {
 
-                     }else{
-                         $("#email").addClass("is-invalid")
-                         $("#email_info").addClass("d-block")
-                     }
+                    } else {
+                        $("#email").addClass("is-invalid")
+                        $("#email_info").addClass("d-block")
+                        event.preventDefault()
+                    }
+                    if($("#username").hasClass('is-invalid')){
+                        event.preventDefault()
+                    }
 
                 })
             </script>
