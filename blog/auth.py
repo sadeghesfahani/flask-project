@@ -112,7 +112,7 @@ def login():
                 print("session done")
                 return redirect(url_for('index'))
         else:
-            error = "loginf failed"
+            error = "login failed"
 
         flash(error)
 

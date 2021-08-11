@@ -21,8 +21,6 @@ def index():
     user=g.user
     return render_template("blog/index.html",user=user)
 
-
-
 @bp.route("/create")
 def create_post():
     return render_template("blog/create.html")
