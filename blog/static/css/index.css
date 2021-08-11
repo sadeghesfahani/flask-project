@@ -42,3 +42,11 @@ body {
     transform: scale(1.5);
     transition: transform 0.5s, box-shadow 0.5s;
 }
+
+
+.card-normal:hover {
+    box-shadow: 0px 0px 0px 0px gray;
+    transform: scale(1.0);
+    cursor: default;
+
+}
