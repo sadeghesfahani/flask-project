@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/normal.css') }}">
+
+{% endblock %}
+{% block content %}
+
+
+    <div class="col-12 col-md-5 col-xl-4 ">
+        <div class="card mt-5">
+
+            <div class="card-header bg-primary text-center ">
+
+                <img class="card-img-top rounded-circle w-50 mt-3 mb-3"
+                     src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}">
+
+            </div>
+            <div class="card-body">
+                <table class="table table-borderless text-center ">
+                    <thead class=" m-0 p-0">
+                    <tr class="">
+                        <th class="m-0 p-0 ">2</th>
+                        <th class="m-0 p-0">6</th>
+                        <th class="m-0 p-0">10</th>
+                    </tr>
+                    </thead>
+                    <tbody class="m-0 p-0">
+                    <tr>
+                        <td class="m-0 p-0">پست</td>
+                        <td class="m-0 p-0">دنبال کننده</td>
+                        <td class="m-0 p-0">دنبال شده</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="text-center">
+                    <button class="btn btn-primary m-1">دنبال کن</button>
+                    <button class="btn btn-primary  m-1">ارسال پیام</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="card mt-3 text-right">
+
+            <div class="card-body m-0 p-0">
+                <ul class="list-group m-0 p-0">
+                    <li class="list-group-item">اینستاگرام</li>
+                    <li class="list-group-item">تلگرام</li>
+                    <li class="list-group-item">ایمیل</li>
+                    <li class="list-group-item">وبسایت</li>
+
+                </ul>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="col-12 col-md-7 col-xl-8 text-right mt-5">
+        <div class="card ">
+            <div class="card-header border-0 bg-transparent">
+                <img class=" rounded-circle"
+                     src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}" style="width: 8%">
+                <span class=" mr-2">sadeghesfahani.sina</span>
+                <span class="mr-2 mr-3">دنبال شده</span>
+                <div class="float-left">
+                    <span><i class="fa fa-thumbs-down m-1" aria-hidden="true"></i> 25</span>
+                    <span><i class="fa fa-thumbs-up m-1" aria-hidden="true"></i>10</span>
+                </div>
+
+            </div>
+
+            <div class="card-body">
+                <h5>عنوان مطلب</h5>
+                این یک پست آزمایشی برای نمایش در صفحه آزمایشی است
+            </div>
+            <div class="card-footer">
+                <table class="table  mr-4 table-borderless">
+                    <tr>
+                        <th rowspan="3" class="text-center m-0 p-0" style="width: 5%"><img
+                                class=" rounded-circle w-100 m-0"
+                                src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}"
+                        ></th>
+                        <th>sadeghesfahani.sina</th>
+                        <th class="text-left">۵ دقیقه پیش</th>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div id="accordion">
+                                <div class="card border-0">
+                                    <div class="card-header" id="headingOne">
+                                        <h5 class="mb-0">
+                                            <a class="btn  text-right" data-toggle="collapse"
+                                                    data-target="#collapseOne" aria-expanded="true"
+                                                    aria-controls="collapseOne">
+                                                این یک کامنت آزمایشی است که برای نمایش بهتر فرانت اند پروژه تدارک دیده
+                                                شده تا به صورت واقعی بتوان شکل ظاهری سایت را قضاوت نمود
+                                            </a>
+                                        </h5>
+                                    </div>
+
+                                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                         data-parent="#accordion">
+                                        <div class="card-body border-0" style="background-color: rgba(0, 0, 0, 0.03);">
+                                            <table class="table table-borderless">
+                                                <tr>
+                                                    <th style="width: 10%">
+                                                        <img class=" rounded-circle w-100 m-0"
+                                                             src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}">
+                                                    </th>
+                                                    <th class="w-100">
+                                                        <textarea class="w-100" style="resize: none"></textarea>
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </td>
+                    </tr>
+
+
+
+                </table>
+
+
+
+
+                <table class="table  mr-4 table-borderless">
+                    <tr>
+                        <th rowspan="3" class="text-center m-0 p-0" style="width: 5%"><img
+                                class=" rounded-circle w-100 m-0"
+                                src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}"
+                        ></th>
+                        <th>sadeghesfahani.sina</th>
+                        <th class="text-left">۵ دقیقه پیش</th>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div id="accordion">
+                                <div class="card border-0">
+                                    <div class="card-header" id="headingOne">
+                                        <h5 class="mb-0">
+                                            <a class="btn  text-right" data-toggle="collapse"
+                                                    data-target="#collapseTwo" aria-expanded="true"
+                                                    aria-controls="collapseTwo">
+                                                این یک کامنت آزمایشی است که برای نمایش بهتر فرانت اند پروژه تدارک دیده
+                                                شده تا به صورت واقعی بتوان شکل ظاهری سایت را قضاوت نمود
+                                            </a>
+                                        </h5>
+                                    </div>
+
+                                    <div id="collapseTwo" class="collapse show" aria-labelledby="headingOne"
+                                         data-parent="#accordion">
+                                        <div class="card-body border-0" style="background-color: rgba(0, 0, 0, 0.03);">
+                                            <table class="table table-borderless">
+                                                <tr>
+                                                    <th style="width: 10%">
+                                                        <img class=" rounded-circle w-100 m-0"
+                                                             src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}">
+                                                    </th>
+                                                    <th class="w-100">
+                                                        <textarea class="w-100" style="resize: none"></textarea>
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </td>
+                    </tr>
+
+
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

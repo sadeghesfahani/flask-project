@@ -26,3 +26,10 @@ def index():
 @bp.route("/create")
 def create_post():
     return render_template("blog/create.html")
+
+
+@bp.route("/user")
+def user():
+    return render_template("blog/user.html")
+
+
