@@ -22,3 +22,7 @@ def index():
     return render_template("blog/index.html")
 
 
+
+@bp.route("/create")
+def create_post():
+    return render_template("blog/create.html")

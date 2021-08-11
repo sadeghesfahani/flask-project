@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/normal.css') }}">
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="col-12 col-md-3 text-right ">
+        <div class="card mt-5">
+            <div class="card-header">
+                <h5>انتشار</h5>
+            </div>
+            <form>
+                <div class="card-body">
+
+                    <div class="form-row">
+                        <label for="publish" class="mr-2 ml-3"> وضعیت انتشار </label>
+                        <input type="checkbox" id="publish" name="publish">
+                    </div>
+                    <div class="form-row">
+                        <label for="slider_status" class="mr-2 ml-3">نمایش در اسلایدر</label>
+                        <input type="checkbox" id="slider_status" name="slider_status">
+                    </div>
+
+                </div>
+                <div class="card-footer">
+
+                    <input type="submit" class="btn btn-primary" value="به روز رسانی">
+                    <input type="submit" class="btn btn-danger mr-2" value="حذف">
+                </div>
+            </form>
+
+        </div>
+
+        <div class="card mt-3">
+            <img class="card-img-top" src="{{ url_for('static',filename='media/post/0.Cover_.Zimmer-768x488.jpg') }}">
+            <form>
+
+                <div class="card-footer">
+
+                    <input type="submit" class="btn btn-primary" value="به روز رسانی">
+                    <input type="submit" class="btn btn-danger mr-2" value="حذف">
+                </div>
+            </form>
+
+        </div>
+    <div class="card mt-3">
+
+        <div class="card-header">
+            <h4>دسته بندی</h4>
+        </div>
+        <div class="card-body">
+
+        </div>
+
+        <div class="card-footer">
+            <a id="add_category">افزودن جدید</a>
+        </div>
+    </div>
+
+    </div>
+
+    <div class="col-12 col-md-9">
+        content
+    </div>
+
+
+
+
+
+
+
+
+
+{% endblock %}
