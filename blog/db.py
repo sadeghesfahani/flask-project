@@ -52,7 +52,8 @@ def create_user(username, password, first_name, last_name, email, address=None, 
 class Category(Document):
     title = StringField(max_length=50)
     description = StringField(max_length=250)
-    parent = ListField(ReferenceField('self'))
+    child = ListField(ReferenceField('self'))
+    parent = ReferenceField('self')
 
 
 class Comment(EmbeddedDocument):

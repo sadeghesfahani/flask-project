@@ -52,66 +52,49 @@
             <div class="card-header ">
                 <h4>دسته بندی</h4>
             </div>
-            <div class="card-body p-0 rounded-0">
+            <div class="card-body p-0 rounded-0" id="card_body">
 
 
                 <div id="accordion">
-                    <div class="card" rounded-0>
-                        <div class="card-header bg-transparent rounded-0" id="headingOne">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne"
-                                        aria-expanded="true" aria-controls="collapseOne">
-                                    دسته اصلی ۱
-                                </button>
-                            </h5>
-                        </div>
+                    <div class="card" rounded-0 id="must_add_here">
+                        {% for category in data.category %}
+                            {% if category.parent == None %}
 
-                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                             data-parent="#accordion">
-                            <div class="card-body">
-                                زیر دسته ۱
-                            </div>
-                        </div>
+                                <div class="card-header bg-transparent rounded-0" id="headingOne{{ loop.index0 }}">
+                                    <h5 class="mb-0">
+                                        <input type="checkbox" value="{{ category.id }}">
+                                        <button class="btn btn-link" data-toggle="collapse"
+                                                data-target="#collapseOne{{ loop.index0 }}"
+                                                aria-expanded="true" aria-controls="collapseOne{{ loop.index0 }}">
+                                            {{ category.title }}
+                                        </button>
+
+                                    </h5>
+                                    <div id="collapseOne{{ loop.index0 }}" class="collapse"
+                                         aria-labelledby="headingOne{{ loop.index0 }}"
+                                         data-parent="#accordion">
+                                        <div class="card-body">
+                                            <ul id="{{ category.id }}">
+                                                {% for child in category.child %}
+                                                    <li><input type="checkbox" value="{{ child.id }}"
+                                                               class="ml-3">{{ child.title }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+
                     </div>
-                    <div class="card rounded-0">
-                        <div class="card-header bg-transparent" id="headingTwo">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo"
-                                        aria-expanded="false" aria-controls="collapseTwo">
-                                    دسته اصلی ۲
-                                </button>
-                            </h5>
-                        </div>
-                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                            <div class="card-body">
-                                زیر دسته ۲
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card rounded-0">
-                        <div class="card-header bg-transparent" id="headingThree">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link collapsed" data-toggle="collapse"
-                                        data-target="#collapseThree" aria-expanded="false"
-                                        aria-controls="collapseThree">
-                                    دسته اصلی ۳
-                                </button>
-                            </h5>
-                        </div>
-                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
-                             data-parent="#accordion">
-                            <div class="card-body">
-                                زیر دسته ۳
-                            </div>
-                        </div>
-                    </div>
+
+
                 </div>
-
-
             </div>
-
-            <div class="card-footer">
-                <a id="add_category">افزودن جدید</a>
+            <div class="card-footer" id="add_category_parent">
+                <a id="add_category" onclick="add_category()" class="alert-link" style="cursor: pointer">افزودن
+                    جدید</a>
             </div>
         </div>
 
@@ -129,12 +112,6 @@
     </div>
 
 
-
-
-
-
-
-
     <script>
         var toggler = document.getElementsByClassName("caret");
         var i;
@@ -144,6 +121,136 @@
                 this.parentElement.querySelector(".nested").classList.toggle("active");
                 this.classList.toggle("caret-down");
             });
+        }
+        let category_parent = $("#add_category_parent").clone()
+
+        function add_category() {
+
+
+            $.get("http://127.0.0.1:5000{{ url_for('blog.category_ajax') }}", function (data) {
+                let form = document.createElement('form')
+                let form_div = document.createElement('div')
+                form_div.classList += 'form-group'
+                let elem_select = document.createElement('select')
+                elem_select.classList += 'form-control'
+                elem_select.id = "add_category_parent_id"
+                let counter = 0
+                let no_parent = document.createElement('option')
+                elem_select.appendChild(no_parent)
+                no_parent.text = 'بدون والد'
+                no_parent.value = 'بدون والد'
+                for (category of data['category']) {
+                    console.log(category)
+                    if (category[2] == false) {
+                        let elem = []
+                        elem[counter] = document.createElement('option')
+                        elem[counter].text = category[1]
+                        elem[counter].value = category[0]
+                        elem_select.appendChild(elem[counter])
+
+                        counter++
+
+                    }
+                }
+
+
+                let elem_text = document.createElement('input')
+                elem_text.type = 'text'
+                elem_text.id = 'add_category_text'
+                elem_text.classList += 'form-control'
+                let elem_button = document.createElement('button')
+                elem_button.setAttribute('onClick', "add()")
+                elem_button.textContent = "افزودن"
+                elem_button.id = 'add_category_button'
+                elem_button.classList += 'btn btn-primary mr-2 mt-2'
+
+
+                let elem_button_cancel = document.createElement('button')
+                elem_button_cancel.setAttribute('onClick', "cancel()")
+                elem_button_cancel.textContent = "انصراف"
+                elem_button_cancel.id = 'add_category_button_cancel'
+                elem_button_cancel.classList += 'btn btn-danger mr-2 mt-2'
+
+
+                form_div.appendChild(elem_select)
+                form_div.appendChild(elem_text)
+                form_div.appendChild(elem_button)
+                form_div.appendChild(elem_button_cancel)
+                form.appendChild(form_div)
+
+                $("#add_category_parent").append(form)
+                {#$("#add_category_parent").append(elem_button)#}
+                $("#add_category").addClass('d-none')
+
+            })
+
+
+            let categories = []
+
+
+            console.log(categories)
+
+
+        }
+
+
+        function add() {
+            let selec = document.getElementById("add_category_parent_id")
+            event.preventDefault()
+            let text = $("#add_category_text").val()
+            if ($("#add_category_text").val()) {
+                $.post("http://127.0.0.1:5000{{ url_for('blog.category_add_ajax') }}", {
+                    "text": $("#add_category_text").val(),
+                    "parent": selec.value
+                }, function (data) {
+
+                    if (selec.value == "بدون والد") {
+                        let counter = 250
+
+                        let element_to_add = `<div class="card-header bg-transparent rounded-0" id="headingOne${counter}">
+                                    <h5 class="mb-0">
+                                        <input type="checkbox" value="${data["self"]}">
+                                        <button class="btn btn-link" data-toggle="collapse"
+                                                data-target="#collapseOne${counter}"
+                                                aria-expanded="true" aria-controls="collapseOne${counter}">
+                                            ${text}
+                                        </button>
+
+                                    </h5>
+                                    <div id="collapseOne${counter}" class="collapse"
+                                         aria-labelledby="headingOne${counter}"
+                                         data-parent="#accordion">
+                                        <div class="card-body">
+                                            <ul id=${data["self"]}>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>`
+                        $("#must_add_here").append(element_to_add)
+                        counter++
+                    } else {
+                        let inp = document.createElement("input")
+                        inp.value = data["self"];
+                        inp.type = 'checkbox';
+                        inp.classList += "ml-3";
+
+                        let li = document.createElement("li")
+                        li.innerText = text
+                        li.prepend(inp)
+
+                        $(`#${selec.value}`).append(li)
+                    }
+
+
+                })
+            }
+            $("#add_category_parent").remove()
+            $("#card_body").append(category_parent)
+        }
+
+        function cancel() {
+            $("#add_category_parent").remove()
+            $("#card_body").append(category_parent)
         }
     </script>
 {% endblock %}
