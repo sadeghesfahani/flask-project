@@ -92,7 +92,7 @@
 
                 </div>
             </div>
-            <div class="card-footer" id="add_category_parent">
+            <div class="card-footer add_category_parent" >
                 <a id="add_category" onclick="add_category()" class="alert-link" style="cursor: pointer">افزودن
                     جدید</a>
             </div>
@@ -122,7 +122,7 @@
                 this.classList.toggle("caret-down");
             });
         }
-        let category_parent = $("#add_category_parent").clone()
+        let category_parent = $(".add_category_parent").clone()
 
         function add_category() {
 
@@ -178,7 +178,7 @@
                 form_div.appendChild(elem_button_cancel)
                 form.appendChild(form_div)
 
-                $("#add_category_parent").append(form)
+                $(".add_category_parent").append(form)
                 {#$("#add_category_parent").append(elem_button)#}
                 $("#add_category").addClass('d-none')
 
@@ -228,6 +228,7 @@
                                 </div>`
                         $("#must_add_here").append(element_to_add)
                         counter++
+
                     } else {
                         let inp = document.createElement("input")
                         inp.value = data["self"];
@@ -239,18 +240,34 @@
                         li.prepend(inp)
 
                         $(`#${selec.value}`).append(li)
+
                     }
 
 
                 })
             }
-            $("#add_category_parent").remove()
-            $("#card_body").append(category_parent)
+
+            {#$("#add_category_parent").remove()#}
+            let element_to_delete = document.getElementsByClassName('add_category_parent')[0]
+            element_to_delete.remove()
+            let element_to_add = `<div class="card-footer add_category_parent" >
+                <a id="add_category" onclick="add_category()" class="alert-link" style="cursor: pointer">افزودن
+                    جدید</a>
+            </div>`
+            $("#accordion").append(element_to_add)
         }
 
         function cancel() {
-            $("#add_category_parent").remove()
-            $("#card_body").append(category_parent)
+            event.preventDefault()
+            {#$(".add_category_parent").remove()#}
+            let element_to_delete = document.getElementsByClassName('add_category_parent')[0]
+            element_to_delete.remove()
+            let element_to_add = `<div class="card-footer add_category_parent" >
+                <a id="add_category" onclick="add_category()" class="alert-link" style="cursor: pointer">افزودن
+                    جدید</a>
+            </div>`
+            $("#accordion").append(element_to_add)
+
         }
     </script>
 {% endblock %}
