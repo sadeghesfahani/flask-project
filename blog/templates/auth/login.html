@@ -1,223 +1,83 @@
 {% extends 'base.html' %}
-
 {% block content %}
 
+<div class="card text-center mx-auto mt-5 mb-5 rounded">
 
-    <div class="card text-center mx-auto mt-5 mb-5 rounded">
-
-
-        <img class="card-img  w-25 d-block h-auto rounded-circle mx-auto mt-3"
-             src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}" alt="Card image cap">
-
-        <div class="card-body p-0">
-            <div class="tab-content">
-                <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+    <div class="card-body">
+        <div class="tab-content">
+            <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
 
 
-                    <form class="m-4" method="post" action="{{ url_for('auth.register') }}">
-                        <div class="form-row">
-                            <div class="col-md-6 mb-3">
-                                <label for="first_name">نام</label>
-                                <input type="text" class="form-control" name="first_name" id="first_name" value=""
-                                       oninvalid="this.setCustomValidity('لطفا نام خود را وارد کنید')" required
-                                       onchange="this.setCustomValidity('')">
+                <form class="m-4" method="post" action="{{ url_for('auth.register') }}">
 
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="last_name">نام خانوادگی</label>
-                                <input type="text" class="form-control" id="last_name" name="last_name" value=""
-                                       required oninvalid="this.setCustomValidity('لطفا نام خانوادگی خود را وارد کنید')"
-                                       onchange="this.setCustomValidity('')">
-
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username">نام کاربری</label>
+                            <input type="text" class="form-control" name="username" id="username" value=""
+                                   required oninvalid="this.setCustomValidity('لطفا یک نام کاربری انتخاب کنید')"
+                                   onchange="this.setCustomValidity('')">
+                            <div id="username_info" class="invalid-feedback">
+                                نام کاربری موجود است
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="col-md-6 mb-3">
-                                <label for="username">نام کاربری</label>
-                                <input type="text" class="form-control" name="username" id="username" value=""
-                                       required oninvalid="this.setCustomValidity('لطفا یک نام کاربری انتخاب کنید')"
-                                       onchange="this.setCustomValidity('')">
-                                <div id="username_info" class="invalid-feedback">
-                                    نام کاربری موجود است
-                                </div>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="password">کلمه عبور</label>
-                                <input type="password" class="form-control" id="password" name="password" value=""
-                                       required oninvalid="this.setCustomValidity('لطفا یک رمز عبور انتخواب کنید')"
-                                       onchange="this.setCustomValidity('')">
-                                <div id="password_info" class="invalid-feedback">
-                                    حداقل ۷ کارکتر
-                                </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="password">کلمه عبور</label>
+                            <input type="password" class="form-control" id="password" name="password" value=""
+                                   required oninvalid="this.setCustomValidity('لطفا یک رمز عبور انتخواب کنید')"
+                                   onchange="this.setCustomValidity('')">
+                            <div id="password_info" class="invalid-feedback">
+                                حداقل ۷ کارکتر
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="col-12 mb-3">
-                                <label for="email">ایمیل</label>
-                                <input type="text" class="form-control" id="email" name="email" value=""
-                                       required oninvalid="this.setCustomValidity('لطفا ایمیل خود را وارد کنید')"
-                                       onchange="this.setCustomValidity('')">
-                                <div id="email_info" class="invalid-feedback">
-                                    لطفا یک ایمیل معتبر وارد کنید
-                                </div>
-                            </div>
+                    </div>
 
-                        </div>
-                        <div class="form-row">
-                            <div class="col-md-6 mb-3">
-                                <label for="address">آدرس</label>
-                                <input type="text" class="form-control" id="address" name="address"
-                                       aria-describedby="validationServer03Feedback">
+                    <div class="form-group">
 
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="instagram">اینستاگرام</label>
-                                <input type="text" class="form-control" id="instagram" name="instagram"
-                                       aria-describedby="validationServer03Feedback">
+                    </div>
+                    <a class="" href="#"> فراموشی رمز عبور</a><br><br>
+                    <button id="logining" class="btn btn-primary" type="submit">ورود</button>
+                    <a id="register" class="btn btn-primary" href="http://127.0.0.1:5000/auth/register">ثبت نام</a>
+                </form>
 
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="telegram">تلگرام</label>
-                                <input type="text" class="form-control" id="telegram" name="telegram"
-                                       aria-describedby="validationServer05Feedback">
-
-                            </div>
-                        </div>
-                        <div class="form-group">
-
-                        </div>
-                        <button id="register" class="btn btn-primary" type="submit">ثبت نام</button>
-                    </form>
-
-
-                </div>
-
-
-                <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-
-
-                    <form class="m-4" method="post" action="{{ url_for('auth.login') }}">
-
-                        <div class="form-row">
-                            <div class="col-md-6 mb-3">
-                                <label for="username_login">نام کاربری</label>
-                                <input type="text" class="form-control" name="username_login" id="username_login"
-                                       value=""
-                                       required oninvalid="this.setCustomValidity('لطفا یک نام کاربری را وارد کنید')"
-                                       onchange="this.setCustomValidity('')">
-
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="password_login">کلمه عبور</label>
-                                <input type="password" class="form-control" id="password_login" name="password_login"
-                                       value=""
-                                       required oninvalid="this.setCustomValidity('لطفا رمز عبور خود را وارد کنید')"
-                                       onchange="this.setCustomValidity('')">
-                                <div id="password_info" class="invalid-feedback">
-                                    حداقل ۷ کارکتر
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="form-group">
-                            <a class="" href="#"> فراموشی رمز عبور</a>
-                        </div>
-                        <button id="login" class="btn btn-primary" type="submit">ورود</button>
-                    </form>
-
-
-                </div>
 
             </div>
 
-            <ul class="nav justify-content-center nav-fill p-0 m-0" id="myTab" role="tablist">
-                <li class="nav-item border" role="presentation">
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                       aria-controls="home" aria-selected="true">ثبت نام</a>
-                </li>
-                <li class="nav-item border table-active" role="presentation">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                       aria-controls="profile" aria-selected="false">ورود</a>
-                </li>
 
-            </ul>
+            <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 
 
-            <script>
+                <form class="m-4" method="post" action="{{ url_for('auth.login') }}">
 
-                $("#username").change(function () {
-                    $.post("http://127.0.0.1:5000{{ url_for('auth.check_username') }}", {username: $("#username").val()}, function (data) {
-                            if (data == 'exist') {
+                    <div class="form-row">
+                        <div class="col-md-6 mb-3">
+                            <label for="username_login">نام کاربری</label>
+                            <input type="text" class="form-control" name="username_login" id="username_login"
+                                   value=""
+                                   required oninvalid="this.setCustomValidity('لطفا یک نام کاربری را وارد کنید')"
+                                   onchange="this.setCustomValidity('')">
 
-                                $("#username_info").addClass('d-block')
-                                $("#username").addClass('is-invalid')
-                            } else{
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="password_login">کلمه عبور</label>
+                            <input type="password" class="form-control" id="password_login" name="password_login"
+                                   value=""
+                                   required oninvalid="this.setCustomValidity('لطفا رمز عبور خود را وارد کنید')"
+                                   onchange="this.setCustomValidity('')">
+                            <div id="password_info" class="invalid-feedback">
+                                حداقل ۷ کارکتر
+                            </div>
+                        </div>
+                    </div>
 
-                            $("#username_info").removeClass('d-block')
-                            $("#username").removeClass('is-invalid')
-                                $("#username").addClass('is-valid')
-                        }}
-                    )
-                })
+                    <div class="form-group">
+                        <a class="" href="#"> فراموشی رمز عبور</a>
+                    </div>
+                    <button id="login" class="btn btn-primary" type="submit">ورود</button>
+                </form>
 
-                $(function () {
-                    $('#myTab li:last-child a').tab('show');
-
-                })
-                $("#myTab li").click(function () {
-                    $("#myTab li").removeClass('table-active');
-                    $(this).addClass('table-active');
-                })
-
-                $("#password").keyup(function () {
-                    $("#password").removeClass("is-invalid");
-                    $("#password_info").removeClass('d-block');
-
-                })
-
-
-                $("#email").keyup(function () {
-                    $("#email").removeClass("is-invalid");
-                    $("#email_info").removeClass('d-block');
-
-                })
-
-                $("#register").click(function () {
-                    let password = $("#password").val()
-
-                    if (password.length < 7) {
-                        $("#password").addClass("is-invalid");
-                        $("#password_info").removeClass('d-block');
-                        event.preventDefault()
-                    }
-                    let email = $("#email").val();
-                    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                    if (re.test(email)) {
-
-                    } else {
-                        $("#email").addClass("is-invalid")
-                        $("#email_info").addClass("d-block")
-                        event.preventDefault()
-                    }
-                    if($("#username").hasClass('is-invalid')){
-                        event.preventDefault()
-                    }
-
-                })
-            </script>
-
+            </div>
 
         </div>
+
     </div>
-
-    {#  <form method="post">#}
-    {#    <label for="username">Username</label>#}
-    {#    <input name="username" id="username" required>#}
-    {#    <label for="password">Password</label>#}
-    {#    <input type="password" name="password" id="password" required>#}
-    {#    <input type="submit" value="Log In">#}
-    {#  </form>#}
-
-
-{% endblock %}
+</div>

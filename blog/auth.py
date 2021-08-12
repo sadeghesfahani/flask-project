@@ -90,7 +90,8 @@ def register():
         return redirect(url_for("auth.login"))
         # return redirect(url_for("index"))
 
-    return redirect(url_for('index'))
+    return render_template("auth/register.html")
+    # return redirect(url_for('index'))
 
 
 @bp.route("/login", methods=("GET", "POST"))
