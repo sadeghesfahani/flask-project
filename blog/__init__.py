@@ -10,7 +10,7 @@ def create_app(test_config=None):
         # a default secret that should be overridden by instance config
         SECRET_KEY="dev",
         # store the database in the instance folder
-        DATABASE=os.path.join(app.instance_path, "blog.sqlite"),
+        # DATABASE=os.path.join(app.instance_path, "blog.sqlite"),
     )
 
     if test_config is None:
@@ -32,19 +32,18 @@ def create_app(test_config=None):
 
     # register the database commands
     from blog import db
-
-
+    db.init_app(app)
 
     # apply the blueprints to the app
-    from blog import auth, blog
-
+    from . import auth
     app.register_blueprint(auth.bp)
-    app.register_blueprint(blog.bp)
 
+    from . import blog
+    app.register_blueprint(blog.bp)
+    app.add_url_rule("/", endpoint="index")
     # make url_for('index') == url_for('blog.index')
     # in another app, you might define a separate main index here with
     # app.route, while giving the blog blueprint a url_prefix, but for
     # the tutorial the blog will be the main index
-    app.add_url_rule("/", endpoint="index")
 
     return app

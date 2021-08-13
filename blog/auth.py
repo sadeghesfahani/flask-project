@@ -1,14 +1,13 @@
 import functools
+
+from flask import (
+    current_app, Flask, Blueprint, flash, g, redirect, render_template, request, session, url_for
+)
+from werkzeug.security import check_password_hash, generate_password_hash
+
+from blog.db import get_db, User, create_user
+
 from bson import ObjectId
-from flask import Blueprint
-from flask import g
-from flask import redirect
-from flask import render_template
-from flask import request
-from flask import session
-from flask import url_for
-from werkzeug.security import check_password_hash
-from blog.db import get_db, create_user, User
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -79,9 +78,3 @@ def check_username():
             return 'ok'
     else:
         return redirect(url_for('index'))
-
-
-def get_essentials():
-    data = dict()
-    data['user'] = g.user if g.user else None
-    return data

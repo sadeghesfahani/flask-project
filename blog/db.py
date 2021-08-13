@@ -11,14 +11,40 @@ def get_db():
     again.
     """
     client = MongoClient('localhost', 27017)
+    connect('blog')
     if "db" not in g:
         g.db = client.blog
     return g.db
 
 
-connect('blog')
+def close_db(e=None):
+    disconnect('blog')
+
+# ------------- Looks like MongoDB does not require initialization -------------
+
+# def init_db():
+#     db = get_db()
+#
+#     with current_app.open_resource('schema.sql') as f:
+#         db.executescript(f.read().decode('utf8'))
+#
+#
+# @click.command('init-db')
+# @with_appcontext
+# def init_db_command():
+#     """Clear the existing data and create new tables."""
+#     init_db()
+#     click.echo('Initialized the database.')
+
+# -------------------------------------------------------------------------------
 
 
+def init_app(app):
+    app.teardown_appcontext(close_db)
+#     app.cli.add_command(init_db_command)
+
+
+# Mongoengine ORM
 class User(Document):
     username = StringField(required=True)
     password = StringField(required=True)

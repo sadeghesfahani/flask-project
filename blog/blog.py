@@ -1,16 +1,14 @@
 from os.path import join, dirname, realpath
 from bson import ObjectId, BSONOBJ
-from flask import Blueprint, session
-from flask import flash
-from flask import g
-from flask import redirect
-from flask import render_template
-from flask import request
-from flask import url_for
+from datetime import datetime
+from pprint import pprint
+from flask import (
+    current_app, Blueprint, flash, g, redirect, render_template, request, url_for
+)
 from werkzeug.exceptions import abort
-from werkzeug.utils import secure_filename
+
 from blog.auth import login_required
-from blog.db import get_db, Category, User
+from blog.db import get_db, Post, Category
 import json
 
 bp = Blueprint("blog", __name__)
@@ -19,25 +17,86 @@ UPLOADS_PATH = 'static/media'
 
 @bp.route("/")
 def index():
-    user = g.user
-    return render_template("blog/index.html", data=get_essentials())
+    db = get_db()
+    data = {'user': g.user, 'posts': Post.objects().order_by("created")}
+    return render_template("blog/index.html", data=data)
 
+
+# ---------------------------------------------- 3oop Code -------------------------------------
+
+# @bp.route('/create', methods=('GET', 'POST'))
+# @login_required
+# def create():
+#     if request.method == 'POST':
+#         title = request.form['title']
+#         body = request.form['body']
+#         error = None
+#
+#         if not title:
+#             error = 'Title is required.'
+#
+#         if error is not None:
+#             flash(error)
+#         else:
+#             db = get_db()
+#             new_post = Post(
+#                 title=title,
+#                 body=body,
+#                 author=g.user,
+#                 created=datetime.now()
+#             )
+#             new_post.save()
+#             return redirect(url_for('blog.index'))
+#
+#     return render_template('blog/create.html')
+#
+#
+# def get_post(id, check_author=True):
+#     post = Post.objects(id=str(id)).get()
+#
+#     if post is None:
+#         abort(404, f"Post id {id} doesn't exist.")
+#
+#     if check_author and post['author'] != g.user['username']:
+#         abort(403)
+#
+#     return post
+#
+#
+# @bp.route('/<int:id>/update', methods=('GET', 'POST'))
+# @login_required
+# def update(id):
+#     post = get_post(id)
+#
+#     if request.method == 'POST':
+#         title = request.form['title']
+#         body = request.form['body']
+#         error = None
+#
+#         if not title:
+#             error = 'Title is required.'
+#
+#         if error is not None:
+#             flash(error)
+#         else:
+#             post.title = title
+#             post.body = body
+#             post.save()
+#             return redirect(url_for('blog.index'))
+#
+#     return render_template('blog/update.html', post=post)
+#
+# -------------------------------- 3oop Code -----------------------
 
 @bp.route("/create")
 def create_post():
-    return render_template("blog/create.html", data=get_essentials())
+    data = {'user': g.user, 'category': Category.objects()}
+    return render_template("blog/create.html", data=data)
 
 
 @bp.route("/user")
 def user():
     return render_template("blog/user.html")
-
-
-def get_essentials():
-    data = dict()
-    data['user'] = g.user if g.user else None
-    data['category'] = Category.objects()
-    return data
 
 
 @bp.route("/category/ajax")
