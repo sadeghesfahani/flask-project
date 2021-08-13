@@ -1,4 +1,6 @@
 import functools
+
+import mongoengine
 from bson import ObjectId
 from flask import Blueprint, flash
 from flask import g
@@ -53,15 +55,28 @@ def register():
 def login():
     error = None
     if request.method == "POST":
-        user = User.objects(username=request.form["username_login"])
-        if user and check_password_hash(user[0].password, request.form['password_login']):
-            session['user_id'] = str(user[0].id)
+        username = request.form["username_login"]
+        password = request.form['password_login']
+        try:
+            user = User.objects(username=username).get()
+        except mongoengine.DoesNotExist:
+            error = True
+            user = None
+
+        if user is None:
+            error = True
+        elif not check_password_hash(user['password'], password):
+            error = True
+
+        if error is None:
+            session.clear()
+            session['user_id'] = str(user.id)
             return redirect(url_for('index'))
-        else:
-            flash("something")
-            return render_template("auth/login.html", req='login',
-                                   error=True)
-    return render_template("auth/login.html", req='login', error=True if error else False)
+
+        flash(error)
+
+    return render_template('auth/login.html', req='Login')
+
 
 
 @bp.route("/logout")
