@@ -63,7 +63,7 @@
                     ناحیه کاربری
                 </a>
 
-                {% if data.user == none %}
+                {% if not g.user %}
                 <div class="dropdown-menu" aria-labelledby="auth">
 
                     <a class="dropdown-item" href="{{ url_for('auth.login') }}">ورود</a>
@@ -84,7 +84,7 @@
             </li>
         </ul>
 
-        {{ data.user.first_name }}
+        {{ g.user.first_name }}
         <form class="form-inline my-2 my-lg-0 mr-auto">
             <input class="form-control mr-sm-2" type="search" placeholder="جست و جو" aria-label="جست و جو">
             <button class="btn btn-outline-secondary my-2 my-sm-0 mr-2" type="submit">جست و جو</button>

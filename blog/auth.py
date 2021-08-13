@@ -8,7 +8,7 @@ from flask import request
 from flask import session
 from flask import url_for
 from werkzeug.security import check_password_hash
-from blog.db import get_db, create_user, User
+from blog.db import create_user, User
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -46,7 +46,7 @@ def register():
                         request.form["last_name"], request.form["email"], request.form["address"],
                         request.form["instagram"], request.form["telegram"])
             return redirect(url_for('index'))
-    return render_template("auth/login.html", req='register', data=get_essentials())
+    return render_template("auth/login.html", req='register')
 
 
 @bp.route("/login", methods=("GET", "POST"))
@@ -58,9 +58,9 @@ def login():
             session['user_id'] = str(user[0].id)
             return redirect(url_for('index'))
         else:
-            return render_template("auth/login.html", req='login', data=get_essentials(),
+            return render_template("auth/login.html", req='login',
                                    error=True)
-    return render_template("auth/login.html", req='login', data=get_essentials(), error=True if error else False)
+    return render_template("auth/login.html", req='login', error=True if error else False)
 
 
 @bp.route("/logout")
@@ -81,7 +81,4 @@ def check_username():
         return redirect(url_for('index'))
 
 
-def get_essentials():
-    data = dict()
-    data['user'] = g.user if g.user else None
-    return data
+
