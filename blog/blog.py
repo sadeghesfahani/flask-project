@@ -1,11 +1,8 @@
-from os.path import join, dirname, realpath
 from bson import ObjectId, BSONOBJ
 from datetime import datetime
-from pprint import pprint
 from flask import (
     current_app, Blueprint, flash, g, redirect, render_template, request, url_for
 )
-from werkzeug.exceptions import abort
 
 from blog.auth import login_required
 from blog.db import get_db, Post, Category
@@ -88,7 +85,8 @@ def index():
 #
 # -------------------------------- 3oop Code -----------------------
 
-@bp.route("/create")
+@bp.route('/create', methods=('GET', 'POST'))
+@login_required
 def create_post():
     data = {'user': g.user, 'category': Category.objects()}
     return render_template("blog/create.html", data=data)

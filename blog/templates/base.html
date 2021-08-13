@@ -23,7 +23,9 @@
     <title>Title</title>
 </head>
 <body>
-
+  {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+  {% endfor %}
 <!--  menu   -->
 
 <nav class="navbar navbar-expand-md navbar-light bg-transparent">

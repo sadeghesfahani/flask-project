@@ -1,5 +1,6 @@
 import functools
 
+import mongoengine
 from flask import (
     current_app, Flask, Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
@@ -8,6 +9,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from blog.db import get_db, User, create_user
 
 from bson import ObjectId
+
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -45,21 +47,35 @@ def register():
                         request.form["last_name"], request.form["email"], request.form["address"],
                         request.form["instagram"], request.form["telegram"])
             return redirect(url_for('index'))
-    return render_template("auth/login.html", req='register', data=get_essentials())
+    return render_template("auth/login.html", req='register')
 
 
 @bp.route("/login", methods=("GET", "POST"))
 def login():
     error = None
     if request.method == "POST":
-        user = User.objects(username=request.form["username_login"])
-        if user and check_password_hash(user[0].password, request.form['password_login']):
-            session['user_id'] = str(user[0].id)
+        username = request.form["username_login"]
+        password = request.form['password_login']
+        db = get_db()
+        try:
+            user = User.objects(username=username).get()
+        except mongoengine.DoesNotExist:
+            error = "Username doesn't exist"
+            user = None
+
+        if user is None:
+            error = 'Incorrect username.'
+        elif not check_password_hash(user['password'], password):
+            error = 'Incorrect password.'
+
+        if error is None:
+            session.clear()
+            session['user_id'] = str(user.id)
             return redirect(url_for('index'))
-        else:
-            return render_template("auth/login.html", req='login', data=get_essentials(),
-                                   error=True)
-    return render_template("auth/login.html", req='login', data=get_essentials(), error=True if error else False)
+
+        flash(error)
+
+    return render_template('auth/login.html', req='Login', error=error)
 
 
 @bp.route("/logout")
