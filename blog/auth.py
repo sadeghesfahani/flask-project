@@ -1,5 +1,4 @@
 import functools
-
 import mongoengine
 from bson import ObjectId
 from flask import Blueprint, flash
@@ -37,7 +36,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = User.objects(id=ObjectId(user_id))[0]
+        g.user = User.objects(id=ObjectId(user_id)).get()
 
 
 @bp.route("/register", methods=("GET", "POST"))
