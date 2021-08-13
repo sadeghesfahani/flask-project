@@ -17,8 +17,12 @@ def get_db():
     return g.db
 
 
+connect('blog')
+
+
 def close_db(e=None):
     disconnect('blog')
+
 
 # ------------- Looks like MongoDB does not require initialization -------------
 
@@ -41,6 +45,8 @@ def close_db(e=None):
 
 def init_app(app):
     app.teardown_appcontext(close_db)
+    # generate_categories()
+    # generate_posts()
 #     app.cli.add_command(init_db_command)
 
 
@@ -56,23 +62,6 @@ class User(Document):
     telegram = StringField(max_length=50)
     followings = ListField(StringField(max_length=50))
     followers = ListField(StringField(max_length=50))
-
-
-def create_user(username, password, first_name, last_name, email, address=None, instagram=None, telegram=None):
-    try:
-        new_user = User()
-        new_user.username = username
-        new_user.password = generate_password_hash(password, "sha256")
-        new_user.first_name = first_name
-        new_user.last_name = last_name
-        new_user.email = email
-        new_user.address = address
-        new_user.instagram = instagram
-        new_user.telegram = telegram
-        new_user.save()
-        return True
-    except:
-        return False
 
 
 class Category(Document):
@@ -98,3 +87,47 @@ class Post(Document):
     dislike = ListField(User)
     time = DateTimeField(default=datetime.datetime.utcnow)
     comment = ListField(EmbeddedDocumentField(Comment))
+    slider = BooleanField()
+    index = BooleanField()
+
+    def __str__(self):
+        return f"{self.title}"
+
+
+def create_user(username, password, first_name, last_name, email, address=None, instagram=None, telegram=None):
+    try:
+        new_user = User()
+        new_user.username = username
+        new_user.password = generate_password_hash(password, "sha256")
+        new_user.first_name = first_name
+        new_user.last_name = last_name
+        new_user.email = email
+        new_user.address = address
+        new_user.instagram = instagram
+        new_user.telegram = telegram
+        new_user.save()
+        return True
+    except:
+        return False
+
+
+def generate_posts():
+    import random
+    import string
+    for _ in range(50):
+        post = Post()
+        post.title = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+        post.slider = random.choice([True, False])
+        post.index = random.choice([True, False])
+        post.category = random.choice(Category.objects())
+        post.save()
+
+
+def generate_categories():
+    import random
+    import string
+    for _ in range(10):
+        cat = Category()
+        cat.title = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5))
+        cat.parent = random.choice(Category.objects())
+        cat.save()

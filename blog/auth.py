@@ -41,6 +41,7 @@ def load_logged_in_user():
 
 @bp.route("/register", methods=("GET", "POST"))
 def register():
+    db = get_db()
     if request.method == "POST":
         if not User.objects(username=request.form["username"]).count():
             create_user(request.form["username"], request.form["password"], request.form["first_name"],

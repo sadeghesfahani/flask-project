@@ -1,5 +1,6 @@
 from bson import ObjectId, BSONOBJ
 from datetime import datetime
+from pprint import pprint
 from flask import (
     current_app, Blueprint, flash, g, redirect, render_template, request, url_for
 )
@@ -15,7 +16,18 @@ UPLOADS_PATH = 'static/media'
 @bp.route("/")
 def index():
     db = get_db()
-    data = {'user': g.user, 'posts': Post.objects().order_by("created")}
+    sliders = dict()
+    for post in Post.objects(index=True):
+        try:
+            sliders[post.category.title] = [*sliders.get(post.category.title), post]
+        except TypeError:
+            sliders[post.category.title] = [post]
+    current_app.logger.debug(pprint(sliders))
+    data = {
+        'user': g.user,
+        'posts': Post.objects().order_by("created"),
+        'sliders': sliders
+    }
     return render_template("blog/index.html", data=data)
 
 
@@ -88,17 +100,20 @@ def index():
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create_post():
+    db = get_db()
     data = {'user': g.user, 'category': Category.objects()}
     return render_template("blog/create.html", data=data)
 
 
 @bp.route("/user")
 def user():
+    db = get_db()
     return render_template("blog/user.html")
 
 
 @bp.route("/category/ajax")
 def category_ajax():
+    db = get_db()
     return {'category': [[str(obj.id), obj.title, str(obj.parent.id) if "parent" in obj else False,
                           [child.title for child in obj.child] if "child" in obj else False] for obj in
                          Category.objects()]}
@@ -106,6 +121,7 @@ def category_ajax():
 
 @bp.route("/category/add/ajax", methods=("GET", "POST"))
 def category_add_ajax():
+    db = get_db()
     if request.method == "POST":
         category_text = request.form['text']
         category_parent = request.form['parent']
