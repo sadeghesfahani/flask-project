@@ -54,6 +54,13 @@ authentication (back) | Esmaili
 * unpublish and delete posts
 * category view
 * user panel
+
+Task | in charge
+-----|----------
+create (front) | sadeghesfahani
+category (front), create (back)  | Asareha
+category, user (back) | Mohammadi
+user (front) | Esmaili
 - [ ] phase 3 (deadline: 5th shahrivar)
 * like and dislike
 * search engine
