@@ -1,21 +1,21 @@
 # Blogify
 
 ## Introduction
-this is Maktab52 Python-Django boot camp first project
+this is Maktab53 Python-Django boot camp first project
 
 ## Instructor
 * Mr Farzanmehr
 ## Team members
-* Pooria Asareha
+* Pooria Assarehsa
 * Hamidreza Mohammadi
 * Sina Esmaili
 * Seyed Sina Sadeghesfahani
 
 ## install project
 
-first thing first, you need to install the project properly and the following structure will provide you an easy install experience need no prior background knowledge
+First things first, you need to install the project properly and the following structure will provide you an easy installation experience that needs no prior background knowledge
 
-1. install the project with powerfull python install packages tool pip.
+1. install the project with powerful python install packages tool pip.
 `< pip install -e .>`  or `< py -m pip install -e .>` or `< python -m pip install -e .>`
 2. create virtual environment to isolate your project with following steps 
 
@@ -37,7 +37,7 @@ flask run | flask run
 
 ## Project road map
 
-- [x] phase 1 (deadline: 22th mordad)
+- [x] phase 1 (deadline: 22th Mordad)
 * github repository
 * database design
 * index page
@@ -45,11 +45,11 @@ flask run | flask run
  
 Task | in charge
 -----|----------
-index (front) | sadeghesfahani
-index (back)  | Asareha
+index (front) | Sadeghesfahani
+index (back)  | Assarehha
 authentication (front) | Mohammadi
 authentication (back) | Esmaili
-- [ ] phase 2 (deadline: 29th mordad)
+- [ ] phase 2 (deadline: 29th Mordad)
 * create and edit posts
 * unpublish and delete posts
 * category view
@@ -58,10 +58,10 @@ authentication (back) | Esmaili
 Task | in charge
 -----|----------
 create (front) | sadeghesfahani
-category (front), create (back)  | Asareha
+category (front), create (back)  | Assarehha
 category, user (back) | Mohammadi
 user (front) | Esmaili
-- [ ] phase 3 (deadline: 5th shahrivar)
+- [ ] phase 3 (deadline: 5th Shahrivar)
 * like and dislike
 * search engine
 * debug
