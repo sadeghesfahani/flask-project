@@ -2,7 +2,8 @@
 {% block content %}
 
 <div class="card text-center mx-auto mt-5 mb-5 rounded">
-
+    <img class="card-img  w-25 d-block h-auto rounded-circle mx-auto mt-3"
+             src="{{ url_for('static',filename='media/index12.jpg') }}" alt="Card image cap">
     <div class="card-body">
         <div class="tab-content">
             <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -35,7 +36,9 @@
 
                     </div>
                     <a class="" href="#"> فراموشی رمز عبور</a><br><br>
-                    <button id="logining" class="btn btn-primary" type="submit">ورود</button>
+                    <form action="" method="post">
+                        <button id="logining" class="btn btn-primary" type="submit">ورود</button>
+                    </form>
                     <a id="register" class="btn btn-primary" href="http://127.0.0.1:5000/auth/register">ثبت نام</a>
                 </form>
 
@@ -81,3 +84,4 @@
 
     </div>
 </div>
+{% endblock %}
