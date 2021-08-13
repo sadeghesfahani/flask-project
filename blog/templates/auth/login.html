@@ -2,8 +2,13 @@
 
 {% block content %}
 
-    {% if error %}
-    <div class="alert alert-danger position-fixed" role="alert" id="alert">
+{#    {% if error %}#}
+{#    <div class="alert alert-danger position-fixed" role="alert" id="alert">#}
+{#        نام کاربری یا کلمه عبور اشتباه است#}
+{#    </div>#}
+{#    {% endif %}#}
+    {% if get_flashed_messages() %}
+        <div class="alert alert-danger position-fixed flash" role="alert" id="alert">
         نام کاربری یا کلمه عبور اشتباه است
     </div>
     {% endif %}

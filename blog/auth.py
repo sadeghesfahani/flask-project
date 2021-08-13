@@ -1,6 +1,6 @@
 import functools
 from bson import ObjectId
-from flask import Blueprint
+from flask import Blueprint, flash
 from flask import g
 from flask import redirect
 from flask import render_template
@@ -58,6 +58,7 @@ def login():
             session['user_id'] = str(user[0].id)
             return redirect(url_for('index'))
         else:
+            flash("something")
             return render_template("auth/login.html", req='login',
                                    error=True)
     return render_template("auth/login.html", req='login', error=True if error else False)
