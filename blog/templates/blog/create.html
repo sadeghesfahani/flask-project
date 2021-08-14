@@ -103,7 +103,8 @@
     <div class="col-12 col-md-9">
         <div class="card mt-5 pr-0">
             <div class="card-header">
-                <a class="btn btn-info" style="position: relative;z-index: 1"><i class="fa fa-image"></i> چندرسانه ای </a>
+                <a class="btn btn-info" style="position: relative;z-index: 1"><i class="fa fa-image"></i> چندرسانه ای
+                </a>
 
             </div>
             <div class="card-body mr-0 ml-0 p-0" style="margin-top: -43px;">
@@ -125,30 +126,35 @@
                         <div class="card">
                             <div class="card-header">
                                 <button class="btn btn-outline-secondary  dropdown-toggle" type="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="font">
                                     18
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">10</a>
+                                    <a class="dropdown-item" href="#" onclick="change_font(10)">10</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">12</a>
+                                    <a class="dropdown-item" href="#" onclick="change_font(12)">12</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">14</a>
+                                    <a class="dropdown-item" href="#" onclick="change_font(14)">14</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">16</a>
+                                    <a class="dropdown-item" href="#" onclick="change_font(16)">16</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">20</a>
+                                    <a class="dropdown-item" href="#" onclick="change_font(20)">20</a>
                                 </div>
-                                <a class="btn btn-outline-secondary"><i class="fa fa-link"></i></a>
-                                <a class="btn btn-outline-secondary"><i class="fa fa-bold"></i></a>
+                                <a class="btn btn-outline-secondary" id="make_link" data-toggle="modal"
+                                   data-target="#exampleModal"><i class="fa fa-link"></i></a>
+
+
+                                <a class="btn btn-outline-secondary" id="make_bold" onclick="make_bold()"><i
+                                        class="fa fa-bold"></i></a>
 
                             </div>
                             <div class="card-body">
                                 <form>
                                     <div class="form-group">
-                                <textarea style="resize: none" class="form-control"></textarea>
-                                        </div>
-                                    </form>
+                                        <textarea style="resize: none;" class="form-control" rows="20"
+                                                  id="textarea"></textarea>
+                                    </div>
+                                </form>
                             </div>
                         </div>
 
@@ -165,7 +171,102 @@
     </div>
 
 
+
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog text-right" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title" id="exampleModalLabel">افزودن لینک</h5>
+
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <label for="address">آدرس لینک</label>
+                        <input type="text" class="form-control" id="address">
+                        <label for="address_lable">متن لینک</label>
+                        <input type="text" class="form-control" id="address_lable">
+                    </form>
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                        اتصراف
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="set_link()">افزودن</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+
+    function set_link(){
+        if($("#address").val() !== ""){
+            let textarea = document.getElementById('textarea')
+            let text_value= textarea.value
+            $("#textarea").val(text_value.slice(0, window.pos_start) + `<a href="${$("#address").val()}">${$("#address_lable").val()}</a>\n` + text_value.slice(window.pos_end))
+            $("#exampleModal").modal('hide')
+            textarea.focus()
+
+        }else{
+
+            $("#exampleModal").modal('hide')
+        }
+    }
+
+        function change_font(font_size) {
+            let textarea = document.getElementById('textarea')
+
+            let textarea_value = textarea.value
+            let pos = textarea.selectionStart
+            if (textarea.selectionStart == textarea.selectionEnd) {
+                $("#textarea").val(textarea_value.slice(0, textarea.selectionStart) + `\n<span style="font-size: ${font_size}px">\n\n</span>\n` + textarea_value.slice(textarea.selectionStart))
+                textarea.focus()
+                textarea.setSelectionRange(pos + 32, pos + 32)
+            } else {
+                let final_text = textarea_value.slice(0, textarea.selectionStart) + `\n<span style="font-size: ${font_size}px">` + textarea_value.slice(textarea.selectionStart, textarea.selectionEnd) + `</span>\n` + textarea_value.slice(textarea.selectionEnd)
+                $("#textarea").val(final_text)
+                textarea.focus()
+                textarea.setSelectionRange(length(textarea.value), length(textarea.value))
+            }
+        }
+
+
+        function make_bold() {
+            let textarea = document.getElementById('textarea')
+
+            let textarea_value = textarea.value
+            let pos = textarea.selectionStart
+            if (textarea.selectionStart == textarea.selectionEnd) {
+                $("#textarea").val(textarea_value.slice(0, textarea.selectionStart) + `\n<strong>\n\n</strong>\n` + textarea_value.slice(textarea.selectionStart))
+                textarea.focus()
+                textarea.setSelectionRange(pos + 10, pos + 10)
+            } else {
+                let final_text = textarea_value.slice(0, textarea.selectionStart) + `\n<strong>` + textarea_value.slice(textarea.selectionStart, textarea.selectionEnd) + `</strong>\n` + textarea_value.slice(textarea.selectionEnd)
+                $("#textarea").val(final_text)
+                textarea.focus()
+                textarea.setSelectionRange(length(textarea.value), length(textarea.value))
+            }
+
+        }
+
+        function create_link() {
+
+        }
+
+        $("#profile-tab").click(function () {
+
+            $("#profile").html($("#textarea").val())
+
+        })
+
+
         var toggler = document.getElementsByClassName("caret");
         var i;
 
@@ -322,5 +423,17 @@
             $("#accordion").append(element_to_add)
 
         }
+
+        $('#exampleModal').on('shown.bs.modal', function () {
+            let textarea = document.getElementById('textarea')
+            let textarea_value = textarea.value
+            window.pos_start = textarea.selectionStart
+            window.pos_end = textarea.selectionEnd
+            if (textarea.selectionStart !== textarea.selectionEnd) {
+                {#alert("im here")#}
+                $("#address_lable").val(textarea_value.slice(textarea.selectionStart, textarea.selectionEnd))
+            }
+        })
+
     </script>
 {% endblock %}
