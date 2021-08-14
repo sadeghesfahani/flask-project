@@ -1,4 +1,6 @@
 from os.path import join, dirname, realpath
+
+import mongoengine
 from bson import ObjectId, BSONOBJ
 from flask import Blueprint, session
 from flask import flash
@@ -10,7 +12,7 @@ from flask import url_for
 from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 from blog.auth import login_required
-from blog.db import get_db, Category, User
+from blog.db import get_db, Category, User, Post
 import json
 
 bp = Blueprint("blog", __name__)
@@ -57,7 +59,7 @@ def category_add_ajax():
         print(category_parent)
         if category_parent == 'بدون والد':
             new_category.save()
-            parent=None
+            parent = None
         else:
 
             new_category.parent = Category.objects(id=ObjectId(category_parent))[0]
@@ -67,4 +69,24 @@ def category_add_ajax():
             parent.save()
         # Category.objects(id=new_category.id)
 
-        return {"self":str(new_category.id),"parent":str(parent.id) if parent is not None else None}
+        return {"self": str(new_category.id), "parent": str(parent.id) if parent is not None else None}
+
+
+@bp.route("/post/draft/ajax", methods=("GET", "POST"))
+def create_draft_post():
+    new_post = Post()
+    new_post.user = g.user
+    new_post.draft = True
+    new_post.save()
+    return str(new_post.id)
+
+
+@bp.route("/post/fetch/media/ajax", methods=("GET", "POST"))
+def fetch_media():
+    post_id = request.form['post_id']
+    try:
+        post = Post.objects(id=ObjectId(post_id)).get()
+    except mongoengine.DoesNotExist:
+        return False
+    return {'images': ['http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg']}
+    # return {'images': post.images}

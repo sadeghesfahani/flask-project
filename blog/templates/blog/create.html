@@ -103,7 +103,8 @@
     <div class="col-12 col-md-9">
         <div class="card mt-5 pr-0">
             <div class="card-header">
-                <a class="btn btn-info" style="position: relative;z-index: 1"><i class="fa fa-image"></i> چندرسانه ای
+                <a class="btn btn-info" style="position: relative;z-index: 1" id="media" data-toggle="modal"
+                   data-target="#mediamodal"><i class="fa fa-image"></i> چندرسانه ای
                 </a>
 
             </div>
@@ -204,21 +205,61 @@
         </div>
     </div>
 
+
+
+
+
+
+
+
+
+    <div class="modal fade modal-lg" id="mediamodal" tabindex="-1" role="dialog" aria-labelledby="mediamodallabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title" id="mediamodallabel">چند رسانه ای</h5>
+
+                </div>
+                <div class="modal-body" id="media-container">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="attach()">الصاق</button>
+                    <label for="add_media"><a class="btn btn-primary" id="image_lable"><i class="fa fa-image"></i></a>
+                    </label>
+                    <input type="file" id="add_media" class="d-none">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
     <script>
+        window.images = []
 
-    function set_link(){
-        if($("#address").val() !== ""){
-            let textarea = document.getElementById('textarea')
-            let text_value= textarea.value
-            $("#textarea").val(text_value.slice(0, window.pos_start) + `<a href="${$("#address").val()}">${$("#address_lable").val()}</a>\n` + text_value.slice(window.pos_end))
-            $("#exampleModal").modal('hide')
-            textarea.focus()
+        function set_link() {
+            if ($("#address").val() !== "") {
+                let textarea = document.getElementById('textarea')
+                let text_value = textarea.value
+                $("#textarea").val(text_value.slice(0, window.pos_start) + `<a href="${$("#address").val()}">${$("#address_lable").val()}</a>\n` + text_value.slice(window.pos_end))
+                $("#exampleModal").modal('hide')
+                textarea.focus()
 
-        }else{
+            } else {
 
-            $("#exampleModal").modal('hide')
+                $("#exampleModal").modal('hide')
+            }
         }
-    }
 
         function change_font(font_size) {
             let textarea = document.getElementById('textarea')
@@ -435,5 +476,80 @@
             }
         })
 
+
+        $('#mediamodal').on('shown.bs.modal', function () {
+            let textarea = document.getElementById('textarea')
+            let textarea_value = textarea.value
+            window.pos_start = textarea.selectionStart
+            window.pos_end = textarea.selectionEnd
+            if (typeof window.post_id == 'undefined') {
+
+                {#create_post and get id#}
+                $.post("http://127.0.0.1:5000{{ url_for('blog.create_draft_post') }}", function (data) {
+                    window.post_id = data
+                })
+            } else {
+                {#fetch post media and show#}
+                $.post("http://127.0.0.1:5000{{ url_for('blog.fetch_media') }}", {'post_id': window.post_id}, function (data) {
+                    let counter = 0
+                    $("#media-container").html("")
+
+                    for (image of data['images']) {
+
+
+                        if (counter % 3 == 0) {
+                            id = counter
+                            {#alert(`residual is 0 and id is: ${id}`)#}
+                            $("#media-container").append(`<div class="card-deck mt-3" id="media_deck${id}">`)
+                            $(`#media_deck${id}`).append(`<div class="card" id="card${id}"><img onclick="selective(this)" class="card-img " id="${image}" src="${image}"> </div>`)
+
+                        } else {
+                            {#alert(`residual is not 0 and id is: ${id}`)#}
+                            $(`#media_deck${id}`).append(`<div class="card"><img onclick="selective(this)" class="card-img " id="${image}" src="${image}"> </div>`)
+
+                        }
+                        counter++
+
+                    }
+                })
+            }
+
+        })
+
+
+        function selective(element) {
+
+            let classlist = element.classList.toString()
+            if (classlist.includes('selected-image')) {
+
+                element.classList = classlist.replace('selected-image', '')
+            } else {
+
+                element.classList = element.classList + 'selected-image'
+                window.images.push(element.id)
+
+            }
+        }
+
+
+        function attach() {
+            let textarea = document.getElementById('textarea')
+            let textarea_value = textarea.value
+            let selected_elements = document.getElementsByClassName('selected-image')
+            let plus = ""
+            for (element of selected_elements) {
+                textarea_value = textarea.value
+                $("#textarea").val(textarea_value.slice(0, window.pos_start) + `<img class="w-50" src="${element.id}">` + textarea_value.slice(window.pos_start))
+                plus = `<img class="w-50" src="${element.id}">`
+
+                window.pos_start = window.pos_start + plus.length
+
+            }
+
+
+            textarea.setSelectionRange(window.pos_start, window.pos_start)
+            $("#textarea").focus()
+
+        }
     </script>
 {% endblock %}
