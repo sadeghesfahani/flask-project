@@ -1,0 +1,44 @@
+body {
+    direction: rtl;
+    font-family: "B Yekan";
+}
+
+.carousel-item {
+    height: 50vh;
+!important;
+}
+
+@font-face {
+    font-family: "B Yekan";
+    src: url(Yekan.ttf);
+}
+
+.card {
+    box-shadow: 0px 0px 0px 0px gray;
+
+    transform: scale(1);
+    transition: box-shadow 0.3s ease-in-out 0s,transform 0.4s;
+
+}
+
+.card:hover {
+    box-shadow: 0px 0px 15px 1px gray;
+    transform: scale(1.01);
+    transition: box-shadow 0.3s ease-in-out 0s, transform 0.4s;
+    cursor: pointer;
+
+}
+.card-footer  td:hover {
+    color: rgba(37,74,211,0.72);
+}
+
+.card-header img{
+    box-shadow: 0px 0px 0px 7px white;
+    transform: scale(1);
+    transition: transform 0.5s, box-shadow 0.5s;
+}
+.card-header img:hover{
+    box-shadow: 0px 0px 0px 0px white;
+    transform: scale(1.5);
+    transition: transform 0.5s, box-shadow 0.5s;
+}

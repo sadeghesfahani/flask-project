@@ -1,0 +1,214 @@
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 0px;
+    margin: 0px;
+    background: #f6f6f6;
+}
+header {
+    background: #20c997;
+    height: 60px;
+}
+header ul {
+    float: right;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+
+}
+header ul li {
+    float: left;
+    position: relative;
+}
+
+
+header ul li a {
+    display: block;
+    padding: 30px;
+    margin: 7px;
+    font-size: 1.2em;
+    text-decoration: none;
+}
+
+header ul li a:hover {
+    background: white;
+    transition: 0.5s;
+}
+header * {
+    color: white;
+}
+header .logo{
+    float: left;
+    height: inherit;
+}
+header .logo-text {
+    margin: 10px;
+}
+header .logo-text span{
+    color: #007bff;
+}
+header .user-toggle {
+    float: left;
+    border: 0px;
+    padding: 15px;
+    font-size: 2em;
+}
+
+/* style for post slider*/
+.post-slider {
+    position: relative;
+}
+.post-slider .next {
+    position: absolute;
+    top: 50%;
+    right: 30px;
+    font-size: 2em;
+    cursor: pointer;
+}
+.post-slider .prev {
+    position: absolute;
+    top: 50%;
+    left: 30px;
+    font-size: 2em;
+    cursor: pointer;
+}
+.post-slider .slider-title {
+    text-align: center;
+    margin: 30px auto;
+
+}
+.post-slider .post-wrapper {
+    width: 80%;
+    height: 380px;
+    margin: 0px auto;
+    overflow: hidden;
+    padding: 10px 0px 10px 0px;
+}
+.post-slider .post-wrapper .post {
+    width: 300px;
+    height: 360px;
+    display: inline-block;
+    background: white;
+    margin: 0px 10px;
+    box-shadow: 1rem 1rem 1rem -1rem #a0a0a033;
+
+}
+.post-slider .post-wrapper .post .post-info {
+    height: 130px;
+    padding: 0px 5px;
+}
+.post-slider .post-wrapper .post .post-info .btn {
+    padding: 3px 10px;
+    margin: 15px 5px;
+    float: left;
+}
+.post-slider .post-wrapper .post .slider-image {
+    width: 100%;
+    height: 200px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* style for content and sidebar */
+.content {
+    width: 90%;
+    margin: 30px auto 30px;
+}
+.content .main-content {
+    width: 90%;
+    float: left;
+}
+.content .main-content .post {
+    width: 95%;
+    height: 270px;
+    margin: 20px auto;
+    border-radius: 5px;
+    background: white;
+    position: relative;
+}
+.content .main-content .post .more-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: .5rem 1rem;
+    background: #20c997;
+    color: white;
+    border: 1px solid #20c997;
+    border-radius: .25rem;
+    background: transparent;
+    color: #20c997;
+}
+.content .main-content .post .more-btn:hover {
+    background: #20c997;
+    color: white;
+}
+.content .main-content .post .edit-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 500px;
+    border-radius: .25rem;
+}
+.content .main-content .post .btn-danger {
+    position: absolute;
+    bottom: 10px;
+    border-radius: .25rem;
+    color: #ff0017;
+    background: transparent;
+}
+.content .main-content .post .btn-danger:hover{
+    background: #ff0017;
+    color: white;
+}
+.content .main-content .post .post-image {
+    width: 40%;
+    height: 100%;
+    float: left;
+}
+.content .main-content .post .post-preview {
+    width: 60%;
+    padding: 10px;
+    float: right;
+}
+
+.content .main-content .post-title {
+    margin: 20px;
+}
+.content .sidebar {
+    width: 30%;
+    float: left;
+    border: 1px dashed green;
+    height: 300px;
+}
+
+
+
+.main-body {
+    padding: 15px;
+}
+
+.card {
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 1rem;
+}
+
+.text-secondary {
+    margin-top: 8px;
+}
