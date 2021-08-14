@@ -1,4 +1,6 @@
 import functools
+import os
+
 import mongoengine
 from bson import ObjectId
 from flask import Blueprint, flash
@@ -46,6 +48,7 @@ def register():
             create_user(request.form["username"], request.form["password"], request.form["first_name"],
                         request.form["last_name"], request.form["email"], request.form["address"],
                         request.form["instagram"], request.form["telegram"])
+            os.mkdir(os.getcwd() + '\\static\\users\\' + request.form["username"])
             return redirect(url_for('index'))
     return render_template("auth/login.html", req='register')
 

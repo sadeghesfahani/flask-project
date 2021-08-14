@@ -1,8 +1,9 @@
+import os
 from os.path import join, dirname, realpath
 
 import mongoengine
 from bson import ObjectId, BSONOBJ
-from flask import Blueprint, session
+from flask import Blueprint, session, app, current_app
 from flask import flash
 from flask import g
 from flask import redirect
@@ -88,5 +89,26 @@ def fetch_media():
         post = Post.objects(id=ObjectId(post_id)).get()
     except mongoengine.DoesNotExist:
         return False
-    return {'images': ['http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg']}
+
+    # return {'images': ['http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg']}
+    return {'images': [image for image in post.images]}
     # return {'images': post.images}
+
+
+@bp.route("/post/upload/media/ajax", methods=("GET", "POST"))
+def upload_pic():
+    post_id = request.form['post_id']
+    print(post_id)
+    file = request.files['media']
+    try:
+        post = Post.objects(id=ObjectId(post_id)).get()
+        address = f'static/users/{g.user.username}/{file.filename}'
+        file.save(os.path.join(current_app.root_path, f'static/users/{g.user.username}/{file.filename}'))
+        post.images.append(address)
+        post.save()
+
+        return address
+    except mongoengine.DoesNotExist:
+        print('failed')
+
+    return 'done'
