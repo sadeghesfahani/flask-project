@@ -46,7 +46,7 @@
                   <div class="d-flex flex-column align-items-center text-center">
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                     <div class="mt-3">
-                      <h4>{{ user.first_name }}</h4>
+                      <h4>{{ g.User.first_name }}</h4>
                       <p class="text-secondary mb-1">0 Folower</p>
                       <p class="text-muted font-size-sm">0 Folowing</p>
                     </div>
@@ -64,7 +64,7 @@
                        <h4 class="mb-0">First Name</h4>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                      {{ user.first_name }}
+                      {{ g.User.first_name }}
                     </div>
                   </div>
                   <hr>
@@ -73,7 +73,7 @@
                       <h4>Last Name</h4>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                        {{ user.last_name }}
+                        {{ g.User.last_name }}
                     </div>
                   </div>
                   <hr>
@@ -82,7 +82,7 @@
                       <h4>Username</h4>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                        {{ user.username }}
+                        {{ g.User.username }}
                     </div>
                   </div>
                   <hr>
@@ -91,7 +91,7 @@
                       <h4>Email</h4>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                        {{ user.email }}
+                        {{ g.User.email }}
                     </div>
                   </div>
                   <hr>
@@ -100,7 +100,7 @@
                       <h4>Phone</h4>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                        {{ user.phone}}
+                        {{ g.User.phone}}
                     </div>
                   </div>
                   <hr>
@@ -109,14 +109,14 @@
                       <h4>Address</h4>
                     </div>
                     <div class="col-sm-9 text-secondary">
-                        {{ user.address }}
+                        {{ g.User.address }}
                     </div>
                   </div>
                   <hr>
 
                   <div class="row">
                     <div class="col-sm-12">
-                      <a class="btn btn-info " href="{{ url_for('blog.edit', username='{{user.username}}') }}">Edit</a>
+                      <a class="btn btn-info " href="{{ url_for('blog.edit_profile', username='{{user.username}}') }}">Edit</a>
                     </div>
                   </div>
                 </div>
@@ -169,8 +169,8 @@
         <div class="main-content">
             <h1 class="post-title">Your Post</h1>
 
-        {% if other_post %}
-            {% for post in other_post %}
+        {% if user_posts %}
+            {% for post in user_posts %}
             <div class="post">
                 <img src="{{ url_for('static',filename='media/post/0.Cover_.Zimmer-768x488.jpg') }}" class="post-image">
                 <div class="post-preview">
