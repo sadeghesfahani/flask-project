@@ -11,11 +11,21 @@ from flask import request
 from flask import session
 from flask import url_for
 from werkzeug.security import check_password_hash
-from blog.db import create_user, User
+from blog.db import create_user, User, Category
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
 
+def base_load(view):
+    """View decorator that fill what is needed for basic functional like menu"""
+
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        g.category = Category.objects()
+
+        return view(**kwargs)
+
+    return wrapped_view
 def login_required(view):
     """View decorator that redirects anonymous users to the login page."""
 
@@ -41,18 +51,22 @@ def load_logged_in_user():
         g.user = User.objects(id=ObjectId(user_id)).get()
 
 
+@base_load
 @bp.route("/register", methods=("GET", "POST"))
 def register():
     if request.method == "POST":
         if not User.objects(username=request.form["username"]).count():
-            create_user(request.form["username"], request.form["password"], request.form["first_name"],
-                        request.form["last_name"], request.form["email"], request.form["address"],
-                        request.form["instagram"], request.form["telegram"])
-            os.mkdir(os.getcwd() + '\\static\\users\\' + request.form["username"])
+            new_user = create_user(request.form["username"], request.form["password"], request.form["first_name"],
+                                   request.form["last_name"], request.form["email"], request.form["address"],
+                                   request.form["instagram"], request.form["telegram"])
+            os.mkdir(os.path.join(os.getcwd(), 'blog', 'static', 'users', request.form["username"]), mode=0o777)
+            if new_user:
+                session['user_id'] = str(new_user.id)
             return redirect(url_for('index'))
     return render_template("auth/login.html", req='register')
 
 
+@base_load
 @bp.route("/login", methods=("GET", "POST"))
 def login():
     error = None
@@ -80,7 +94,6 @@ def login():
     return render_template('auth/login.html', req='Login')
 
 
-
 @bp.route("/logout")
 def logout():
     """Clear the current session, including the stored user id."""
@@ -97,6 +110,3 @@ def check_username():
             return 'ok'
     else:
         return redirect(url_for('index'))
-
-
-

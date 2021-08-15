@@ -577,22 +577,22 @@
                         let element_count = laschild.childElementCount
                         element_count = typeof element_count
                         element_count = element_count.toString()
-                        alert(element_count)
+
                         if (element_count != "undefined" && laschild.childElementCount !== 3) {
 
                             $(`#${laschild.id}`).append(`<div class="card" id="card${(container.childElementCount - 1) * 3 + laschild.childElementCount + 1}"><img onclick="selective(this)" class="card-img " id="${response}" src="${response}"> </div>`)
 
                         }else if (element_count == "undefined"){
-                            alert('here')
+
                             $("#media-container").append(`<div class="card-deck mt-3" id="media_deck1">`)
                             $(`#media_deck1`).append(`<div class="card" id="card${(container.childElementCount-1)*3+laschild.childElementCount+1}"><img onclick="selective(this)" class="card-img " id="${response}" src="${response}"> </div>`)
                     }else{
-                            alert("im here")
+
                             $("#media-container").append(`<div class="card-deck mt-3" id="media_deck${(container.childElementCount)*3+1}">`)
                             $(`#media_deck${(container.childElementCount-1)*3+1}`).append(`<div class="card" id="card${(container.childElementCount-1)*3+laschild.childElementCount+1}"><img onclick="selective(this)" class="card-img " id="${response}" src="${response}"> </div>`)
                         }
                     } else {
-                        alert('file not uploaded');
+
                     }
                 },
             });

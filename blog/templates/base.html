@@ -46,17 +46,24 @@
                     دسته بندی
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% for category in g.category %}
+                        {% if category.parent == None %}
+                            <a class="dropdown-item" href="#">{{ category.title }}</a>
+                            <div class="dropdown-divider"></div>
+                            {% for children in category.child %}
+                                <a class="dropdown-item">{{ children.title }}</a>
 
-                    <a class="dropdown-item" href="#">دسته بندی اول</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
+                            {% endfor %}
+                            <br>
+                        {% endif %}
+
+                    {% endfor %}
                 </div>
             </li>
 
-{#            <li class="nav-item">#}
-{#                <a class="nav-link" href="#">ورود</a>#}
-{#            </li>#}
+            {#            <li class="nav-item">#}
+            {#                <a class="nav-link" href="#">ورود</a>#}
+            {#            </li>#}
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="auth" role="button"
                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -64,21 +71,21 @@
                 </a>
 
                 {% if not g.user %}
-                <div class="dropdown-menu" aria-labelledby="auth">
+                    <div class="dropdown-menu" aria-labelledby="auth">
 
-                    <a class="dropdown-item" href="{{ url_for('auth.login') }}">ورود</a>
-                    <a class="dropdown-item" href="{{ url_for('auth.register') }}">ثبت نام</a>
+                        <a class="dropdown-item" href="{{ url_for('auth.login') }}">ورود</a>
+                        <a class="dropdown-item" href="{{ url_for('auth.register') }}">ثبت نام</a>
 
-                </div>
+                    </div>
                 {% else %}
 
-                <div class="dropdown-menu" aria-labelledby="auth">
+                    <div class="dropdown-menu" aria-labelledby="auth">
 
-                    <a class="dropdown-item" href="#">پروفایل</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{{ url_for('auth.logout') }}">خروج</a>
+                        <a class="dropdown-item" href="#">پروفایل</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ url_for('auth.logout') }}">خروج</a>
 
-                </div>
+                    </div>
 
                 {% endif %}
             </li>
@@ -115,26 +122,26 @@
     <div class="col-12 m-0 p-0">
 
         <div class="card card-normal m-0">
-            <div class="card-header " >عضویت در خبرنامه</div>
+            <div class="card-header ">عضویت در خبرنامه</div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-md-6">
                         <table class="table text-right">
                             <tr>
                                 <td>پوریا عصاره ها</td>
-                                <td><a href="https://t.me/Pooriaassarehha">ارتباط</a> </td>
+                                <td><a href="https://t.me/Pooriaassarehha">ارتباط</a></td>
                             </tr>
                             <tr>
                                 <td>حمیدرضا محمدی</td>
-                                <td><a href="https://t.me/HamidReza_Mohammadi81">ارتباط</a> </td>
+                                <td><a href="https://t.me/HamidReza_Mohammadi81">ارتباط</a></td>
                             </tr>
                             <tr>
                                 <td>سینا اسماعیلی</td>
-                                <td><a href="https://t.me/sina_esmaili1">ارتباط</a> </td>
+                                <td><a href="https://t.me/sina_esmaili1">ارتباط</a></td>
                             </tr>
                             <tr>
                                 <td>سید سینا صادق اصفهانی</td>
-                                <td><a href="https://t.me/Sssssseuv">ارتباط</a> </td>
+                                <td><a href="https://t.me/Sssssseuv">ارتباط</a></td>
                             </tr>
                         </table>
                     </div>

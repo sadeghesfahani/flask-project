@@ -1,3 +1,4 @@
+import functools
 import os
 from os.path import join, dirname, realpath
 
@@ -19,37 +20,48 @@ import json
 bp = Blueprint("blog", __name__)
 UPLOADS_PATH = 'static/media'
 
+def base_load(view):
+    """View decorator that fill what is needed for basic functional like menu"""
 
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        g.category = Category.objects()
+
+        return view(**kwargs)
+
+    return wrapped_view
+
+@base_load
 @bp.route("/")
 def index():
     user = g.user
     return render_template("blog/index.html", data=get_essentials())
 
-
+@base_load
 @bp.route("/create")
 def create_post():
     return render_template("blog/create.html", data=get_essentials())
 
-
+@base_load
 @bp.route("/user")
 def user():
     return render_template("blog/user.html")
 
-
+@base_load
 def get_essentials():
     data = dict()
     data['user'] = g.user if g.user else None
     data['category'] = Category.objects()
     return data
 
-
+@base_load
 @bp.route("/category/ajax")
 def category_ajax():
     return {'category': [[str(obj.id), obj.title, str(obj.parent.id) if "parent" in obj else False,
                           [child.title for child in obj.child] if "child" in obj else False] for obj in
                          Category.objects()]}
 
-
+@base_load
 @bp.route("/category/add/ajax", methods=("GET", "POST"))
 def category_add_ajax():
     if request.method == "POST":
@@ -72,7 +84,7 @@ def category_add_ajax():
 
         return {"self": str(new_category.id), "parent": str(parent.id) if parent is not None else None}
 
-
+@base_load
 @bp.route("/post/draft/ajax", methods=("GET", "POST"))
 def create_draft_post():
     new_post = Post()
@@ -81,7 +93,7 @@ def create_draft_post():
     new_post.save()
     return str(new_post.id)
 
-
+@base_load
 @bp.route("/post/fetch/media/ajax", methods=("GET", "POST"))
 def fetch_media():
     post_id = request.form['post_id']
@@ -94,7 +106,7 @@ def fetch_media():
     return {'images': [image for image in post.images]}
     # return {'images': post.images}
 
-
+@base_load
 @bp.route("/post/upload/media/ajax", methods=("GET", "POST"))
 def upload_pic():
     post_id = request.form['post_id']
@@ -112,3 +124,6 @@ def upload_pic():
         print('failed')
 
     return 'done'
+
+
+

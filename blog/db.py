@@ -44,7 +44,7 @@ def create_user(username, password, first_name, last_name, email, address=None, 
         new_user.instagram = instagram
         new_user.telegram = telegram
         new_user.save()
-        return True
+        return new_user
     except:
         return False
 
