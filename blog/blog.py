@@ -158,3 +158,23 @@ def create_post_ajax():
 
     print(decoded_data)
     return "done"
+
+
+
+@bp.route("/post/remove/media/ajax", methods=("GET", "POST"))
+def remove_pic():
+    post_id = request.form['post_id']
+    print(post_id)
+    address = request.form['address']
+    print(address)
+    # return 'done'
+    try:
+        post = Post.objects(id=ObjectId(post_id)).get()
+        post.images.remove(address)
+        post.save()
+        os.remove(os.path.join(current_app.root_path,address))
+        return address
+    except mongoengine.DoesNotExist:
+        print('failed')
+
+    return 'done'

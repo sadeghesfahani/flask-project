@@ -23,6 +23,9 @@
                     <div class="form-row">
                         <label for="slider_status" class="mr-2 ml-3">نمایش در اسلایدر</label>
                         <input type="checkbox" id="slider_status" name="slider_status">
+<div class="alert alert-success  mr-auto d-none" role="alert" id="alert">
+        به روز رسانی با موفقیت انجام شد
+    </div>
                     </div>
 
                 </div>
@@ -115,7 +118,9 @@
 
             <div class="card-header text-right">
                 <input type="text" id="title" class="form-control" placeholder="عنوان مطلب">
-
+                <div id="title_info" class="invalid-feedback mr-3">
+                    عنوان نمیتواند خالی باشد
+                </div>
             </div>
             <div class="card-body text-right pt-1">
                 <input type="checkbox" id="automatic">
@@ -255,6 +260,8 @@
                 </div>
                 <div class="modal-footer">
                     <form id="media_form">
+                        <button type="button" class="btn btn-danger" onclick="delete_pic()">حذف
+                        </button>
                         <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="attach()">الصاق
                         </button>
                         <label for="add_media"><a class="btn btn-primary" id="image_lable"><i
@@ -597,13 +604,12 @@
                 processData: false,
                 success: function (response) {
                     if (response != 0) {
-                        alert("im here")
+
                         let container = document.getElementById("media-container")
-                        alert(container)
+
                         {#alert(container.childElementCount)#}
                         let laschild = container.lastChild
-                        alert("next is lastchild")
-                        alert(laschild)
+
                         if (laschild == null) {
 
                         } else {
@@ -611,8 +617,7 @@
                         }
                         element_count = typeof element_count
                         element_count = element_count.toString()
-                        alert("next is element count")
-                        alert(element_count)
+
                         if (element_count != "undefined" && laschild.childElementCount !== 3) {
 
                             $(`#${laschild.id}`).append(`<div class="card" id="card${(container.childElementCount - 1) * 3 + laschild.childElementCount + 1}"><img onclick="selective(this)" class="card-img " id="${response}" src="${response}"> </div>`)
@@ -637,6 +642,8 @@
         })
 
         $("#title").change(function () {
+            $("#title").removeClass('is-invalid')
+            $("#title_info").removeClass('d-block')
             let text = $("#title").val()
             text = text.trim()
             while (text.match(" ")) {
@@ -667,48 +674,54 @@
 
         $("#update").click(function () {
             event.preventDefault()
-
-            let category = []
-            for (element of $('.category:checkbox:checked')) {
-                category.push(element.value)
-            }
-
-            if ($("#publish").is(':checked')) {
-                window.publish = true
+            if ($("#title").val().trim() == "") {
+                $("#title").addClass('is-invalid')
+                $("#title_info").addClass('d-block')
             } else {
-                window.publish = false
-            }
-
-            if ($("#slider_status").is(':checked')) {
-                window.slider = true
-            } else {
-                window.slider = false
-            }
-
-            let title = $("#title").val()
-            let content = $("#textarea").val()
-
-            let data = {
-                category: category,
-                publish: window.publish,
-                slider: window.slider,
-                title: title,
-                content: content,
-                post_id: window.post_id
-            }
-
-            $.ajax({
-                url: `http://127.0.0.1:5000{{ url_for('blog.create_post_ajax') }}`,
-                type: 'post',
-                contentType: "application/json; charset=utf-8",
-                data: JSON.stringify(data),
-                success: function (response) {
-                    if (response != 0) {
-                        alert(response)
-                    }
+                let category = []
+                for (element of $('.category:checkbox:checked')) {
+                    category.push(element.value)
                 }
-            })
 
+                if ($("#publish").is(':checked')) {
+                    window.publish = true
+                } else {
+                    window.publish = false
+                }
+
+                if ($("#slider_status").is(':checked')) {
+                    window.slider = true
+                } else {
+                    window.slider = false
+                }
+
+
+                let title = $("#title").val()
+                let content = $("#textarea").val()
+
+                let data = {
+                    category: category,
+                    publish: window.publish,
+                    slider: window.slider,
+                    title: title,
+                    content: content,
+                    post_id: window.post_id,
+
+                }
+
+                $.ajax({
+                    url: `http://127.0.0.1:5000{{ url_for('blog.create_post_ajax') }}`,
+                    type: 'post',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        if (response != 0) {
+                            $("#alert").removeClass('d-none')
+                            setTimeout( function() { $("#alert").fadeOut(); }, 2000);
+                        }
+                    }
+                })
+            }
         })
 
 
@@ -736,6 +749,7 @@
                             if (response != 0) {
 
                                 $("#main_pic").attr('src', response)
+                                window.main_pic = response
                             } else {
 
                             }
@@ -762,6 +776,7 @@
                         if (response != 0) {
 
                             $("#main_pic").attr('src', response)
+                            window.main_pic = response
                         } else {
 
                         }
@@ -773,5 +788,30 @@
 
 
         })
+
+
+        function delete_pic() {
+            let selected_elements = document.getElementsByClassName('selected-image')
+            for (element of selected_elements) {
+                element.parentNode.remove()
+                let address = element.id
+                let form = new FormData();
+                form.append('address', address)
+                form.append('post_id', window.post_id)
+
+                $.ajax({
+                    url: `http://127.0.0.1:5000{{ url_for('blog.remove_pic') }}`,
+                    type: 'post',
+                    data: form,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response != 0) {
+
+                        }
+                    }
+                })
+            }
+        }
     </script>
 {% endblock %}
