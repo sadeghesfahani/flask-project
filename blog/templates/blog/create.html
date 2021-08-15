@@ -40,7 +40,8 @@
                 {% if post.main_image %}
                     <img class="card-img-top" id="main_pic" src="{{ url_for('static',filename=post.main_image) }}">
                 {% else %}
-                    <img class="card-img-top" id="main_pic" src="{{ url_for('static',filename='media/post/no-pic.png') }}">
+                    <img class="card-img-top" id="main_pic"
+                         src="{{ url_for('static',filename='media/post/no-pic.png') }}">
                 {% endif %}
             {% else %}
                 <img class="card-img-top" id="main_pic" src="{{ url_for('static',filename='media/post/no-pic.png') }}">
@@ -596,13 +597,22 @@
                 processData: false,
                 success: function (response) {
                     if (response != 0) {
+                        alert("im here")
                         let container = document.getElementById("media-container")
+                        alert(container)
                         {#alert(container.childElementCount)#}
                         let laschild = container.lastChild
-                        let element_count = laschild.childElementCount
+                        alert("next is lastchild")
+                        alert(laschild)
+                        if (laschild == null) {
+
+                        } else {
+                            var element_count = laschild.childElementCount
+                        }
                         element_count = typeof element_count
                         element_count = element_count.toString()
-
+                        alert("next is element count")
+                        alert(element_count)
                         if (element_count != "undefined" && laschild.childElementCount !== 3) {
 
                             $(`#${laschild.id}`).append(`<div class="card" id="card${(container.childElementCount - 1) * 3 + laschild.childElementCount + 1}"><img onclick="selective(this)" class="card-img " id="${response}" src="${response}"> </div>`)
@@ -610,7 +620,8 @@
                         } else if (element_count == "undefined") {
 
                             $("#media-container").append(`<div class="card-deck mt-3" id="media_deck1">`)
-                            $(`#media_deck1`).append(`<div class="card" id="card${(container.childElementCount - 1) * 3 + laschild.childElementCount + 1}"><img onclick="selective(this)" class="card-img " id="${response}" src="${response}"> </div>`)
+
+                            $(`#media_deck1`).append(`<div class="card" id="card0"><img onclick="selective(this)" class="card-img " id="${response}" src="${response}"> </div>`)
                         } else {
 
                             $("#media-container").append(`<div class="card-deck mt-3" id="media_deck${(container.childElementCount) * 3 + 1}">`)
@@ -709,27 +720,27 @@
                 $.post("http://127.0.0.1:5000{{ url_for('blog.create_draft_post') }}", function (data) {
                     window.post_id = data
 
-                let elem = document.getElementById('upload_main_image')
-                let file = elem.files[0];
-                let form = new FormData();
-                form.append('media', file)
-                form.append('post_id', window.post_id)
+                    let elem = document.getElementById('upload_main_image')
+                    let file = elem.files[0];
+                    let form = new FormData();
+                    form.append('media', file)
+                    form.append('post_id', window.post_id)
 
-                $.ajax({
-                    url: `http://127.0.0.1:5000{{ url_for('blog.upload_main_pic') }}`,
-                    type: 'post',
-                    data: form,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        if (response != 0) {
+                    $.ajax({
+                        url: `http://127.0.0.1:5000{{ url_for('blog.upload_main_pic') }}`,
+                        type: 'post',
+                        data: form,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            if (response != 0) {
 
-                            $("#main_pic").attr('src',response)
-                        } else {
+                                $("#main_pic").attr('src', response)
+                            } else {
 
-                        }
-                    },
-                });
+                            }
+                        },
+                    });
                 })
 
             } else {
@@ -750,7 +761,7 @@
                     success: function (response) {
                         if (response != 0) {
 
-                            $("#main_pic").attr('src',response)
+                            $("#main_pic").attr('src', response)
                         } else {
 
                         }
