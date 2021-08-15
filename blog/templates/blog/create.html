@@ -36,12 +36,21 @@
         </div>
 
         <div class="card mt-3">
-            <img class="card-img-top" src="{{ url_for('static',filename='media/post/0.Cover_.Zimmer-768x488.jpg') }}">
+            {% if post %}
+                {% if post.main_image %}
+                    <img class="card-img-top" id="main_pic" src="{{ url_for('static',filename=post.main_image) }}">
+                {% else %}
+                    <img class="card-img-top" id="main_pic" src="{{ url_for('static',filename='media/post/no-pic.png') }}">
+                {% endif %}
+            {% else %}
+                <img class="card-img-top" id="main_pic" src="{{ url_for('static',filename='media/post/no-pic.png') }}">
+            {% endif %}
             <form>
 
                 <div class="card-footer">
-
-                    <input type="submit" class="btn btn-primary" value="به روز رسانی">
+                    <label for="upload_main_image"><a class="btn btn-primary"> تصویر<i class="fa fa-image mr-2"></i>
+                    </a> </label>
+                    <input type="file" id="upload_main_image" class="d-none">
                     <input type="submit" class="btn btn-danger mr-2" value="حذف">
                 </div>
             </form>
@@ -667,27 +676,90 @@
 
             let title = $("#title").val()
             let content = $("#textarea").val()
+
             let data = {
                 category: category,
                 publish: window.publish,
                 slider: window.slider,
                 title: title,
-                content: content
-
+                content: content,
+                post_id: window.post_id
             }
 
             $.ajax({
                 url: `http://127.0.0.1:5000{{ url_for('blog.create_post_ajax') }}`,
                 type: 'post',
-                data: data,
-                contentType: false,
-                processData: false,
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
                 success: function (response) {
                     if (response != 0) {
                         alert(response)
                     }
                 }
             })
+
+        })
+
+
+        $("#upload_main_image").change(function () {
+
+            if (typeof window.post_id == 'undefined') {
+
+                {#create_post and get id#}
+                $.post("http://127.0.0.1:5000{{ url_for('blog.create_draft_post') }}", function (data) {
+                    window.post_id = data
+
+                let elem = document.getElementById('upload_main_image')
+                let file = elem.files[0];
+                let form = new FormData();
+                form.append('media', file)
+                form.append('post_id', window.post_id)
+
+                $.ajax({
+                    url: `http://127.0.0.1:5000{{ url_for('blog.upload_main_pic') }}`,
+                    type: 'post',
+                    data: form,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response != 0) {
+
+                            $("#main_pic").attr('src',response)
+                        } else {
+
+                        }
+                    },
+                });
+                })
+
+            } else {
+
+
+                {#upload image#}
+                let file = this.files[0];
+                let form = new FormData();
+                form.append('media', file)
+                form.append('post_id', window.post_id)
+
+                $.ajax({
+                    url: `http://127.0.0.1:5000{{ url_for('blog.upload_main_pic') }}`,
+                    type: 'post',
+                    data: form,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response != 0) {
+
+                            $("#main_pic").attr('src',response)
+                        } else {
+
+                        }
+                    },
+                });
+
+
+            }
+
 
         })
     </script>

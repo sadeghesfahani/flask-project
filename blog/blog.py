@@ -1,3 +1,4 @@
+import ast
 import functools
 import os
 from os.path import join, dirname, realpath
@@ -126,9 +127,34 @@ def upload_pic():
     return 'done'
 
 
-# @bp.route("/post/create/ajax", methods=("GET", "POST"))
-# def create_post_ajax():
-#     data=request.args
-#     form=request.form.get('title')
-#     print(data,form)
-#     return "done"
+
+@bp.route("/post/upload/main-media/ajax", methods=("GET", "POST"))
+def upload_main_pic():
+    post_id = request.form['post_id']
+    print(post_id)
+    file = request.files['media']
+    try:
+        post = Post.objects(id=ObjectId(post_id)).get()
+        address = f'static/users/{g.user.username}/{file.filename}'
+        file.save(os.path.join(current_app.root_path, f'static/users/{g.user.username}/{file.filename}'))
+        post.main_image = address
+        post.save()
+
+        return address
+    except mongoengine.DoesNotExist:
+        print('failed')
+
+    return 'done'
+
+
+@bp.route("/post/create/ajax", methods=("GET", "POST"))
+def create_post_ajax():
+
+
+    decoded_data=request.json
+
+    # data = json.load(decoded_data)
+
+
+    print(decoded_data)
+    return "done"
