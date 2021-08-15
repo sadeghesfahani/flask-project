@@ -28,7 +28,7 @@
                 </div>
                 <div class="card-footer">
 
-                    <input type="submit" class="btn btn-primary" value="به روز رسانی">
+                    <input type="submit" id="update" class="btn btn-primary" value="به روز رسانی">
                     <input type="submit" class="btn btn-danger mr-2" value="حذف">
                 </div>
             </form>
@@ -62,7 +62,7 @@
 
                                 <div class="card-header bg-transparent rounded-0" id="headingOne{{ loop.index0 }}">
                                     <h5 class="mb-0">
-                                        <input type="checkbox" value="{{ category.id }}">
+                                        <input type="checkbox" class="category" value="{{ category.id }}">
                                         <button class="btn btn-link" data-toggle="collapse"
                                                 data-target="#collapseOne{{ loop.index0 }}"
                                                 aria-expanded="true" aria-controls="collapseOne{{ loop.index0 }}">
@@ -76,7 +76,7 @@
                                         <div class="card-body">
                                             <ul id="{{ category.id }}">
                                                 {% for child in category.child %}
-                                                    <li><input type="checkbox" value="{{ child.id }}"
+                                                    <li><input type="checkbox" class="category" value="{{ child.id }}"
                                                                class="ml-3">{{ child.title }}</li>
                                                 {% endfor %}
                                             </ul>
@@ -101,7 +101,23 @@
     </div>
 
     <div class="col-12 col-md-9">
-        <div class="card mt-5 pr-0">
+        <div class="card mt-5">
+
+            <div class="card-header text-right">
+                <input type="text" id="title" class="form-control" placeholder="عنوان مطلب">
+
+            </div>
+            <div class="card-body text-right pt-1">
+                <input type="checkbox" id="automatic">
+                <label for="automatic">انتخاب دستی نام مستعار مطلب</label>
+
+
+                <input type="text" id="seo" class="form-control mt-2" disabled>
+            </div>
+
+
+        </div>
+        <div class="card mt-3 pr-0">
             <div class="card-header">
                 <a class="btn btn-info" style="position: relative;z-index: 1" id="media" data-toggle="modal"
                    data-target="#mediamodal"><i class="fa fa-image"></i> چندرسانه ای
@@ -561,7 +577,7 @@
             let file = this.files[0];
             let form = new FormData();
             form.append('media', file)
-            form.append('post_id',window.post_id)
+            form.append('post_id', window.post_id)
 
             $.ajax({
                 url: `http://127.0.0.1:5000{{ url_for('blog.upload_pic') }}`,
@@ -582,14 +598,14 @@
 
                             $(`#${laschild.id}`).append(`<div class="card" id="card${(container.childElementCount - 1) * 3 + laschild.childElementCount + 1}"><img onclick="selective(this)" class="card-img " id="${response}" src="${response}"> </div>`)
 
-                        }else if (element_count == "undefined"){
+                        } else if (element_count == "undefined") {
 
                             $("#media-container").append(`<div class="card-deck mt-3" id="media_deck1">`)
-                            $(`#media_deck1`).append(`<div class="card" id="card${(container.childElementCount-1)*3+laschild.childElementCount+1}"><img onclick="selective(this)" class="card-img " id="${response}" src="${response}"> </div>`)
-                    }else{
+                            $(`#media_deck1`).append(`<div class="card" id="card${(container.childElementCount - 1) * 3 + laschild.childElementCount + 1}"><img onclick="selective(this)" class="card-img " id="${response}" src="${response}"> </div>`)
+                        } else {
 
-                            $("#media-container").append(`<div class="card-deck mt-3" id="media_deck${(container.childElementCount)*3+1}">`)
-                            $(`#media_deck${(container.childElementCount-1)*3+1}`).append(`<div class="card" id="card${(container.childElementCount-1)*3+laschild.childElementCount+1}"><img onclick="selective(this)" class="card-img " id="${response}" src="${response}"> </div>`)
+                            $("#media-container").append(`<div class="card-deck mt-3" id="media_deck${(container.childElementCount) * 3 + 1}">`)
+                            $(`#media_deck${(container.childElementCount - 1) * 3 + 1}`).append(`<div class="card" id="card${(container.childElementCount - 1) * 3 + laschild.childElementCount + 1}"><img onclick="selective(this)" class="card-img " id="${response}" src="${response}"> </div>`)
                         }
                     } else {
 
@@ -597,6 +613,81 @@
                 },
             });
 
+
+        })
+
+        $("#title").change(function () {
+            let text = $("#title").val()
+            text = text.trim()
+            while (text.match(" ")) {
+                text = text.replace(" ", "-");
+            }
+            if ($("#automatic").is(':checked')) {
+
+            } else {
+                $("#seo").val(text)
+
+            }
+
+        })
+        $("#automatic").change(function () {
+            if ($("#automatic").is(':checked')) {
+                $("#seo").prop('disabled', false)
+
+            } else {
+                $("#seo").prop('disabled', true)
+                let text = $("#title").val()
+                text = text.trim()
+                while (text.match(" ")) {
+                    text = text.replace(" ", "-");
+                }
+                $("#seo").val(text)
+            }
+        })
+
+        $("#update").click(function () {
+            event.preventDefault()
+
+            let category = []
+            for (element of $('.category:checkbox:checked')) {
+                category.push(element.value)
+            }
+
+            if ($("#publish").is(':checked')) {
+                window.publish = true
+            } else {
+                window.publish = false
+            }
+
+            if ($("#slider_status").is(':checked')) {
+                window.slider = true
+            } else {
+                window.slider = false
+            }
+
+            let title = $("#title").val()
+            let content = $("#textarea").val()
+            let data = {
+                category: category,
+                publish: window.publish,
+                slider: window.slider,
+                title: title,
+                content: content
+
+            }
+
+            $.ajax({
+                url: `http://127.0.0.1:5000{{ url_for('blog.create_post_ajax') }}`,
+                type: 'post',
+                data: data,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response != 0) {
+                        alert(response)
+                    }
+                }
+            })
 
         })
     </script>

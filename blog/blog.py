@@ -84,7 +84,7 @@ def category_add_ajax():
 
         return {"self": str(new_category.id), "parent": str(parent.id) if parent is not None else None}
 
-@base_load
+
 @bp.route("/post/draft/ajax", methods=("GET", "POST"))
 def create_draft_post():
     new_post = Post()
@@ -93,7 +93,7 @@ def create_draft_post():
     new_post.save()
     return str(new_post.id)
 
-@base_load
+
 @bp.route("/post/fetch/media/ajax", methods=("GET", "POST"))
 def fetch_media():
     post_id = request.form['post_id']
@@ -106,7 +106,7 @@ def fetch_media():
     return {'images': [image for image in post.images]}
     # return {'images': post.images}
 
-@base_load
+
 @bp.route("/post/upload/media/ajax", methods=("GET", "POST"))
 def upload_pic():
     post_id = request.form['post_id']
@@ -126,4 +126,9 @@ def upload_pic():
     return 'done'
 
 
-
+# @bp.route("/post/create/ajax", methods=("GET", "POST"))
+# def create_post_ajax():
+#     data=request.args
+#     form=request.form.get('title')
+#     print(data,form)
+#     return "done"
