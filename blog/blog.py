@@ -112,3 +112,24 @@ def upload_pic():
         print('failed')
 
     return 'done'
+
+
+@bp.route("/profile")
+def profile():
+
+    #other_posts = None
+
+    #user = {}
+    #user_posts = []
+
+    return  render_template("user_doshboard.html", other_post=[1,2,3,4], user={"first_name":"sina", "last_name":"esmaili", "username":"Sinae12", "email":"sina@gmail.com", "phone":"0123456789","addres":""})
+
+
+@bp.route("/edit-profile/<username>")
+def edit(username):
+    user = {}
+    #get info from form and save it
+    #...
+    return render_template("edit_profile.html", user={"first_name":"Sina", "last_name":"Esmaili", "username":"Sina123", "password":"12345678", "email":"sina@emaili.com", "phone":"09168581319"})
+
+
