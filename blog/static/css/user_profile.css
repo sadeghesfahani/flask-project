@@ -179,6 +179,15 @@ header .user-toggle {
     float: right;
 }
 
+.content .main-content .post .post-preview i {
+    font-size: 18px;
+}
+
+.content .main-content .post .post-preview .icon {
+    float: right;
+    margin-right: 8px;
+}
+
 .content .main-content .post-title {
     margin: 20px;
 }
