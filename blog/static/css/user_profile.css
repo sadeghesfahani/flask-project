@@ -9,57 +9,9 @@ body {
     margin: 0px;
     background: #f6f6f6;
 }
-header {
-    background: #20c997;
-    height: 60px;
-}
-header ul {
-    float: right;
-    margin: 0px;
-    padding: 0px;
-    list-style: none;
-
-}
-header ul li {
-    float: left;
-    position: relative;
-}
 
 
-header ul li a {
-    display: block;
-    padding: 30px;
-    margin: 7px;
-    font-size: 1.2em;
-    text-decoration: none;
-}
-
-header ul li a:hover {
-    background: white;
-    transition: 0.5s;
-}
-header * {
-    color: white;
-}
-header .logo{
-    float: left;
-    height: inherit;
-}
-header .logo-text {
-    margin: 10px;
-}
-header .logo-text span{
-    color: #007bff;
-}
-header .user-toggle {
-    float: left;
-    border: 0px;
-    padding: 15px;
-    font-size: 2em;
-}
-
-
-/* style for content and sidebar */
+/* style for content */
 .content {
     width: 90%;
     margin: 30px auto 30px;
@@ -68,8 +20,10 @@ header .user-toggle {
     width: 90%;
     float: right;
 }
+
+
 .content .main-content .post {
-    width: 95%;
+    width: 1000px;
     height: 270px;
     margin: 20px auto;
     border-radius: 5px;
@@ -95,7 +49,7 @@ header .user-toggle {
 .content .main-content .post .edit-btn {
     position: absolute;
     bottom: 10px;
-    right: 87%;
+    right: 86%;
     border: 1px solid #005cbf;
     border-radius: .25rem;
     color: #005cbf;
@@ -121,6 +75,8 @@ header .user-toggle {
     height: 100%;
     float: right;
 }
+
+
 .content .main-content .post .post-preview {
     width: 60%;
     padding: 10px;
@@ -160,6 +116,7 @@ header .user-toggle {
 }
 
 .card {
+
     box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
     position: relative;
     display: flex;
@@ -170,6 +127,8 @@ header .user-toggle {
     background-clip: border-box;
     border: 0 solid rgba(0,0,0,.125);
     border-radius: .25rem;
+    width: 1070px;
+    height: 270px;
 }
 
 .card-body {
@@ -178,6 +137,126 @@ header .user-toggle {
     padding: 1rem;
 }
 
+.card .card-body .tooltip-avatar {
+    position: absolute;
+    right: 10px;
+}
+.card .card-body h1 {
+    position: absolute;
+    right: 20%;
+}
+
+.card .card-body h4 {
+    position: absolute;
+    bottom: 60px;
+    right: 4%;
+}
+.card .card-body .email {
+    position: absolute;
+    right: 20%;
+    bottom: 50%;
+}
+
+.card .card-body .phone {
+    position: absolute;
+    right: 20%;
+    bottom: 35%;
+}
+
+#myBtn {
+    position: absolute;
+    right: 20%;
+    bottom: 10%;
+}
+
+.card .card-body .follow-info {
+    position: absolute;
+    bottom: 5px;
+    right: 4%;
+}
+
 .text-secondary {
     margin-top: 8px;
 }
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* modal style */
+
+
+.edit-information-form{
+	padding: 50px 0;
+    margin-top: 0px;
+}
+
+.edit-information-form form{
+    background-color: #fff;
+    max-width: 600px;
+    margin: auto;
+    padding: 50px 70px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.075);
+}
+
+
+
+.edit-information-form .item{
+	border-radius: 20px;
+    margin-bottom: 25px;
+    padding: 10px 20px;
+}
+
+.edit-information-form .save-change{
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #5791ff;
+    border: none;
+    color: white;
+    margin-top: 20px;
+}
+label {
+    float: right;
+    margin-right: 13px;
+}
+
+
+
