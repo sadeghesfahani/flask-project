@@ -282,7 +282,7 @@ def remove_pic():
 @login_required
 @base_load
 def profile():
-    user_posts = None
+    # user_posts = None
 
     # user = {}
     # user_posts = []
