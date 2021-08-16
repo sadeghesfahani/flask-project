@@ -70,7 +70,7 @@
 
                 <div id="accordion">
                     <div class="card" rounded-0 id="must_add_here">
-                        {% for category in data.category %}
+                        {% for category in g.category %}
                             {% if category.parent == None %}
 
                                 <div class="card-header bg-transparent rounded-0" id="headingOne{{ loop.index0 }}">

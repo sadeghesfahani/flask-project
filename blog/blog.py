@@ -21,6 +21,7 @@ import json
 bp = Blueprint("blog", __name__)
 UPLOADS_PATH = 'static/media'
 
+
 def base_load(view):
     """View decorator that fill what is needed for basic functional like menu"""
 
@@ -32,37 +33,46 @@ def base_load(view):
 
     return wrapped_view
 
-@base_load
+
+
 @bp.route("/")
+@base_load
 def index():
     user = g.user
-    return render_template("blog/index.html", data=get_essentials())
+    return render_template("blog/index.html")
 
-@base_load
+
+
 @bp.route("/create")
-def create_post():
-    return render_template("blog/create.html", data=get_essentials())
-
 @base_load
+def create_post():
+    return render_template("blog/create.html")
+
+
+
 @bp.route("/user")
+@base_load
 def user():
     return render_template("blog/user.html")
 
-@base_load
-def get_essentials():
-    data = dict()
-    data['user'] = g.user if g.user else None
-    data['category'] = Category.objects()
-    return data
 
-@base_load
+# @base_load
+# def get_essentials():
+#     data = dict()
+#     data['user'] = g.user if g.user else None
+#     data['category'] = Category.objects()
+#     return data
+
+
+
 @bp.route("/category/ajax")
 def category_ajax():
     return {'category': [[str(obj.id), obj.title, str(obj.parent.id) if "parent" in obj else False,
                           [child.title for child in obj.child] if "child" in obj else False] for obj in
                          Category.objects()]}
 
-@base_load
+
+
 @bp.route("/category/add/ajax", methods=("GET", "POST"))
 def category_add_ajax():
     if request.method == "POST":
@@ -127,7 +137,6 @@ def upload_pic():
     return 'done'
 
 
-
 @bp.route("/post/upload/main-media/ajax", methods=("GET", "POST"))
 def upload_main_pic():
     post_id = request.form['post_id']
@@ -149,16 +158,12 @@ def upload_main_pic():
 
 @bp.route("/post/create/ajax", methods=("GET", "POST"))
 def create_post_ajax():
-
-
-    decoded_data=request.json
+    decoded_data = request.json
 
     # data = json.load(decoded_data)
 
-
     print(decoded_data)
     return "done"
-
 
 
 @bp.route("/post/remove/media/ajax", methods=("GET", "POST"))
@@ -172,9 +177,28 @@ def remove_pic():
         post = Post.objects(id=ObjectId(post_id)).get()
         post.images.remove(address)
         post.save()
-        os.remove(os.path.join(current_app.root_path,address))
+        os.remove(os.path.join(current_app.root_path, address))
         return address
     except mongoengine.DoesNotExist:
         print('failed')
 
     return 'done'
+
+
+@bp.route("/profile")
+@base_load
+def profile():
+    user_posts = None
+
+    # user = {}
+    # user_posts = []
+
+    return render_template("user_doshboard.html", user_posts=user_posts)
+
+
+@bp.route("/edit-profile/<username>")
+@base_load
+def edit_profile(username):
+    # get info from form and save it
+    # ...
+    return render_template("edit_profile.html")
