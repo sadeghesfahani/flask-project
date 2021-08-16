@@ -81,7 +81,7 @@ def index():
     return render_template("blog/index.html", posts=posts)
 
 
-@bp.route("/create")
+@bp.route("/create/")
 @login_required
 @base_load
 def create_post():
@@ -278,7 +278,7 @@ def remove_pic():
     return 'done'
 
 
-@bp.route("/profile")
+@bp.route("/profile/")
 @login_required
 @base_load
 def profile():
@@ -286,14 +286,27 @@ def profile():
 
     # user = {}
     # user_posts = []
+    user_posts = Post.objects(user=ObjectId(g.user.id)).get()
+    return render_template("blog/user_doshboard.html", user_posts=user_posts)
 
-    return render_template("user_doshboard.html", user_posts=user_posts)
 
-
-@bp.route("/edit-profile/<username>")
+@bp.route("/edit-profile/<username>/")
 @login_required
 @base_load
 def edit_profile(username):
     # get info from form and save it
     # ...
+    first_name = request.form['first-name']
+    last_name = request.form['last-name']
+    password = request.form['password']
+    email = request.form['email']
+    user = User.objects(username=username).get()
+    user.first_name = first_name
+    user.save()
+    user.last_name = last_name
+    user.save()
+    user.password = password
+    user.save()
+    user.email = email
+    user.save()
     return render_template("edit_profile.html")
