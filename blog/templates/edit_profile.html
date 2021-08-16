@@ -12,26 +12,32 @@
 <body>
     <div class="edit-information-form">
         <form method="post">
+            <label for="first-name">نام</label>
              <div class="form-group">
                 <input type="text" class="form-control item" id="first-name" name="first-name" placeholder="{{ g.user.first_name }}">
             </div>
+
+            <label for="last-name">نام خانوادگی</label>
              <div class="form-group">
                 <input type="text" class="form-control item" id="last-name" name="last-name" placeholder="{{ g.user.last_name }}">
             </div>
+
+            <label for="password">رمز عبور</label>
             <div class="form-group">
-                <input type="text" class="form-control item" id="username" name="username" placeholder="{{ g.user.username }}">
+                <input type="password" class="form-control item" id="password" name="password">
             </div>
-            <div class="form-group">
-                <input type="password" class="form-control item" id="password" name="password" placeholder="{{ g.user.password }}">
-            </div>
+
+            <label for="email">ایمیل</label>
             <div class="form-group">
                 <input type="text" class="form-control item" id="email" name="email" placeholder="{{ g.user.email }}">
             </div>
+
+            <label for="phone-number">شماره تلفن</label>
             <div class="form-group">
                 <input type="text" class="form-control item" id="phone-number" name="phone-number" placeholder="{{ g.user.phone}}">
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-block save-change">Save Change</button>
+                <button type="button" class="btn btn-block save-change">ذخیره تغییرات</button>
             </div>
         </form>
 
