@@ -45,7 +45,7 @@ flask run | flask run
  
 Task | in charge
 -----|----------
-index (front) | Sadeghesfahani [x]
+index (front) | Sadeghesfahani - [x]
 index (back)  | Assarehha [ ]
 authentication (front) | Mohammadi [ ]
 authentication (back) | Esmaili [x]
