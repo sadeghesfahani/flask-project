@@ -26,6 +26,8 @@ def base_load(view):
         return view(**kwargs)
 
     return wrapped_view
+
+
 def login_required(view):
     """View decorator that redirects anonymous users to the login page."""
 

@@ -1,10 +1,8 @@
 import ast
 import functools
 import os
-from os.path import join, dirname, realpath
-
 import mongoengine
-from bson import ObjectId, BSONOBJ
+from bson import ObjectId
 from flask import Blueprint, session, app, current_app
 from flask import flash
 from flask import g
@@ -12,10 +10,9 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
-from werkzeug.exceptions import abort
 from werkzeug.utils import secure_filename
 from blog.auth import login_required
-from blog.db import get_db, Category, User, Post
+from blog.db import Category, User, Post
 import json
 
 bp = Blueprint("blog", __name__)
@@ -23,7 +20,11 @@ UPLOADS_PATH = 'static/media'
 
 
 def base_load(view):
-    """View decorator that fill what is needed for basic functional like menu"""
+    """
+    this decorator has been designed to get ride of redundancy of passing basic data
+    toward pages
+    :return: passing category data so far
+    """
 
     @functools.wraps(view)
     def wrapped_view(**kwargs):
@@ -34,7 +35,6 @@ def base_load(view):
     return wrapped_view
 
 
-
 @bp.route("/")
 @base_load
 def index():
@@ -42,39 +42,43 @@ def index():
     return render_template("blog/index.html")
 
 
-
 @bp.route("/create")
+@login_required
 @base_load
 def create_post():
     return render_template("blog/create.html")
 
 
-
 @bp.route("/user")
+@login_required
 @base_load
 def user():
     return render_template("blog/user.html")
 
 
-# @base_load
-# def get_essentials():
-#     data = dict()
-#     data['user'] = g.user if g.user else None
-#     data['category'] = Category.objects()
-#     return data
-
-
 
 @bp.route("/category/ajax")
 def category_ajax():
+    """
+    this section fetches all category data exist in database and pass it to the
+    Front-end for the further uses
+    :return: a dictionary consists of list of all categories in detail
+    """
     return {'category': [[str(obj.id), obj.title, str(obj.parent.id) if "parent" in obj else False,
                           [child.title for child in obj.child] if "child" in obj else False] for obj in
                          Category.objects()]}
 
 
-
 @bp.route("/category/add/ajax", methods=("GET", "POST"))
 def category_add_ajax():
+    """
+    this section add category to the category collections based on what
+    Front-end passes by. if there is no parent if will be considered as
+    first level category otherwise the parent will be added to the parent
+    field and parent will be recalled and this new child will be added to
+    its child list
+    :return: a dictionary consists of created category id and its parent id
+    """
     if request.method == "POST":
         category_text = request.form['text']
         category_parent = request.form['parent']
@@ -91,13 +95,17 @@ def category_add_ajax():
             parent = Category.objects(id=ObjectId(category_parent))[0]
             parent.child += Category.objects(id=new_category.id)
             parent.save()
-        # Category.objects(id=new_category.id)
 
         return {"self": str(new_category.id), "parent": str(parent.id) if parent is not None else None}
 
 
 @bp.route("/post/draft/ajax", methods=("GET", "POST"))
 def create_draft_post():
+    """
+    this section create a draft for uploading and storing uploaded pictures
+    related to post
+    :return: created post id
+    """
     new_post = Post()
     new_post.user = g.user
     new_post.draft = True
@@ -107,21 +115,30 @@ def create_draft_post():
 
 @bp.route("/post/fetch/media/ajax", methods=("GET", "POST"))
 def fetch_media():
+    """
+    this section fetch all image addresses related to the specific post
+    which is determined by Front-end
+    :return: list of all related picture addresses
+    """
     post_id = request.form['post_id']
     try:
         post = Post.objects(id=ObjectId(post_id)).get()
     except mongoengine.DoesNotExist:
         return False
 
-    # return {'images': ['http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg','http://127.0.0.1:5000/static/media/post/0.Cover_.Zimmer-768x488.jpg']}
     return {'images': [image for image in post.images]}
-    # return {'images': post.images}
+
 
 
 @bp.route("/post/upload/media/ajax", methods=("GET", "POST"))
 def upload_pic():
+    """
+    this section uploads picture into user's directory and put (append) their address
+    into the post database (images list)
+    :return: uploaded picture address
+    """
+    # fetching data passed from Front-end
     post_id = request.form['post_id']
-    print(post_id)
     file = request.files['media']
     try:
         post = Post.objects(id=ObjectId(post_id)).get()
@@ -139,8 +156,14 @@ def upload_pic():
 
 @bp.route("/post/upload/main-media/ajax", methods=("GET", "POST"))
 def upload_main_pic():
+    """
+    this section upload main picture of the post into user directory
+    and save it to the post data base (main_image)
+    :return: saved picture address
+    """
+
+    # fetching data passed from Front-end
     post_id = request.form['post_id']
-    print(post_id)
     file = request.files['media']
     try:
         post = Post.objects(id=ObjectId(post_id)).get()
@@ -148,7 +171,6 @@ def upload_main_pic():
         file.save(os.path.join(current_app.root_path, f'static/users/{g.user.username}/{file.filename}'))
         post.main_image = address
         post.save()
-
         return address
     except mongoengine.DoesNotExist:
         print('failed')
@@ -158,21 +180,31 @@ def upload_main_pic():
 
 @bp.route("/post/create/ajax", methods=("GET", "POST"))
 def create_post_ajax():
+    """
+    this section creates post or update changes if there is
+    post_id in passed json, update part will run otherwise
+    create part will run
+    :return: nothing
+    """
     decoded_data = request.json
-
-    # data = json.load(decoded_data)
-
     print(decoded_data)
     return "done"
 
 
 @bp.route("/post/remove/media/ajax", methods=("GET", "POST"))
 def remove_pic():
+    """
+    this section delete picture which had been already added
+    to the user directory and post database (images list) with
+    ajax technology
+    :returns: nothing
+    """
+
+    # getting information from front end to work with
     post_id = request.form['post_id']
-    print(post_id)
     address = request.form['address']
-    print(address)
-    # return 'done'
+
+    # finding post with identified id and remove specified picture from it
     try:
         post = Post.objects(id=ObjectId(post_id)).get()
         post.images.remove(address)
@@ -186,6 +218,7 @@ def remove_pic():
 
 
 @bp.route("/profile")
+@login_required
 @base_load
 def profile():
     user_posts = None
@@ -197,6 +230,7 @@ def profile():
 
 
 @bp.route("/edit-profile/<username>")
+@login_required
 @base_load
 def edit_profile(username):
     # get info from form and save it
