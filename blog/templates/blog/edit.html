@@ -866,6 +866,14 @@ window.images = []
         $(`#${cat}`).prop("checked",true)
     }
 
+    window.cat = []
+        function check_value(elem){
+            if(window.cat.includes(elem.value)){
+                window.cat.remove(elem.value)
+            }else{
+                window.cat.push(elem.value)
+            }
+        }
 
 {% endif %}
     </script>

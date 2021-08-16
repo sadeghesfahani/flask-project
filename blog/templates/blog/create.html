@@ -442,7 +442,7 @@
 
                         let element_to_add = `<div class="card-header bg-transparent rounded-0" id="headingOne${counter}">
                                     <h5 class="mb-0">
-                                        <input type="checkbox" value="${data["self"]}">
+                                        <input type="checkbox" onchange="check_value(this)" value="${data["self"]}">
                                         <button class="btn btn-link" data-toggle="collapse"
                                                 data-target="#collapseOne${counter}"
                                                 aria-expanded="true" aria-controls="collapseOne${counter}">
@@ -467,7 +467,7 @@
                         inp.value = data["self"];
                         inp.type = 'checkbox';
                         inp.classList += "ml-3";
-
+                        inp.onchange = check_value(this)
                         let li = document.createElement("li")
                         li.innerText = text
                         li.prepend(inp)
@@ -681,9 +681,15 @@
                 $("#title_info").addClass('d-block')
             } else {
                 let category = []
+
+
                 for (element of $('.category:checkbox:checked')) {
                     category.push(element.value)
                 }
+                for(newly_added_elements of window.cat){
+                    category.push(newly_added_elements)
+                }
+
 
                 if ($("#publish").is(':checked')) {
                     window.publish = true
@@ -830,6 +836,16 @@
         window.post_id = '{{ post.id }}'
         {% endif %}
 
+        window.cat = []
+        function check_value(elem){
+            if(window.cat.includes(elem.value)){
+                let index =window.cat.indexOf(elem.value)
+                window.cat.splice(index,1)
+
+            }else{
+                window.cat.push(elem.value)
+            }
+        }
     </script>
 
 {% endblock %}

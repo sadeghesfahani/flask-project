@@ -64,7 +64,7 @@ class Comment(EmbeddedDocument):
 
 class Post(Document):
     title = StringField(max_length=150)
-    body = StringField(max_length=1200)
+    body = StringField(max_length=2500)
     user = ReferenceField(User)
     category = ListField(ReferenceField(Category))
     main_image = StringField(max_length=150)
