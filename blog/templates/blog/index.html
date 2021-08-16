@@ -56,7 +56,7 @@
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     {% for key in posts.index %}
-                        {{ posts.index[key]|count }}
+
                         {% if posts.index[key]|count !=0 %}
                             {% if loop.index0 == 0 %}
                                 <a class="nav-item nav-link active" id="nav-tab-{{ loop.index0 }}" data-toggle="tab"
@@ -93,7 +93,7 @@
 
                     <div class="card m-4 w-25 d-inline-block">
                         <img class="card-img-top "
-                             src="{{ post[0].main_image }}"
+                             src="{{ post.main_image }}"
                              alt="Card image cap">
                         <div class="card-header text-center bg-transparent border-bottom-0 m-0 pb-0">
 
@@ -107,7 +107,7 @@
                                style="margin-top: -20px"><small
                                     class="text-muted"><i class="fa fa-user-circle-o"
                                                           aria-hidden="true"></i>
-                                {{ post[0].user.first_name }}
+                                {{ post.user.first_name }}
                             </small>
                             </p>
                             <p class="card-text float-right d-inline-flex mb-0"
@@ -118,7 +118,7 @@
                             </small></p>
                             <h5 class="card-title">{{ post_title }}</h5>
                             <p class="card-text">
-                                {{ post[0].body|truncate(20) }}
+                                {{ post.title|truncate(20) }}
                             </p>
 
                         </div>

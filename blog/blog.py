@@ -44,31 +44,34 @@ def base_load(view):
 @bp.route("/")
 @base_load
 def index():
-    # environment.filters['get_user']=get_user
-    # index_posts = Post.objects(index=True)
+
     slider_posts = Post.objects(slider=True)
     category_post_list = list()
     index_posts = dict()
     for category in Category.objects(parent=None):
+        index_posts[category.title]=list()
         if 'child' in category:
             posts = Post.objects.filter(category__contains=category.id)
-            posts = [x for x in posts if x != []]
+            posts = [x for x in posts if x != [] and x.published and x.index]
             if posts:
-                category_post_list.append(posts)
+                [index_posts[category.title].append(post) for post in posts]
             for children in category['child']:
                 posts = Post.objects.filter(category__contains=children.id)
-                posts = [x for x in posts if x != []]
+                posts = [x for x in posts if x != [] and x.published and x.index]
                 if posts:
-                    category_post_list.append(posts)
+                    [index_posts[category.title].append(post) for post in posts]
+        else:
+            posts = Post.objects.filter(category__contains=category.id)
+            posts = [x for x in posts if x != [] and x.published and x.index]
+            if posts:
+                [index_posts[category.title].append(post) for post in posts]
 
-                # category_post_list = [x for x in category_post_list if x != [] or [[], []]]
-        # category_post_list = [x for x in category_post_list if x != [] or [[],[]]]
-        print(category_post_list)
-        make_it_tuple = tuple(category_post_list)
-        print(make_it_tuple)
-        category_post_list = list(make_it_tuple)
-        index_posts[category.title] = category_post_list
-        category_post_list = list()
+        # #print(category_post_list)
+        # make_it_tuple = tuple(category_post_list)
+        # #print(make_it_tuple)
+        # category_post_list = list(make_it_tuple)
+        # index_posts[category.title] = category_post_list
+        # category_post_list = list()
     print(index_posts)
 
     posts = {

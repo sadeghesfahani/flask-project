@@ -81,7 +81,9 @@
 
                     <div class="dropdown-menu" aria-labelledby="auth">
 
-                        <a class="dropdown-item" href="#">پروفایل</a>
+                        <a class="dropdown-item" href="{{ url_for('blog.profile') }}">پروفایل</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ url_for('blog.create_post') }}">پست جدید</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ url_for('auth.logout') }}">خروج</a>
 
