@@ -51,10 +51,11 @@ authentication (front) | Mohammadi
 authentication (back) | Esmaili 
 
 deligation completed status:
-[x] Sadeghesfahani
-[x] Esmaili
-[ ] Assareha
-[ ] Mohammadi
+- [x] Sadeghesfahani
+- [x] Esmaili
+- [ ] Assareha
+- [ ] Mohammadi
+
 - [ ] phase 2 (deadline: 29th Mordad)
 * create and edit posts
 * unpublish and delete posts
