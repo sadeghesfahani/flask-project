@@ -45,10 +45,10 @@ flask run | flask run
  
 Task | in charge
 -----|----------
-index (front) | Sadeghesfahani
-index (back)  | Assarehha
-authentication (front) | Mohammadi
-authentication (back) | Esmaili
+index (front) | Sadeghesfahani [x]
+index (back)  | Assarehha [ ]
+authentication (front) | Mohammadi [ ]
+authentication (back) | Esmaili [x]
 - [ ] phase 2 (deadline: 29th Mordad)
 * create and edit posts
 * unpublish and delete posts
@@ -57,7 +57,7 @@ authentication (back) | Esmaili
 
 Task | in charge
 -----|----------
-create (front) | sadeghesfahani
+create (front) | sadeghesfahani [x]
 category (front), create (back)  | Assarehha
 category, user (back) | Mohammadi
 user (front) | Esmaili
