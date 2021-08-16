@@ -88,6 +88,25 @@ def create_post():
     return render_template("blog/create.html")
 
 
+
+
+@bp.route("/edit/<string:seo>")
+@login_required
+@base_load
+def edit_post(seo):
+    try:
+        post=Post.objects(seo=seo).get()
+        print(str(post.id))
+        category_to_send=list()
+        for category in post.category:
+            category_to_send.append(category.id)
+    except mongoengine.DoesNotExist:
+        pass
+    if g.user == post.user:
+        return render_template("blog/edit.html",post=post,category=category_to_send)
+
+
+
 @bp.route("/user")
 @login_required
 @base_load
@@ -226,10 +245,10 @@ def create_post_ajax():
     decoded_data = request.json
     print(decoded_data)
     if 'post_id' in decoded_data:
+        print("im here")
         post = Post.objects(id=ObjectId(decoded_data['post_id'])).get()
         post.title = decoded_data['title']
         post.category = [ObjectId(category) for category in decoded_data['category']]
-        post.draft = False
         post.body = decoded_data['content']
         post.published = decoded_data['publish']
         post.slider = decoded_data['slider']

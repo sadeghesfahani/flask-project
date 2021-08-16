@@ -58,60 +58,6 @@ header .user-toggle {
     font-size: 2em;
 }
 
-/* style for post slider*/
-.post-slider {
-    position: relative;
-}
-.post-slider .next {
-    position: absolute;
-    top: 50%;
-    right: 30px;
-    font-size: 2em;
-    cursor: pointer;
-}
-.post-slider .prev {
-    position: absolute;
-    top: 50%;
-    left: 30px;
-    font-size: 2em;
-    cursor: pointer;
-}
-.post-slider .slider-title {
-    text-align: center;
-    margin: 30px auto;
-
-}
-.post-slider .post-wrapper {
-    width: 80%;
-    height: 380px;
-    margin: 0px auto;
-    overflow: hidden;
-    padding: 10px 0px 10px 0px;
-}
-.post-slider .post-wrapper .post {
-    width: 300px;
-    height: 360px;
-    display: inline-block;
-    background: white;
-    margin: 0px 10px;
-    box-shadow: 1rem 1rem 1rem -1rem #a0a0a033;
-
-}
-.post-slider .post-wrapper .post .post-info {
-    height: 130px;
-    padding: 0px 5px;
-}
-.post-slider .post-wrapper .post .post-info .btn {
-    padding: 3px 10px;
-    margin: 15px 5px;
-    float: left;
-}
-.post-slider .post-wrapper .post .slider-image {
-    width: 100%;
-    height: 200px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
 
 /* style for content and sidebar */
 .content {
@@ -120,7 +66,7 @@ header .user-toggle {
 }
 .content .main-content {
     width: 90%;
-    float: left;
+    float: right;
 }
 .content .main-content .post {
     width: 95%;
@@ -133,7 +79,7 @@ header .user-toggle {
 .content .main-content .post .more-btn {
     position: absolute;
     bottom: 10px;
-    right: 10px;
+    right: 43%;
     padding: .5rem 1rem;
     background: #20c997;
     color: white;
@@ -149,9 +95,10 @@ header .user-toggle {
 .content .main-content .post .edit-btn {
     position: absolute;
     bottom: 10px;
-    left: 500px;
+    right: 87%;
     border: 1px solid #005cbf;
     border-radius: .25rem;
+    color: #005cbf;
 }
 .content .main-content .post .edit-btn:hover {
     color: white;
@@ -160,6 +107,7 @@ header .user-toggle {
 .content .main-content .post .btn-danger {
     position: absolute;
     bottom: 10px;
+    left: 15px;
     border-radius: .25rem;
     color: #ff0017;
     background: transparent;
@@ -171,12 +119,23 @@ header .user-toggle {
 .content .main-content .post .post-image {
     width: 40%;
     height: 100%;
-    float: left;
+    float: right;
 }
 .content .main-content .post .post-preview {
     width: 60%;
     padding: 10px;
+    float: left;
+}
+.content .main-content .post .post-preview h1{
     float: right;
+}
+.content .main-content .post .post-preview .post-info {
+    padding: 15px;
+}
+.content .main-content .post .post-preview .post-content {
+    float: right;
+    padding: 10px;
+    font-size: 20px;
 }
 
 .content .main-content .post .post-preview i {
@@ -184,19 +143,15 @@ header .user-toggle {
 }
 
 .content .main-content .post .post-preview .icon {
-    float: right;
+    float: left;
     margin-right: 8px;
 }
 
 .content .main-content .post-title {
     margin: 20px;
 }
-.content .sidebar {
-    width: 30%;
-    float: left;
-    border: 1px dashed green;
-    height: 300px;
-}
+
+
 
 
 

@@ -36,6 +36,11 @@ body{
     margin-top: 20px;
 }
 
+label {
+    float: right;
+    margin-right: 13px;
+}
+
 
 
 

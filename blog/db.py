@@ -30,7 +30,7 @@ class User(Document):
     telegram = StringField(max_length=50)
     followings = ListField(StringField(max_length=50))
     followers = ListField(StringField(max_length=50))
-
+    avatar = StringField(max_length=150)
 
 def create_user(username, password, first_name, last_name, email, address=None, instagram=None, telegram=None):
     try:
@@ -64,7 +64,7 @@ class Comment(EmbeddedDocument):
 
 class Post(Document):
     title = StringField(max_length=150)
-    body = StringField(max_length=1200)
+    body = StringField(max_length=2500)
     user = ReferenceField(User)
     category = ListField(ReferenceField(Category))
     main_image = StringField(max_length=150)
