@@ -76,7 +76,10 @@
                 </div>
             </nav>
             <div class="tab-content" id="nav-tabContent">
+{#            {% posts.index.rewind() %}#}
+
                 {% for key in posts.index %}
+
                     {% if loop.index0 ==0 %}
                         <div class="tab-pane fade show active" id="nav-item-{{ loop.index0 }}" role="tabpanel"
                              aria-labelledby="nav-tab-{{ loop.index0 }}">
@@ -85,13 +88,10 @@
                              aria-labelledby="nav-tab-{{ loop.index0 }}">
                     {% endif %}
 
-                <div class="col-12">
+                <div class="col-12 text-center">
                     {% for post in posts.index[key] %}
-                        {% if loop.index0 % 3 == 0 %}
-                            <div class="card-deck">
-                            {% set ended = false %}
-                        {% endif %}
-                    <div class="card mb-3 mt-3">
+
+                    <div class="card m-4 w-25 d-inline-block">
                         <img class="card-img-top "
                              src="{{ post[0].main_image }}"
                              alt="Card image cap">
@@ -132,14 +132,9 @@
                             </table>
                         </div>
                     </div>
-                    {% if loop.index0 % 3 == 2 %}
-                        {% set ended = true %}
-                        </div>
-                    {% endif %}
+
                     {% endfor %}
-                    {% if ended == false %}
-                        </div>
-                    {% endif %}
+
                 </div>
 
                 {#            </div>#}
