@@ -38,8 +38,14 @@ def base_load(view):
 @bp.route("/")
 @base_load
 def index():
-    user = g.user
-    return render_template("blog/index.html")
+    index_posts = Post.objects(index=True)
+    slider_posts = Post.objects(slider=True)
+
+    posts = {
+        'index': index_posts,
+        'slider': slider_posts
+    }
+    return render_template("blog/index.html",posts=posts)
 
 
 @bp.route("/create")
@@ -54,7 +60,6 @@ def create_post():
 @base_load
 def user():
     return render_template("blog/user.html")
-
 
 
 @bp.route("/category/ajax")
@@ -129,7 +134,6 @@ def fetch_media():
     return {'images': [image for image in post.images]}
 
 
-
 @bp.route("/post/upload/media/ajax", methods=("GET", "POST"))
 def upload_pic():
     """
@@ -184,11 +188,34 @@ def create_post_ajax():
     this section creates post or update changes if there is
     post_id in passed json, update part will run otherwise
     create part will run
-    :return: nothing
+    :return: true if successfull, false if it failed
     """
     decoded_data = request.json
     print(decoded_data)
-    return "done"
+    if 'post_id' in decoded_data:
+        post = Post.objects(id=ObjectId(decoded_data['post_id'])).get()
+        post.title = decoded_data['title']
+        post.category = [ObjectId(category) for category in decoded_data['category']]
+        post.draft = False
+        post.body = decoded_data['content']
+        post.published = decoded_data['publish']
+        post.slider = decoded_data['slider']
+        post.index = decoded_data['index']
+        post.seo = decoded_data['seo']
+        post.save()
+        return str(post.id)
+    else:
+        new_post = Post()
+        new_post.title = decoded_data['title']
+        new_post.category = decoded_data['category']
+        new_post.draft = False
+        new_post.body = decoded_data['content']
+        new_post.published = decoded_data['publish']
+        new_post.slider = decoded_data['slider']
+        new_post.index = decoded_data['index']
+        new_post.seo = decoded_data['seo']
+        new_post.save()
+        return str(new_post.id)
 
 
 @bp.route("/post/remove/media/ajax", methods=("GET", "POST"))

@@ -23,9 +23,11 @@
                     <div class="form-row">
                         <label for="slider_status" class="mr-2 ml-3">نمایش در اسلایدر</label>
                         <input type="checkbox" id="slider_status" name="slider_status">
-<div class="alert alert-success  mr-auto d-none" role="alert" id="alert">
-        به روز رسانی با موفقیت انجام شد
-    </div>
+                        <label for="index_status" class="mr-2 ml-3">نمایش در صفحه اصلی</label>
+                        <input type="checkbox" id="index_status" name="index_status">
+                        <div class="alert alert-success  mr-auto d-none" role="alert" id="alert">
+                            به روز رسانی با موفقیت انجام شد
+                        </div>
                     </div>
 
                 </div>
@@ -695,10 +697,16 @@
                     window.slider = false
                 }
 
+                if ($("#index_status").is(':checked')) {
+                    window.index_status = true
+                } else {
+                    window.index_status = false
+                }
+
 
                 let title = $("#title").val()
                 let content = $("#textarea").val()
-
+                let seo = $("#seo").val()
                 let data = {
                     category: category,
                     publish: window.publish,
@@ -706,6 +714,8 @@
                     title: title,
                     content: content,
                     post_id: window.post_id,
+                    index: window.index_status,
+                    seo: seo,
 
                 }
 
@@ -716,8 +726,11 @@
                     data: JSON.stringify(data),
                     success: function (response) {
                         if (response != 0) {
+                            window.post_id = response
                             $("#alert").removeClass('d-none')
-                            setTimeout( function() { $("#alert").fadeOut(); }, 2000);
+                            setTimeout(function () {
+                                $("#alert").fadeOut();
+                            }, 2000);
                         }
                     }
                 })
