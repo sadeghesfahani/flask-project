@@ -78,3 +78,4 @@ class Post(Document):
     index = BooleanField()
     slider = BooleanField()
     seo = StringField(max_length=150)
+

@@ -10,6 +10,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+from jinja2 import environment, pass_eval_context
 from werkzeug.utils import secure_filename
 from blog.auth import login_required
 from blog.db import Category, User, Post
@@ -34,18 +35,47 @@ def base_load(view):
 
     return wrapped_view
 
+# @pass_eval_context
+# def get_user(user_id):
+#     user = User.objects(id=ObjectId(user_id)).get()
+#     return user
+
 
 @bp.route("/")
 @base_load
 def index():
-    index_posts = Post.objects(index=True)
+    # environment.filters['get_user']=get_user
+    # index_posts = Post.objects(index=True)
     slider_posts = Post.objects(slider=True)
+    category_post_list = list()
+    index_posts = dict()
+    for category in Category.objects(parent=None):
+        if 'child' in category:
+            posts = Post.objects.filter(category__contains=category.id)
+            posts = [x for x in posts if x != []]
+            if posts:
+                category_post_list.append(posts)
+            for children in category['child']:
+                posts = Post.objects.filter(category__contains=children.id)
+                posts = [x for x in posts if x != []]
+                if posts:
+                    category_post_list.append(posts)
+
+                # category_post_list = [x for x in category_post_list if x != [] or [[], []]]
+        # category_post_list = [x for x in category_post_list if x != [] or [[],[]]]
+        print(category_post_list)
+        make_it_tuple = tuple(category_post_list)
+        print(make_it_tuple)
+        category_post_list = list(make_it_tuple)
+        index_posts[category.title] = category_post_list
+        category_post_list = list()
+    print(index_posts)
 
     posts = {
         'index': index_posts,
         'slider': slider_posts
     }
-    return render_template("blog/index.html",posts=posts)
+    return render_template("blog/index.html", posts=posts)
 
 
 @bp.route("/create")
@@ -206,6 +236,7 @@ def create_post_ajax():
         return str(post.id)
     else:
         new_post = Post()
+        new_post.user = g.user
         new_post.title = decoded_data['title']
         new_post.category = decoded_data['category']
         new_post.draft = False
