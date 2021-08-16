@@ -37,7 +37,7 @@ flask run | flask run
 
 ## Project road map
 
-- [x] phase 1 (deadline: 22th Mordad)
+### - [x] phase 1 (deadline: 22th Mordad)
 * github repository
 * database design
 * index page
@@ -50,13 +50,13 @@ index (back)  | Assarehha
 authentication (front) | Mohammadi 
 authentication (back) | Esmaili 
 
-deligation completed status:
+### deligation completed status:
 - [x] Sadeghesfahani
 - [x] Esmaili
 - [ ] Assareha
 - [ ] Mohammadi
 
-- [ ] phase 2 (deadline: 29th Mordad)
+### - [ ] phase 2 (deadline: 29th Mordad)
 * create and edit posts
 * unpublish and delete posts
 * category view
@@ -68,7 +68,8 @@ create (front) | sadeghesfahani [x]
 category (front), create (back)  | Assarehha
 category, user (back) | Mohammadi
 user (front) | Esmaili
-- [ ] phase 3 (deadline: 5th Shahrivar)
+
+### - [ ] phase 3 (deadline: 5th Shahrivar)
 * like and dislike
 * search engine
 * debug
