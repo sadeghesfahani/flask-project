@@ -45,10 +45,15 @@ flask run | flask run
  
 Task | in charge
 -----|----------
-index (front) | Sadeghesfahani - [x]
-index (back)  | Assarehha [ ]
-authentication (front) | Mohammadi [ ]
-authentication (back) | Esmaili [x]
+index (front) | Sadeghesfahani 
+index (back)  | Assarehha 
+authentication (front) | Mohammadi 
+authentication (back) | Esmaili 
+deligation completed status:
+[x] Sadeghesfahani
+[x] Esmaili
+[ ] Assareha
+[ ] Mohammadi
 - [ ] phase 2 (deadline: 29th Mordad)
 * create and edit posts
 * unpublish and delete posts
