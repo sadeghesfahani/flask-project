@@ -59,6 +59,8 @@ class Category(Document):
 class Comment(EmbeddedDocument):
     user = ReferenceField(User)
     text = StringField(max_length=250)
+    likes = ListField(ReferenceField(User))
+    dislike = ListField(ReferenceField(User))
     time = DateTimeField(default=datetime.datetime.utcnow)
 
 
