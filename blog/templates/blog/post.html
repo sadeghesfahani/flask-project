@@ -56,14 +56,18 @@
     </div>
     <div class="col-12 text-right mt-5">
         <div class="card ">
-            <div class="card-header border-0 bg-transparent" >
+            <div class="card-header border-0 bg-transparent">
                 <img class=" rounded-circle"
-                     src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}" style="width: 8%" data-toggle="modal" data-target="#profile" role="button">
-                <span class=" mr-2" data-toggle="modal" data-target="#profile" role="button">{{ post.user.first_name }} {{ post.user.last_name }}</span>
+                     src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}" style="width: 8%"
+                     data-toggle="modal" data-target="#profile" role="button">
+                <span class=" mr-2" data-toggle="modal" data-target="#profile"
+                      role="button">{{ post.user.first_name }} {{ post.user.last_name }}</span>
                 <span class="mr-2 mr-3">دنبال شده</span>
                 <div class="float-left mt-1">
-                    <span><i class="fa fa-thumbs-down m-1" aria-hidden="true" style="font-size: 2rem"></i> {{ post.likes|count }}</span>
-                    <span><i class="fa fa-thumbs-up m-1" aria-hidden="true" style="font-size: 2rem"></i>{{ post.dislike|count }}</span>
+                    <span><i class="fa fa-thumbs-down m-1" aria-hidden="true"
+                             style="font-size: 2rem"></i> {{ post.likes|count }}</span>
+                    <span><i class="fa fa-thumbs-up m-1" aria-hidden="true"
+                             style="font-size: 2rem"></i>{{ post.dislike|count }}</span>
                 </div>
 
             </div>
@@ -72,110 +76,55 @@
                 <h5>{{ post.title }}</h5>
                 <div id="body"></div>
             </div>
+
             <div class="card-footer">
-                <table class="table  mr-4 table-borderless">
-                    <tr>
-                        <th rowspan="3" class="text-center m-0 p-0" style="width: 5%"><img
-                                class=" rounded-circle w-100 m-0"
-                                src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}"
-                        ></th>
-                        <th>sadeghesfahani.sina</th>
-                        <th class="text-left">۵ دقیقه پیش</th>
-                    </tr>
 
-                    <tr>
-                        <td colspan="2">
-                            <div id="accordion">
-                                <div class="card border-0">
-                                    <div class="card-header" id="headingOne">
-                                        <h5 class="mb-0">
-                                            <a class="btn  text-right" data-toggle="collapse"
-                                               data-target="#collapseOne" aria-expanded="true"
-                                               aria-controls="collapseOne">
-                                                این یک کامنت آزمایشی است که برای نمایش بهتر فرانت اند پروژه تدارک دیده
-                                                شده تا به صورت واقعی بتوان شکل ظاهری سایت را قضاوت نمود
-                                            </a>
-                                        </h5>
-                                    </div>
 
-                                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                         data-parent="#accordion">
-                                        <div class="card-body border-0" style="background-color: rgba(0, 0, 0, 0.03);">
-                                            <table class="table table-borderless">
-                                                <tr>
-                                                    <th style="width: 10%">
-                                                        <img class=" rounded-circle w-100 m-0"
-                                                             src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}">
-                                                    </th>
-                                                    <th class="w-100">
-                                                        <textarea class="w-100" style="resize: none"></textarea>
-                                                    </th>
-                                                </tr>
-                                            </table>
+                <form class="mb-5">
+                    <label for="comment"><h5> نظرات</h5></label>
+                    <textarea class="form-control" id="comment" style="resize: none" rows="3"></textarea>
+                    <div id="comment_info" class="invalid-feedback">
+                        برای ثبت نظر این فیلد اجباریست
+                    </div>
+                    <input type="button" value="ثبت نظر" class="mt-2 btn btn-primary" id="submut_comment">
+                </form>
+                <div id="comment_container">
+
+                    {% for comment in post.comment|sort(attribute='time', reverse = True) %}
+                        <table class="table  mr-4 table-borderless">
+                            <tr>
+                                <th rowspan="3" class="text-center m-0 p-0" style="width: 5%"><img
+                                        class=" rounded-circle w-100 m-0"
+                                        src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}"
+                                ></th>
+                                <th>{{ comment.user.first_name }}</th>
+                                <th class="text-left">۵ دقیقه پیش</th>
+
+                            </tr>
+
+                            <tr>
+                                <td colspan="2">
+
+                                    <div class="card border-0">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">
+
+                                                {{ comment.text }}
+
+                                            </h5>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
 
-
-                        </td>
-                    </tr>
-
-
-                </table>
-
-
-                <table class="table  mr-4 table-borderless">
-                    <tr>
-                        <th rowspan="3" class="text-center m-0 p-0" style="width: 5%"><img
-                                class=" rounded-circle w-100 m-0"
-                                src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}"
-                        ></th>
-                        <th>sadeghesfahani.sina</th>
-                        <th class="text-left">۵ دقیقه پیش</th>
-                    </tr>
-
-                    <tr>
-                        <td colspan="2">
-                            <div id="accordion">
-                                <div class="card border-0">
-                                    <div class="card-header" id="headingOne">
-                                        <h5 class="mb-0">
-                                            <a class="btn  text-right" data-toggle="collapse"
-                                               data-target="#collapseTwo" aria-expanded="true"
-                                               aria-controls="collapseTwo">
-                                                این یک کامنت آزمایشی است که برای نمایش بهتر فرانت اند پروژه تدارک دیده
-                                                شده تا به صورت واقعی بتوان شکل ظاهری سایت را قضاوت نمود
-                                            </a>
-                                        </h5>
                                     </div>
 
-                                    <div id="collapseTwo" class="collapse show" aria-labelledby="headingOne"
-                                         data-parent="#accordion">
-                                        <div class="card-body border-0" style="background-color: rgba(0, 0, 0, 0.03);">
-                                            <table class="table table-borderless">
-                                                <tr>
-                                                    <th style="width: 10%">
-                                                        <img class=" rounded-circle w-100 m-0"
-                                                             src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}">
-                                                    </th>
-                                                    <th class="w-100">
-                                                        <textarea class="w-100" style="resize: none"></textarea>
-                                                    </th>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+                                </td>
+                            </tr>
 
 
-                        </td>
-                    </tr>
+                        </table>
+                    {% endfor %}
 
-
-                </table>
-
+                </div>
             </div>
         </div>
     </div>
@@ -192,5 +141,54 @@
 
         {#$("#profile").collapse('show')#}
 
+        $("#submut_comment").click(function () {
+
+            if ($("#comment").val() === "") {
+                $("#comment").addClass('is-invalid')
+                $("#comment_info").addClass('d-block')
+            } else {
+                $.post("http://127.0.0.1:5000{{ url_for('blog.add_comment') }}", {
+                        comment: $("#comment").val(),
+                        post_id: '{{ post.id }}'
+                    }, function (data) {
+                        let new_comment = `<table class="table  mr-4 table-borderless">
+                            <tr>
+                                <th rowspan="3" class="text-center m-0 p-0" style="width: 5%"><img
+                                        class=" rounded-circle w-100 m-0"
+                                        src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}"
+                                ></th>
+                                <th>{{ g.user.first_name }}</th>
+                                <th class="text-left">۵ دقیقه پیش</th>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2">
+
+                                    <div class="card border-0">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">
+
+                                                ${$("#comment").val()}
+
+                                            </h5>
+                                        </div>
+
+                                    </div>
+
+
+                                </td>
+                            </tr>
+
+
+                        </table>`
+                    $("#comment_container").prepend(new_comment)
+                    }
+                )
+            }
+        })
+        $("#comment").click(function () {
+            $("#comment").removeClass('is-invalid')
+            $("#comment_info").removeClass('d-block')
+        })
     </script>
 {% endblock %}

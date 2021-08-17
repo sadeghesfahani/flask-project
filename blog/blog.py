@@ -13,7 +13,7 @@ from flask import url_for
 from jinja2 import environment, pass_eval_context
 from werkzeug.utils import secure_filename
 from blog.auth import login_required
-from blog.db import Category, User, Post
+from blog.db import Category, User, Post, Comment
 import json
 
 bp = Blueprint("blog", __name__)
@@ -320,6 +320,20 @@ def show_post(seo):
         pass
 
     return render_template("blog/post.html", post=post, count=all_posts_count)
+
+@bp.route("/post/comment/add/ajax",methods=("GET", "POST"))
+def add_comment():
+    comment = request.form['comment']
+    comment_user = g.user
+    post = request.form['post_id']
+    new_comment = Comment()
+    new_comment.user = comment_user
+    new_comment.text = comment
+    post = Post.objects(id=post).get()
+    post.comment.append(new_comment)
+    post.save()
+    print(comment,post,comment_user.username)
+    return "done"
 
 
 @bp.route("/profile")
