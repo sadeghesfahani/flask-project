@@ -11,5 +11,4 @@ itsdangerous~=2.0.1
 test~=1.0.0
 setuptools~=49.2.1
 Pillow~=8.3.1
-asdf
-a
+
