@@ -163,6 +163,7 @@ def create_draft_post():
     new_post = Post()
     new_post.user = g.user
     new_post.draft = True
+    new_post.views = 0
     new_post.save()
     return str(new_post.id)
 
@@ -264,6 +265,7 @@ def create_post_ajax():
         new_post.slider = decoded_data['slider']
         new_post.index = decoded_data['index']
         new_post.seo = decoded_data['seo']
+        new_post.views = 0
         new_post.save()
         return str(new_post.id)
 
@@ -306,8 +308,14 @@ def show_post(seo):
         post = Post.objects(seo=seo).get()
         user_own_post = post.user
         all_posts_count = Post.objects(user=user_own_post).count()
-        body =post.body
-        print(body)
+        if str(post.id) not in session:
+            if 'views' not in post:
+                post.views = 1
+                post.save()
+            else:
+                post.views += 1
+                post.save()
+            session[str(post.id)] = True
     except mongoengine.DoesNotExist:
         pass
 
