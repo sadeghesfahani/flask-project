@@ -355,3 +355,25 @@ def edit_profile(username):
     # get info from form and save it
     # ...
     return render_template("edit_profile.html")
+
+
+
+
+
+@bp.route("/post/like/add/ajax",methods=("GET", "POST"))
+def add_like():
+    post_id = request.form['post_id']
+    user_who_act = User.objects(id =g.user.id).get()
+    post = Post.objects(id=post_id).get()
+
+    if user_who_act in post.dislike:
+        post.dislike.remove(user_who_act)
+
+    if user_who_act in post.likes:
+        pass
+    else:
+        post.likes.append(user_who_act)
+
+
+    post.save()
+    return "done"
