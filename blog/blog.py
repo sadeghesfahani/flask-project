@@ -35,6 +35,7 @@ def base_load(view):
 
     return wrapped_view
 
+
 # @pass_eval_context
 # def get_user(user_id):
 #     user = User.objects(id=ObjectId(user_id)).get()
@@ -44,12 +45,11 @@ def base_load(view):
 @bp.route("/")
 @base_load
 def index():
-
     slider_posts = Post.objects(slider=True)
     category_post_list = list()
     index_posts = dict()
     for category in Category.objects(parent=None):
-        index_posts[category.title]=list()
+        index_posts[category.title] = list()
         if 'child' in category:
             posts = Post.objects.filter(category__contains=category.id)
             posts = [x for x in posts if x != [] and x.published and x.index]
@@ -88,23 +88,20 @@ def create_post():
     return render_template("blog/create.html")
 
 
-
-
 @bp.route("/edit/<string:seo>")
 @login_required
 @base_load
 def edit_post(seo):
     try:
-        post=Post.objects(seo=seo).get()
+        post = Post.objects(seo=seo).get()
         print(str(post.id))
-        category_to_send=list()
+        category_to_send = list()
         for category in post.category:
             category_to_send.append(category.id)
     except mongoengine.DoesNotExist:
         pass
     if g.user == post.user:
-        return render_template("blog/edit.html",post=post,category=category_to_send)
-
+        return render_template("blog/edit.html", post=post, category=category_to_send)
 
 
 @bp.route("/user")
@@ -295,6 +292,26 @@ def remove_pic():
         print('failed')
 
     return 'done'
+
+
+@bp.route("/post/<seo>")
+@base_load
+def show_post(seo):
+    """
+    this section gets the seo and return the post data to show
+    :param seo:
+    :return: post data
+    """
+    try:
+        post = Post.objects(seo=seo).get()
+        user_own_post = post.user
+        all_posts_count = Post.objects(user=user_own_post).count()
+        body =post.body
+        print(body)
+    except mongoengine.DoesNotExist:
+        pass
+
+    return render_template("blog/post.html", post=post, count=all_posts_count)
 
 
 @bp.route("/profile")

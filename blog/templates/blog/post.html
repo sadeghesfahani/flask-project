@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/normal.css') }}">
+
+{% endblock %}
+{% block content %}
+
+
+    <div class="modal " id="profile" role="dialog">
+        <div class="modal-dialog col-12 col-md-6 col-lg-3" role="document">
+            <div class="modal-content">
+                <div class="modal-header p-1">
+                    <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title" id="exampleModalLabel">{{ post.user.username }}</h5>
+
+                </div>
+                <div class="modal-body p-0">
+                    <div class="card m-0 p-0">
+
+                        <div class="card-header bg-primary text-center ">
+
+                            <img class="card-img-top rounded-circle w-50 mt-3 mb-3"
+                                 src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}">
+
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-borderless text-center ">
+                                <thead class=" m-0 p-0">
+                                <tr class="">
+                                    <th class="m-0 p-0 ">{{ count }}</th>
+                                    <th class="m-0 p-0">{{ post.user.followers|count }}</th>
+                                    <th class="m-0 p-0">{{ post.user.followings|count }}</th>
+                                </tr>
+                                </thead>
+                                <tbody class="m-0 p-0">
+                                <tr>
+                                    <td class="m-0 p-0">پست</td>
+                                    <td class="m-0 p-0">دنبال کننده</td>
+                                    <td class="m-0 p-0">دنبال شده</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center">
+                                <button class="btn btn-primary m-1">دنبال کن</button>
+                                <button class="btn btn-primary  m-1">ارسال پیام</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 text-right mt-5">
+        <div class="card ">
+            <div class="card-header border-0 bg-transparent" >
+                <img class=" rounded-circle"
+                     src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}" style="width: 8%" data-toggle="modal" data-target="#profile" role="button">
+                <span class=" mr-2" data-toggle="modal" data-target="#profile" role="button">{{ post.user.first_name }} {{ post.user.last_name }}</span>
+                <span class="mr-2 mr-3">دنبال شده</span>
+                <div class="float-left mt-1">
+                    <span><i class="fa fa-thumbs-down m-1" aria-hidden="true" style="font-size: 2rem"></i> {{ post.likes|count }}</span>
+                    <span><i class="fa fa-thumbs-up m-1" aria-hidden="true" style="font-size: 2rem"></i>{{ post.dislike|count }}</span>
+                </div>
+
+            </div>
+
+            <div class="card-body">
+                <h5>{{ post.title }}</h5>
+                <div id="body"></div>
+            </div>
+            <div class="card-footer">
+                <table class="table  mr-4 table-borderless">
+                    <tr>
+                        <th rowspan="3" class="text-center m-0 p-0" style="width: 5%"><img
+                                class=" rounded-circle w-100 m-0"
+                                src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}"
+                        ></th>
+                        <th>sadeghesfahani.sina</th>
+                        <th class="text-left">۵ دقیقه پیش</th>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div id="accordion">
+                                <div class="card border-0">
+                                    <div class="card-header" id="headingOne">
+                                        <h5 class="mb-0">
+                                            <a class="btn  text-right" data-toggle="collapse"
+                                               data-target="#collapseOne" aria-expanded="true"
+                                               aria-controls="collapseOne">
+                                                این یک کامنت آزمایشی است که برای نمایش بهتر فرانت اند پروژه تدارک دیده
+                                                شده تا به صورت واقعی بتوان شکل ظاهری سایت را قضاوت نمود
+                                            </a>
+                                        </h5>
+                                    </div>
+
+                                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                         data-parent="#accordion">
+                                        <div class="card-body border-0" style="background-color: rgba(0, 0, 0, 0.03);">
+                                            <table class="table table-borderless">
+                                                <tr>
+                                                    <th style="width: 10%">
+                                                        <img class=" rounded-circle w-100 m-0"
+                                                             src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}">
+                                                    </th>
+                                                    <th class="w-100">
+                                                        <textarea class="w-100" style="resize: none"></textarea>
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </td>
+                    </tr>
+
+
+                </table>
+
+
+                <table class="table  mr-4 table-borderless">
+                    <tr>
+                        <th rowspan="3" class="text-center m-0 p-0" style="width: 5%"><img
+                                class=" rounded-circle w-100 m-0"
+                                src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}"
+                        ></th>
+                        <th>sadeghesfahani.sina</th>
+                        <th class="text-left">۵ دقیقه پیش</th>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <div id="accordion">
+                                <div class="card border-0">
+                                    <div class="card-header" id="headingOne">
+                                        <h5 class="mb-0">
+                                            <a class="btn  text-right" data-toggle="collapse"
+                                               data-target="#collapseTwo" aria-expanded="true"
+                                               aria-controls="collapseTwo">
+                                                این یک کامنت آزمایشی است که برای نمایش بهتر فرانت اند پروژه تدارک دیده
+                                                شده تا به صورت واقعی بتوان شکل ظاهری سایت را قضاوت نمود
+                                            </a>
+                                        </h5>
+                                    </div>
+
+                                    <div id="collapseTwo" class="collapse show" aria-labelledby="headingOne"
+                                         data-parent="#accordion">
+                                        <div class="card-body border-0" style="background-color: rgba(0, 0, 0, 0.03);">
+                                            <table class="table table-borderless">
+                                                <tr>
+                                                    <th style="width: 10%">
+                                                        <img class=" rounded-circle w-100 m-0"
+                                                             src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}">
+                                                    </th>
+                                                    <th class="w-100">
+                                                        <textarea class="w-100" style="resize: none"></textarea>
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </td>
+                    </tr>
+
+
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        let body_text = `{{ post.body|safe }}`
+        const parser = new DOMParser();
+        if (body_text.includes('src="static')) {
+            body_text = body_text.replace('src="static', 'src="../static')
+        }
+        let elem = parser.parseFromString(body_text, "text/html")
+        $("#body").html(body_text)
+
+        {#$("#profile").collapse('show')#}
+
+    </script>
+{% endblock %}
