@@ -67,18 +67,18 @@
                     {% if g.user in post.dislike %}
                         <span id="dislike"><i class="fa fa-thumbs-down m-1" aria-hidden="true"
                                               style="font-size: 2rem;color: #007bff"
-                                              status="on"></i> {{ post.dislike|count }}</span>
+                                              status="on"></i><span id="dislike_num"> {{ post.dislike|count }} </span></span>
                     {% else %}
                         <span id="dislike"><i class="fa fa-thumbs-down m-1" aria-hidden="true"
-                                              style="font-size: 2rem" status="off"></i> {{ post.dislike|count }}</span>
+                                              style="font-size: 2rem" status="off"></i><span id="dislike_num"> {{ post.dislike|count }}</span></span>
                     {% endif %}
                     {% if g.user in post.likes %}
                         <span id="likes"><i class="fa fa-thumbs-up m-1" aria-hidden="true"
                                             style="font-size: 2rem;color: #007bff"
-                                            status="on"></i>{{ post.likes|count }}</span>
+                                            status="on"></i><span id="like_num">{{ post.likes|count }}</span></span>
                     {% else %}
                         <span id="likes"><i class="fa fa-thumbs-up m-1" aria-hidden="true"
-                                            style="font-size: 2rem" status="off"></i>{{ post.likes|count }}</span>
+                                            style="font-size: 2rem" status="off"></i><span id="like_num">{{ post.likes|count }}</span></span>
                     {% endif %}
                 </div>
 
@@ -163,11 +163,11 @@
                     }, function (data) {
                         $("#likes i").attr('status', 'on')
                         $("#likes i").css('color', '#007bff')
-                        $("#likes").text($("#likes").text() + 1)
+                        $("#like_num").text(Number($("#like_num").text()) + 1)
                         if ($("#dislike i").attr('status') == 'on') {
                             $("#dislike i").attr('status', 'off')
                             $("#dislike i").css('color', 'black')
-                            $("#dislike").text($("#dislike").text() - 1)
+                            $("#dislike_num").text(Number($("#dislike_num").text()) - 1)
                         }
                     })
 
@@ -180,6 +180,20 @@
                 {#    do nothing #}
             } else {
 
+
+
+                $.post("http://127.0.0.1:5000{{ url_for('blog.add_dislike') }}", {
+                        post_id: '{{ post.id }}'
+                    }, function (data) {
+                        $("#dislike i").attr('status', 'on')
+                        $("#dislike i").css('color', '#007bff')
+                        $("#dislike_num").text(Number($("#dislike_num").text()) + 1)
+                        if ($("#likes i").attr('status') == 'on') {
+                            $("#likes i").attr('status', 'off')
+                            $("#likes i").css('color', 'black')
+                            $("#like_num").text(Number($("#like_num").text()) - 1)
+                        }
+                    })
             }
         })
 

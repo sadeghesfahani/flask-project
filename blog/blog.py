@@ -377,3 +377,22 @@ def add_like():
 
     post.save()
     return "done"
+
+
+@bp.route("/post/dislike/add/ajax",methods=("GET", "POST"))
+def add_dislike():
+    post_id = request.form['post_id']
+    user_who_act = User.objects(id =g.user.id).get()
+    post = Post.objects(id=post_id).get()
+
+    if user_who_act in post.likes:
+        post.likes.remove(user_who_act)
+
+    if user_who_act in post.dislike:
+        pass
+    else:
+        post.dislike.append(user_who_act)
+
+
+    post.save()
+    return "done"
