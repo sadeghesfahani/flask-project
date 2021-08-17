@@ -157,11 +157,6 @@ body {
     bottom: 50%;
 }
 
-.card .card-body .phone {
-    position: absolute;
-    right: 20%;
-    bottom: 35%;
-}
 
 #myBtn {
     position: absolute;
@@ -171,9 +166,10 @@ body {
 
 .card .card-body .follow-info {
     position: absolute;
-    bottom: 5px;
-    right: 4%;
+    right: 20%;
+    bottom: 28%;
 }
+
 
 .text-secondary {
     margin-top: 8px;

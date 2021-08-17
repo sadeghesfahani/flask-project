@@ -27,7 +27,7 @@
                 <div class="card-body ">
                   <div class="d-flex flex-column align-items-center text-center">
                     <div class="tooltip-avatar" data-toggle="tooltip" data-placement="left" title="تغییر پروفایل">
-                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" class="rounded-circle" width="150">
+                        <img id="avatar" src="https://bootdey.com/img/Content/avatar/avatar7.png" class="rounded-circle" width="150">
                     </div>
 
                     <h1>{{ g.user.first_name }}</h1>
@@ -77,6 +77,20 @@
     </div>
 
 
+
+    <div id="avatarModal" class="modal">
+        <div class="modal-content">
+            <span id="close" class="close">&times;</span>
+            <form method="post"  action="{{ url_for('blog.change_avatar','username={{g.user.username}}') }}">
+                <label for="choice-avatar">انتخاب عکس آواتار</label>
+                <input type="file" name="choice-avatar">
+                <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
+            </form>
+        </div>
+    </div>
+
+
+
      <div id="myModal" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
@@ -85,12 +99,12 @@
             <form method="post" action="{{ url_for('blog.edit_profile',username='{{g.user.username}}') }}">
                 <label for="first-name">نام</label>
                  <div class="form-group">
-                    <input type="text" class="form-control item" id="first-name" name="first-name" placeholder="{{ user.first_name}}">
+                    <input type="text" class="form-control item" id="first-name" name="first-name" placeholder="{{ g.user.first_name}}">
                 </div>
 
                 <label for="last-name-name">نام خانوادگی</label>
                  <div class="form-group">
-                    <input type="text" class="form-control item" id="last-name" name="last-name" placeholder="{{ user.last_name }}">
+                    <input type="text" class="form-control item" id="last-name" name="last-name" placeholder="{{ g.user.last_name }}">
                 </div>
 
                 <label for="password">رمز عبور</label>
@@ -100,12 +114,12 @@
 
                 <label for="email">ایمیل</label>
                 <div class="form-group">
-                    <input type="text" class="form-control item" id="email" name="email" placeholder="{{ user.email }}">
+                    <input type="text" class="form-control item" id="email" name="email" placeholder="{{ g.user.email }}">
                 </div>
 
                 <label for="phone-number">شماره تلفن</label>
                 <div class="form-group">
-                    <input type="text" class="form-control item" id="phone-number" name="phone-number" placeholder="{{ user.phone}}">
+                    <input type="text" class="form-control item" id="phone-number" name="phone-number" placeholder="{{ g.user.phone}}">
                 </div>
 
                 <div class="form-group">

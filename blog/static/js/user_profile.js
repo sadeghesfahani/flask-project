@@ -1,14 +1,19 @@
-// Get the modal
-var modal = document.getElementById("myModal");
+var avatar = document.getElementById("avatar")
 
-// Get the button that opens the modal
+var avatarModal = document.getElementById("avatarModal");
+
+var span = document.getElementsByClassName("close")[1];
+
 var btn = document.getElementById("myBtn");
 
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+var modal = document.getElementById("myModal");
 
+var span2 = document.getElementsByClassName("close")[0];
+
+
+
+btn.onclick = function () {
 // When the user clicks the button, open the modal
-btn.onclick = function() {
   modal.style.display = "block";
 }
 
@@ -21,5 +26,21 @@ span.onclick = function() {
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
+  }
+}
+
+
+
+avatar.onclick = function () {
+  avatarModal.style.display = "block"
+}
+
+span2.onclick = function() {
+  avatarModal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == avatarModal) {
+    avatarModal.style.display = "none";
   }
 }
