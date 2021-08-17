@@ -81,7 +81,7 @@
     <div id="avatarModal" class="modal">
         <div class="modal-content">
             <span id="close" class="close">&times;</span>
-            <form method="post"  action="{{ url_for('blog.change_avatar','username={{g.user.username}}') }}">
+            <form enctype="{{ url_for('static', filename='media/user') }}" method="post"  action="{{ url_for('blog.change_avatar','username={{g.user.username}}') }}">
                 <label for="choice-avatar">انتخاب عکس آواتار</label>
                 <input type="file" name="choice-avatar">
                 <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
