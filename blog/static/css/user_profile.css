@@ -149,7 +149,7 @@ body {
 .card .card-body h4 {
     position: absolute;
     bottom: 60px;
-    right: 4%;
+    right: 6%;
 }
 .card .card-body .email {
     position: absolute;
@@ -256,3 +256,45 @@ label {
 
 
 
+@media only screen and (max-width: 800px) {
+    .card {
+        width: 800px;
+    }
+    .card .card-body h4 {
+        position: absolute;
+        bottom: 60px;
+        right: 8%;
+    }
+
+}
+
+@media only screen and (max-width: 500px) {
+    .card {
+        width: 400px;
+    }
+    .card .card-body h1 {
+        position: absolute;
+        right: 40%;
+    }
+
+    .card .card-body h4 {
+        position: absolute;
+        bottom: 60px;
+        right: 18%;
+    }
+    .card .card-body .email {
+        position: absolute;
+        right: 40%;
+        bottom: 50%;
+    }
+    .card .card-body .follow-info {
+        position: absolute;
+        right: 40%;
+        bottom: 28%;
+    }
+    #myBtn {
+        position: absolute;
+        right: 40%;
+        bottom: 10%;
+    }
+}
