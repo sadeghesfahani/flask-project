@@ -8,24 +8,25 @@
     <div class="col-12">
 
 
-        <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
-            <ol class="carousel-indicators">
-                {% for post in posts['slider'] %}
-                    {% if loop.index0 == 0 %}
-                        <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
-                    {% else %}
-                        <li data-target="#carouselExampleCaptions" data-slide-to="{{ loop.index0 }}"></li>
-                    {% endif %}
-                {% endfor %}
-            </ol>
+    <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            {% for post in posts['slider'] %}
+                {% if loop.index0 == 0 %}
+                    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+                {% else %}
+                    <li data-target="#carouselExampleCaptions" data-slide-to="{{ loop.index0 }}"></li>
+                {% endif %}
+            {% endfor %}
+        </ol>
 
-            <div class="carousel-inner">
-                {% for post in posts['slider'] %}
-                    {% if loop.index0 ==0 %}
-                        <div class="carousel-item active">
-                    {% else %}
-                        <div class="carousel-item">
-                    {% endif %}
+        <div class="carousel-inner">
+            {% for post in posts['slider'] %}
+                {% if loop.index0 ==0 %}
+                    <div class="carousel-item active">
+                {% else %}
+                    <div class="carousel-item">
+                {% endif %}
+            <a href="{{ url_for('blog.show_post',seo=post.seo) }}">
                 <img src="{{ post.main_image }}"
                      class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block"
@@ -33,68 +34,71 @@
                     <h5>{{ post.title }}</h5>
                     <p>{{ post.body|safe|truncate(20) }}</p>
                 </div>
-                </div>
-                {% endfor %}
-
-                <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button"
-                   data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleCaptions" role="button"
-                   data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-                </div>
-
-
+            </a>
             </div>
+            {% endfor %}
+
+            <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button"
+               data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleCaptions" role="button"
+               data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+            </div>
+
+
         </div>
-        <div class="col-12 mt-3">
+    </div>
+    <div class="col-12 mt-3">
 
-            <nav>
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    {% for key in posts.index %}
-
-                        {% if posts.index[key]|count !=0 %}
-                            {% if loop.index0 == 0 %}
-                                <a class="nav-item nav-link active" id="nav-tab-{{ loop.index0 }}" data-toggle="tab"
-                                   href="#nav-item-{{ loop.index0 }}"
-                                   role="tab" aria-controls="nav-item-{{ loop.index0 }}"
-                                   aria-selected="true">{{ key }}</a>
-
-                            {% else %}
-                                <a class="nav-item nav-link" id="nav-tab-{{ loop.index0 }}" data-toggle="tab"
-                                   href="#nav-item-{{ loop.index0 }}"
-                                   role="tab" aria-controls="nav-item-{{ loop.index0 }}"
-                                   aria-selected="false">{{ key }}</a>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-
-                </div>
-            </nav>
-            <div class="tab-content" id="nav-tabContent">
-{#            {% posts.index.rewind() %}#}
-
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 {% for key in posts.index %}
 
-                    {% if loop.index0 ==0 %}
-                        <div class="tab-pane fade show active" id="nav-item-{{ loop.index0 }}" role="tabpanel"
-                             aria-labelledby="nav-tab-{{ loop.index0 }}">
-                    {% else %}
-                        <div class="tab-pane fade" id="nav-item-{{ loop.index0 }}" role="tabpanel"
-                             aria-labelledby="nav-tab-{{ loop.index0 }}">
-                    {% endif %}
+                    {% if posts.index[key]|count !=0 %}
+                        {% if loop.index0 == 0 %}
+                            <a class="nav-item nav-link active" id="nav-tab-{{ loop.index0 }}" data-toggle="tab"
+                               href="#nav-item-{{ loop.index0 }}"
+                               role="tab" aria-controls="nav-item-{{ loop.index0 }}"
+                               aria-selected="true">{{ key }}</a>
 
-                <div class="col-12 text-center">
-                    {% for post in posts.index[key] %}
+                        {% else %}
+                            <a class="nav-item nav-link" id="nav-tab-{{ loop.index0 }}" data-toggle="tab"
+                               href="#nav-item-{{ loop.index0 }}"
+                               role="tab" aria-controls="nav-item-{{ loop.index0 }}"
+                               aria-selected="false">{{ key }}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            {#            {% posts.index.rewind() %}#}
+
+            {% for key in posts.index %}
+
+                {% if loop.index0 ==0 %}
+                    <div class="tab-pane fade show active" id="nav-item-{{ loop.index0 }}" role="tabpanel"
+                         aria-labelledby="nav-tab-{{ loop.index0 }}">
+                {% else %}
+                    <div class="tab-pane fade" id="nav-item-{{ loop.index0 }}" role="tabpanel"
+                         aria-labelledby="nav-tab-{{ loop.index0 }}">
+                {% endif %}
+
+            <div class="col-12 text-center">
+                {% for post in posts.index[key] %}
 
                     <div class="card m-3 d-inline-block" style="width: 47%" id="{{ post.id }}">
-                        <img class="card-img-top "
-                             src="{{ post.main_image }}"
-                             alt="Card image cap">
+                        <a href="{{ url_for('blog.show_post',seo=post.seo) }}">
+                            <img class="card-img-top "
+                                 src="{{ post.main_image }}"
+                                 alt="Card image cap">
+                        </a>
                         <div class="card-header text-center bg-transparent border-bottom-0 m-0 pb-0">
 
                             <img class="rounded-circle w-25 "
@@ -116,36 +120,39 @@
                                 ۲۵
                                 اردیبهشت
                             </small></p>
-                            <h5 class="card-title">{{ post_title }}</h5>
-                            <p class="card-text">
-                                {{ post.title|truncate(20) }}
+                            <a href="{{ url_for('blog.show_post',seo=post.seo) }}">
+                                <h5 class="card-title">{{ post.title }}</h5>
+                            </a>
+                            <p class="card-text text-right">
+                                {{ post.body|truncate(250) }}
                             </p>
 
                         </div>
                         <div class="card-footer text-center p-0">
                             <table class="table table-bordered m-0 p-0">
                                 <tr>
-                                    <td>1 <i class="fa fa-comments-o" aria-hidden="true"></i></td>
-                                    <td>1 <i class="fa fa-heart-o" aria-hidden="true"></i></td>
-                                    <td>1 <i class="fa fa-eye" aria-hidden="true"></i></td>
+                                    <td>{{ post.comment|count }} <i class="fa fa-comments-o" aria-hidden="true"></i>
+                                    </td>
+                                    <td>{{ post.likes|count }} <i class="fa fa-heart-o" aria-hidden="true"></i></td>
+                                    <td>{{ post.views }} <i class="fa fa-eye" aria-hidden="true"></i></td>
                                 </tr>
                             </table>
                         </div>
                     </div>
 
-                    {% endfor %}
-
-                </div>
-
-                {#            </div>#}
-                {#            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">#}
-                {#                something else#}
-                {#            </div>#}
-                {#            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">#}
-                {#                another thing#}
-                {#            </div>#}
-                </div>
                 {% endfor %}
+
+            </div>
+
+            {#            </div>#}
+            {#            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">#}
+            {#                something else#}
+            {#            </div>#}
+            {#            <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">#}
+            {#                another thing#}
+            {#            </div>#}
+            </div>
+            {% endfor %}
 
             </div>
         </div>

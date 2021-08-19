@@ -59,6 +59,8 @@ class Category(Document):
 class Comment(EmbeddedDocument):
     user = ReferenceField(User)
     text = StringField(max_length=250)
+    likes = ListField(ReferenceField(User))
+    dislike = ListField(ReferenceField(User))
     time = DateTimeField(default=datetime.datetime.utcnow)
 
 
@@ -69,8 +71,8 @@ class Post(Document):
     category = ListField(ReferenceField(Category))
     main_image = StringField(max_length=150)
     images = ListField(StringField(max_length=150))
-    likes = ListField(User)
-    dislike = ListField(User)
+    likes = ListField(ReferenceField(User))
+    dislike = ListField(ReferenceField(User))
     time = DateTimeField(default=datetime.datetime.utcnow)
     comment = ListField(EmbeddedDocumentField(Comment))
     draft = BooleanField()
@@ -78,4 +80,5 @@ class Post(Document):
     index = BooleanField()
     slider = BooleanField()
     seo = StringField(max_length=150)
+    views= IntField(default=0)
 

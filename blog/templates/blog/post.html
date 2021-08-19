@@ -1,0 +1,251 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/normal.css') }}">
+
+{% endblock %}
+{% block content %}
+
+
+    <div class="modal " id="profile" role="dialog">
+        <div class="modal-dialog col-12 col-md-6 col-lg-3" role="document">
+            <div class="modal-content">
+                <div class="modal-header p-1">
+                    <button type="button" class="close " data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h5 class="modal-title" id="exampleModalLabel">{{ post.user.username }}</h5>
+
+                </div>
+                <div class="modal-body p-0">
+                    <div class="card m-0 p-0">
+
+                        <div class="card-header bg-primary text-center ">
+
+                            <img class="card-img-top rounded-circle w-50 mt-3 mb-3"
+                                 src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}">
+
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-borderless text-center ">
+                                <thead class=" m-0 p-0">
+                                <tr class="">
+                                    <th class="m-0 p-0 ">{{ count }}</th>
+                                    <th class="m-0 p-0">{{ post.user.followers|count }}</th>
+                                    <th class="m-0 p-0">{{ post.user.followings|count }}</th>
+                                </tr>
+                                </thead>
+                                <tbody class="m-0 p-0">
+                                <tr>
+                                    <td class="m-0 p-0">پست</td>
+                                    <td class="m-0 p-0">دنبال کننده</td>
+                                    <td class="m-0 p-0">دنبال شده</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center">
+                                <button class="btn btn-primary m-1">دنبال کن</button>
+                                <button class="btn btn-primary  m-1">ارسال پیام</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 text-right mt-5">
+        <div class="card ">
+            <div class="card-header border-0 bg-transparent">
+                <img class=" rounded-circle"
+                     src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}" style="width: 8%"
+                     data-toggle="modal" data-target="#profile" role="button">
+                <span class=" mr-2" data-toggle="modal" data-target="#profile"
+                      role="button">{{ post.user.first_name }} {{ post.user.last_name }}</span>
+                <span class="mr-2 mr-3">دنبال شده</span>
+                <div class="float-left mt-1">
+                    {% if g.user in post.dislike %}
+                        <span id="dislike"><i class="fa fa-thumbs-down m-1" aria-hidden="true"
+                                              style="font-size: 2rem;color: #007bff"
+                                              status="on"></i><span id="dislike_num"> {{ post.dislike|count }} </span></span>
+                    {% else %}
+                        <span id="dislike"><i class="fa fa-thumbs-down m-1" aria-hidden="true"
+                                              style="font-size: 2rem" status="off"></i><span id="dislike_num"> {{ post.dislike|count }}</span></span>
+                    {% endif %}
+                    {% if g.user in post.likes %}
+                        <span id="likes"><i class="fa fa-thumbs-up m-1" aria-hidden="true"
+                                            style="font-size: 2rem;color: #007bff"
+                                            status="on"></i><span id="like_num">{{ post.likes|count }}</span></span>
+                    {% else %}
+                        <span id="likes"><i class="fa fa-thumbs-up m-1" aria-hidden="true"
+                                            style="font-size: 2rem" status="off"></i><span id="like_num">{{ post.likes|count }}</span></span>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <div class="card-body">
+                <h5>{{ post.title }}</h5>
+                <div id="body"></div>
+            </div>
+
+            <div class="card-footer">
+
+
+                <form class="mb-5">
+                    <label for="comment"><h5> نظرات</h5></label>
+                    <textarea class="form-control" id="comment" style="resize: none" rows="3"></textarea>
+                    <div id="comment_info" class="invalid-feedback">
+                        برای ثبت نظر این فیلد اجباریست
+                    </div>
+                    <input type="button" value="ثبت نظر" class="mt-2 btn btn-primary" id="submut_comment">
+                </form>
+                <div id="comment_container">
+
+                    {% for comment in post.comment|sort(attribute='time', reverse = True) %}
+                        <table class="table  mr-4 table-borderless">
+                            <tr>
+                                <th rowspan="3" class="text-center m-0 p-0" style="width: 5%"><img
+                                        class=" rounded-circle w-100 m-0"
+                                        src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}"
+                                ></th>
+                                <th>{{ comment.user.first_name }}</th>
+                                <th class="text-left">۵ دقیقه پیش</th>
+
+                            </tr>
+
+                            <tr>
+                                <td colspan="2">
+
+                                    <div class="card border-0">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">
+
+                                                {{ comment.text }}
+
+                                            </h5>
+                                        </div>
+
+                                    </div>
+
+
+                                </td>
+                            </tr>
+
+
+                        </table>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        let body_text = `{{ post.body|safe }}`
+        const parser = new DOMParser();
+        if (body_text.includes('src="static')) {
+            body_text = body_text.replace('src="static', 'src="../static')
+        }
+        let elem = parser.parseFromString(body_text, "text/html")
+        $("#body").html(body_text)
+
+        {#$("#profile").collapse('show')#}
+
+
+        $("#likes").click(function () {
+                if ($("#likes i").attr('status') == "on") {
+                    {#    do nothing #}
+                } else {
+                    $.post("http://127.0.0.1:5000{{ url_for('blog.add_like') }}", {
+                        post_id: '{{ post.id }}'
+                    }, function (data) {
+                        $("#likes i").attr('status', 'on')
+                        $("#likes i").css('color', '#007bff')
+                        $("#like_num").text(Number($("#like_num").text()) + 1)
+                        if ($("#dislike i").attr('status') == 'on') {
+                            $("#dislike i").attr('status', 'off')
+                            $("#dislike i").css('color', 'black')
+                            $("#dislike_num").text(Number($("#dislike_num").text()) - 1)
+                        }
+                    })
+
+                }
+            }
+        )
+
+        $("#dislike").click(function () {
+            if ($("#dislike i").attr('status') == "on") {
+                {#    do nothing #}
+            } else {
+
+
+
+                $.post("http://127.0.0.1:5000{{ url_for('blog.add_dislike') }}", {
+                        post_id: '{{ post.id }}'
+                    }, function (data) {
+                        $("#dislike i").attr('status', 'on')
+                        $("#dislike i").css('color', '#007bff')
+                        $("#dislike_num").text(Number($("#dislike_num").text()) + 1)
+                        if ($("#likes i").attr('status') == 'on') {
+                            $("#likes i").attr('status', 'off')
+                            $("#likes i").css('color', 'black')
+                            $("#like_num").text(Number($("#like_num").text()) - 1)
+                        }
+                    })
+            }
+        })
+
+
+        $("#submut_comment").click(function () {
+
+            if ($("#comment").val() === "") {
+                $("#comment").addClass('is-invalid')
+                $("#comment_info").addClass('d-block')
+            } else {
+                $.post("http://127.0.0.1:5000{{ url_for('blog.add_comment') }}", {
+                        comment: $("#comment").val(),
+                        post_id: '{{ post.id }}'
+                    }, function (data) {
+                        let new_comment = `<table class="table  mr-4 table-borderless">
+                            <tr>
+                                <th rowspan="3" class="text-center m-0 p-0" style="width: 5%"><img
+                                        class=" rounded-circle w-100 m-0"
+                                        src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}"
+                                ></th>
+                                <th>{{ g.user.first_name }}</th>
+                                <th class="text-left">۵ دقیقه پیش</th>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2">
+
+                                    <div class="card border-0">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">
+
+                                                ${$("#comment").val()}
+
+                                            </h5>
+                                        </div>
+
+                                    </div>
+
+
+                                </td>
+                            </tr>
+
+
+                        </table>`
+                        $("#comment_container").prepend(new_comment)
+                    }
+                )
+            }
+        })
+        $("#comment").click(function () {
+            $("#comment").removeClass('is-invalid')
+            $("#comment_info").removeClass('d-block')
+        })
+    </script>
+{% endblock %}
