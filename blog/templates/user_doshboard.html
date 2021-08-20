@@ -1,6 +1,8 @@
+
 {% extends 'base.html' %}
 {% block head %}
 
+{% block content %}
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
@@ -8,13 +10,10 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="">
     <script src="https://kit.fontawesome.com/e8b231d464.js" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
     <link rel="stylesheet" href="{{ url_for('static',filename='css/user_profile.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/normal.css') }}">
-
 
 {% endblock %}
 {% block content %}

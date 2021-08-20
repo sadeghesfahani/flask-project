@@ -49,9 +49,10 @@ body {
 .content .main-content .post .edit-btn {
     position: absolute;
     bottom: 10px;
-    left: 500px;
+    right: 84%;
     border: 1px solid #005cbf;
     border-radius: .25rem;
+    color: #005cbf;
 }
 .content .main-content .post .edit-btn:hover {
     color: white;
@@ -60,6 +61,7 @@ body {
 .content .main-content .post .btn-danger {
     position: absolute;
     bottom: 10px;
+    left: 20px;
     border-radius: .25rem;
     color: #ff0017;
     background: transparent;
@@ -152,7 +154,7 @@ body {
 .card .card-body .email {
     position: absolute;
     right: 20%;
-    bottom: 50%;
+    bottom: 60%;
 }
 
 
@@ -257,7 +259,7 @@ label {
 @media only screen and (max-width: 800px) {
     .card {
         width: 770px;
-        height: 300px;
+        height: 350px;
     }
     .card .card-body #avatar {
         position: absolute;
@@ -265,7 +267,7 @@ label {
     }
     .card .card-body h4 {
         position: absolute;
-        bottom: 100px;
+        bottom: 130px;
         right: 315px;
     }
     .card .card-body h1 {
@@ -273,15 +275,15 @@ label {
     }
     .card .card-body .follow-info {
         position: absolute;
-        right: 40%;
-        bottom: 12%;
+        right: 37%;
+        bottom: 14%;
     }
     .card .card-body .email {
         display: none;
     }
     #myBtn {
         position: absolute;
-        right: 38%;
+        right: 36%;
         bottom: 2%;
     }
     .content .main-content .post {
@@ -295,7 +297,7 @@ label {
     .content .main-content .post .edit-btn {
         position: absolute;
         bottom: 10px;
-        right: 82%;
+        right: 80%;
         border: 1px solid #005cbf;
         border-radius: .25rem;
         color: #005cbf;
@@ -322,8 +324,8 @@ label {
     }
     .card .card-body .follow-info {
         position: absolute;
-        right: 50%;
-        bottom: 26%;
+        right: 49%;
+        bottom: 20%;
     }
     #myBtn {
         position: absolute;
@@ -332,7 +334,7 @@ label {
     }
 
 
-    /* for posts */
+
     .content .main-content .post {
         width: 600px;
         height: 270px;
@@ -344,7 +346,7 @@ label {
     .content .main-content .post .edit-btn {
         position: absolute;
         bottom: 10px;
-        right: 78%;
+        right: 74%;
         border: 1px solid #005cbf;
         border-radius: .25rem;
         color: #005cbf;
