@@ -10,11 +10,13 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask import abort
 from jinja2 import environment, pass_eval_context
 from werkzeug.utils import secure_filename
 from blog.auth import login_required
 from blog.db import Category, User, Post, Comment
 import json
+from datetime import datetime
 
 bp = Blueprint("blog", __name__)
 UPLOADS_PATH = 'static/media'
@@ -40,6 +42,15 @@ def base_load(view):
 # def get_user(user_id):
 #     user = User.objects(id=ObjectId(user_id)).get()
 #     return user
+
+@bp.route("/category/<cat>")
+@base_load
+def category(cat):
+    try:
+        my_cat = Category.objects(id=ObjectId(cat)).get()
+    except mongoengine.DoesNotExist:
+        abort(404, "This category does not exist")
+    return render_template('blog/category.html', posts=Post.objects(category=my_cat), cat=my_cat)
 
 
 @bp.route("/")
@@ -85,7 +96,31 @@ def index():
 @login_required
 @base_load
 def create_post():
-    return render_template("blog/create.html")
+    if request.method == 'POST':
+        title = request.form['title']
+        body = request.form['body']
+
+        error = None
+
+        if not title:
+            error = 'Title is required.', 'alert-danger'
+
+        if error is not None:
+            flash(*error)
+        else:
+            # db = get_db()
+            new_post = Post(
+                title=title,
+                body=body,
+                author=g.user,
+                author_id=g.user.username,
+                time=datetime.now()
+            )
+            new_post.save()
+            flash('Post saved', 'alert-success')
+            return redirect(url_for('blog.index'))
+
+    return render_template('blog/create.html')
 
 
 @bp.route("/edit/<string:seo>")
@@ -221,7 +256,7 @@ def upload_main_pic():
     file = request.files['media']
     try:
         post = Post.objects(id=ObjectId(post_id)).get()
-        address = f'static/users/{g.user.username}/{file.filename}'
+        address = f'static/users/{g.user.username}/{secure_filename(file.filename)}'
         file.save(os.path.join(current_app.root_path, f'static/users/{g.user.username}/{file.filename}'))
         post.main_image = address
         post.save()
@@ -232,7 +267,7 @@ def upload_main_pic():
     return 'done'
 
 
-@bp.route("/post/create/ajax", methods=("GET", "POST"))
+@bp.route("/post/create/ajax", methods=["POST"])
 def create_post_ajax():
     """
     this section creates post or update changes if there is
@@ -321,6 +356,7 @@ def show_post(seo):
 
     return render_template("blog/post.html", post=post, count=all_posts_count)
 
+
 @bp.route("/post/comment/add/ajax",methods=("GET", "POST"))
 def add_comment():
     comment = request.form['comment']
@@ -348,19 +384,24 @@ def profile():
     return render_template("user_doshboard.html", user_posts=user_posts)
 
 
-@bp.route("/edit-profile/<username>")
+@bp.route("/edit-profile/", methods=["POST"])
 @login_required
 @base_load
-def edit_profile(username):
+def edit_profile():
     # get info from form and save it
-    # ...
-    return render_template("edit_profile.html")
+    user = g.user
+    file = request.files['new-avatar']
+    address = f"static/media/user/{g.user.username}/{secure_filename(file.filename)}"
+    full_ads = os.path.join(current_app.root_path, address)
+    with open(full_ads, 'w') as f:
+        file.save(full_ads)
+    user.avatar = address
+    user.save()
+    return address
+    # return render_template("user_doshboard.html")
 
 
-
-
-
-@bp.route("/post/like/add/ajax",methods=("GET", "POST"))
+@bp.route("/post/like/add/ajax", methods=("GET", "POST"))
 def add_like():
     post_id = request.form['post_id']
     user_who_act = User.objects(id =g.user.id).get()
@@ -374,12 +415,11 @@ def add_like():
     else:
         post.likes.append(user_who_act)
 
-
     post.save()
     return "done"
 
 
-@bp.route("/post/dislike/add/ajax",methods=("GET", "POST"))
+@bp.route("/post/dislike/add/ajax", methods=("GET", "POST"))
 def add_dislike():
     post_id = request.form['post_id']
     user_who_act = User.objects(id =g.user.id).get()
@@ -392,7 +432,6 @@ def add_dislike():
         pass
     else:
         post.dislike.append(user_who_act)
-
 
     post.save()
     return "done"
