@@ -96,31 +96,7 @@ def index():
 @login_required
 @base_load
 def create_post():
-    if request.method == 'POST':
-        title = request.form['title']
-        body = request.form['body']
-
-        error = None
-
-        if not title:
-            error = 'Title is required.', 'alert-danger'
-
-        if error is not None:
-            flash(*error)
-        else:
-            # db = get_db()
-            new_post = Post(
-                title=title,
-                body=body,
-                author=g.user,
-                author_id=g.user.username,
-                time=datetime.now()
-            )
-            new_post.save()
-            flash('Post saved', 'alert-success')
-            return redirect(url_for('blog.index'))
-
-    return render_template('blog/create.html')
+    return render_template("blog/create.html")
 
 
 @bp.route("/edit/<string:seo>")
@@ -371,34 +347,60 @@ def add_comment():
     print(comment,post,comment_user.username)
     return "done"
 
-
-@bp.route("/profile")
+@bp.route("/profile/")
 @login_required
 @base_load
 def profile():
-    user_posts = None
+    try:
+        user_posts = Post.objects(user=ObjectId(g.user.id))
 
-    # user = {}
-    # user_posts = []
+        return render_template("user_doshboard.html", user_posts=user_posts)
+    except:
+        user_posts = None
+        return render_template("user_doshboard.html", user_posts=user_posts)
 
-    return render_template("user_doshboard.html", user_posts=user_posts)
 
-
-@bp.route("/edit-profile/", methods=["POST"])
+@bp.route("/edit-profile/",methods=("GET", "POST"))
 @login_required
 @base_load
-def edit_profile():
+def edit_profile(username):
     # get info from form and save it
-    user = g.user
-    file = request.files['new-avatar']
-    address = f"static/media/user/{g.user.username}/{secure_filename(file.filename)}"
-    full_ads = os.path.join(current_app.root_path, address)
-    with open(full_ads, 'w') as f:
-        file.save(full_ads)
-    user.avatar = address
-    user.save()
-    return address
-    # return render_template("user_doshboard.html")
+    # ...
+
+    if request.method == "POST":
+        if request.form['info'] == 'file':
+            file = request.files['choice-avatar']
+            user = User.objects(username=g.user.username).get()
+            address = f'static/users/{g.user.username}/{file.filename}'
+            file.save(os.path.join(current_app.root_path, f'static/users/{g.user.username}/{file.filename}'))
+            # user.avatar.append(address)
+            user.avatar = address
+            user.save()
+
+            return render_template("user_doshboard.html")
+        elif request.form['info'] == 'text':
+            first_name = request.form['first-name']
+            last_name = request.form['last-name']
+            password = request.form['password']
+            email = request.form['email']
+            user = User.objects(username=g.user.username).get()
+            if first_name not in [None, "", " "] or first_name.isnumeric() == False:
+                user.first_name = first_name
+                user.save()
+            if last_name not in [None, "", " "] or first_name.isnumeric() == False:
+                user.last_name = last_name
+                user.save()
+            if password not in [None, ""]:
+                user.password = password
+                user.save()
+            if email not in [None, ""]:
+                user.email = email
+                user.save()
+
+            return render_template("user_doshboard.html")
+    else:
+        return render_template("user_doshboard.html")
+
 
 
 @bp.route("/post/like/add/ajax", methods=("GET", "POST"))
