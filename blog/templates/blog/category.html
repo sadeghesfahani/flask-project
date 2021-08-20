@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ cat.title }} - {% endblock %}
+
+{% block content %}
+{% for post in posts %}
+{#    <div class="card">#}
+{#        <div class="card-header">{{ post.title }}</div>#}
+{#        <div class="card-body"><img class="card-img" src="../{{ post.main_image }}" alt="post_photo"></div>#}
+{#        <div class="card-footer">#}
+{#            <div class="avatar"></div>#}
+{#        </div>#}
+{#    </div>#}
+<div class="card m-3 d-inline-block" style="width: 47%" id="{{ post.id }}">
+                        <a href="{{ url_for('blog.show_post',seo=post.seo) }}">
+                            <img class="card-img-top "
+                                 src="../{{ post.main_image }}"
+                                 alt="Card image cap">
+                        </a>
+                        <div class="card-header text-center bg-transparent border-bottom-0 m-0 pb-0">
+
+                            <img class="rounded-circle w-25 "
+                                 src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}"
+                                 alt="Card image cap" style="margin-top: -30%;">
+                        </div>
+
+                        <div class="card-body pt-0 text-center">
+                            <p class="card-text float-left d-inline-flex  mb-0"
+                               style="margin-top: -20px"><small
+                                    class="text-muted"><i class="fa fa-user-circle-o"
+                                                          aria-hidden="true"></i>
+                                {{ post.user.first_name }}
+                            </small>
+                            </p>
+                            <p class="card-text float-right d-inline-flex mb-0"
+                               style="margin-top: -20px"><small
+                                    class="text-muted"><i class="fa fa-calendar" aria-hidden="true"></i>
+                                ۲۵
+                                اردیبهشت
+                            </small></p>
+                            <a href="{{ url_for('blog.show_post',seo=post.seo) }}">
+                                <h5 class="card-title">{{ post.title }}</h5>
+                            </a>
+                            <p class="card-text text-right">
+                                {{ post.body|truncate(250) }}
+                            </p>
+
+                        </div>
+                        <div class="card-footer text-center p-0">
+                            <table class="table table-bordered m-0 p-0">
+                                <tr>
+                                    <td>{{ post.comment|count }} <i class="fa fa-comments-o" aria-hidden="true"></i>
+                                    </td>
+                                    <td>{{ post.likes|count }} <i class="fa fa-heart-o" aria-hidden="true"></i></td>
+                                    <td>{{ post.views }} <i class="fa fa-eye" aria-hidden="true"></i></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+{% endfor %}
+{% endblock %}

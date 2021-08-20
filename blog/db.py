@@ -32,6 +32,7 @@ class User(Document):
     followers = ListField(StringField(max_length=50))
     avatar = StringField(max_length=150)
 
+
 def create_user(username, password, first_name, last_name, email, address=None, instagram=None, telegram=None):
     try:
         new_user = User()
@@ -80,5 +81,5 @@ class Post(Document):
     index = BooleanField()
     slider = BooleanField()
     seo = StringField(max_length=150)
-    views= IntField(default=0)
+    views = IntField(default=0)
 
