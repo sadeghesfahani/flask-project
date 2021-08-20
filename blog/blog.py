@@ -49,9 +49,9 @@ def category(cat):
     try:
         my_cat = Category.objects(id=ObjectId(cat)).get()
     except mongoengine.DoesNotExist:
-        abort(404, "This category does not exist")
+        abort(404, "This  does not exist")
     return render_template('blog/category.html', posts=Post.objects(category=my_cat), cat=my_cat)
-
+category
 
 @bp.route("/")
 @base_load
@@ -109,6 +109,8 @@ def edit_post(seo):
         category_to_send = list()
         for category in post.category:
             category_to_send.append(category.id)
+        print(category_to_send)
+        print(post)
     except mongoengine.DoesNotExist:
         pass
     if g.user == post.user:
@@ -219,7 +221,7 @@ def upload_pic():
     return 'done'
 
 
-@bp.route("/post/upload/main-media/ajax", methods=("GET", "POST"))
+@bp.route("/post/upload/main-media/ajax",methods=("GET", "POST"))
 def upload_main_pic():
     """
     this section upload main picture of the post into user directory
@@ -232,7 +234,7 @@ def upload_main_pic():
     file = request.files['media']
     try:
         post = Post.objects(id=ObjectId(post_id)).get()
-        address = f'static/users/{g.user.username}/{secure_filename(file.filename)}'
+        address = f'static/users/{g.user.username}/{file.filename}'
         file.save(os.path.join(current_app.root_path, f'static/users/{g.user.username}/{file.filename}'))
         post.main_image = address
         post.save()
@@ -243,7 +245,7 @@ def upload_main_pic():
     return 'done'
 
 
-@bp.route("/post/create/ajax", methods=["POST"])
+@bp.route("/post/create/ajax", methods=("GET", "POST"))
 def create_post_ajax():
     """
     this section creates post or update changes if there is
@@ -263,6 +265,7 @@ def create_post_ajax():
         post.slider = decoded_data['slider']
         post.index = decoded_data['index']
         post.seo = decoded_data['seo']
+        post.draft = False
         post.save()
         return str(post.id)
     else:
@@ -351,19 +354,19 @@ def add_comment():
 @login_required
 @base_load
 def profile():
-    try:
-        user_posts = Post.objects(user=ObjectId(g.user.id))
-
-        return render_template("user_doshboard.html", user_posts=user_posts)
-    except:
-        user_posts = None
-        return render_template("user_doshboard.html", user_posts=user_posts)
+    # try:
+    user_posts = Post.objects(user=ObjectId(g.user.id),draft__ne=True)
+    print(user_posts)
+    return render_template("user_doshboard.html", user_posts=user_posts)
+    # except:
+    #     user_posts = None
+    #     return render_template("user_doshboard.html", user_posts=user_posts)
 
 
 @bp.route("/edit-profile/",methods=("GET", "POST"))
 @login_required
 @base_load
-def edit_profile(username):
+def edit_profile():
     # get info from form and save it
     # ...
 

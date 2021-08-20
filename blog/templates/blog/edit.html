@@ -49,7 +49,8 @@
                          src="../{{ url_for('static',filename='media/post/no-pic.png') }}">
                 {% endif %}
             {% else %}
-                <img class="card-img-top" id="main_pic" src="../{{ url_for('static',filename='media/post/no-pic.png') }}">
+                <img class="card-img-top" id="main_pic"
+                     src="../{{ url_for('static',filename='media/post/no-pic.png') }}">
             {% endif %}
             <form>
 
@@ -71,13 +72,14 @@
 
 
                 <div id="accordion">
-                    <div class="card" rounded-0 id="must_add_here">
+                    <div class="card rounded-0" id="must_add_here">
                         {% for category in g.category %}
                             {% if category.parent == None %}
 
                                 <div class="card-header bg-transparent rounded-0" id="headingOne{{ loop.index0 }}">
                                     <h5 class="mb-0">
-                                        <input type="checkbox" class="category" value="{{ category.id }}" id="{{ category.id }}">
+                                        <input type="checkbox" class="category" value="{{ category.id }}"
+                                               id="{{ category.id }}">
                                         <button class="btn btn-link" data-toggle="collapse"
                                                 data-target="#collapseOne{{ loop.index0 }}"
                                                 aria-expanded="true" aria-controls="collapseOne{{ loop.index0 }}">
@@ -283,7 +285,8 @@
 
 
     <script>
-window.images = []
+
+        window.images = []
 
         function set_link() {
             if ($("#address").val() !== "") {
@@ -681,8 +684,8 @@ window.images = []
                 $("#title_info").addClass('d-block')
             } else {
                 let category = []
-                for (element of $('.category:checkbox:checked')) {
-                    category.push(element.value)
+                for (elem of $('.category:checkbox:checked')) {
+                    category.push(elem.value)
                 }
 
                 if ($("#publish").is(':checked')) {
@@ -827,55 +830,57 @@ window.images = []
             }
         }
 
-{% if post %}
-    window.post_id = '{{ post.id }}'
-    window.index_status = '{{ post.index }}'
-    window.publish = '{{ post.published }}'
-    window.title= '{{ post.title }}'
-    window.slider = '{{ post.slider }}'
-    if(window.slider == "True"){
-        $("#slider_status").prop("checked",true)
-    }else{
-        $("#slider_status").prop("checked",false)
-    }
-
-    if(window.index_status == "True"){
-        $("#index_status").prop("checked",true)
-    }else{
-        $("#index_status").prop("checked",false)
-    }
-
-    if(window.publish == "True"){
-        $("#publish").prop("checked",true)
-    }else{
-        $("#publish").prop("checked",false)
-    }
-
-
-    window.seo= '{{ post.seo }}'
-    window.body = '{{ post.body }}'
-    $("#title").val(window.title)
-    $("#seo").val(window.seo)
-    $("#textarea").val(window.body.trim())
-    window.category =[]
-    {% for cat in category %}
-    window.category.push('{{ cat }}')
-    {% endfor %}
-    for(cat of window.category){
-
-        $(`#${cat}`).prop("checked",true)
-    }
-
-    window.cat = []
-        function check_value(elem){
-            if(window.cat.includes(elem.value)){
-                window.cat.remove(elem.value)
-            }else{
-                window.cat.push(elem.value)
+        {#alert("post is not here")#}
+        {% if post %}
+            {#alert("post is here")#}
+            window.post_id = '{{ post.id }}'
+            window.index_status = '{{ post.index }}'
+            window.publish = '{{ post.published }}'
+            window.title = '{{ post.title }}'
+            window.slider = '{{ post.slider }}'
+            if (window.slider == "True") {
+                $("#slider_status").prop("checked", true)
+            } else {
+                $("#slider_status").prop("checked", false)
             }
-        }
 
-{% endif %}
+            if (window.index_status == "True") {
+                $("#index_status").prop("checked", true)
+            } else {
+                $("#index_status").prop("checked", false)
+            }
+
+            if (window.publish == "True") {
+                $("#publish").prop("checked", true)
+            } else {
+                $("#publish").prop("checked", false)
+            }
+
+
+            window.seo = '{{ post.seo }}'
+            window.body = '{{ post.body }}'
+            $("#title").val(window.title)
+            $("#seo").val(window.seo)
+            $("#textarea").val(window.body.trim())
+            window.category = []
+            {% for cat in category %}
+                window.category.push('{{ cat }}')
+            {% endfor %}
+            for (cat of window.category) {
+
+                $(`#${cat}`).prop("checked", true)
+            }
+
+            window.cat = []
+            function check_value(elem) {
+                if (window.cat.includes(elem.value)) {
+                    window.cat.remove(elem.value)
+                } else {
+                    window.cat.push(elem.value)
+                }
+            }
+
+        {% endif %}
     </script>
 
 {% endblock %}

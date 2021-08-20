@@ -1,9 +1,7 @@
-
 {% extends 'base.html' %}
 {% block head %}
 
-{% block content %}
-<head>
+
     <meta charset="UTF-8">
     <title>Dashboard</title>
 
@@ -16,6 +14,7 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='css/normal.css') }}">
 
 {% endblock %}
+
 {% block content %}
 
 
@@ -27,7 +26,11 @@
                 <div class="card-body ">
                   <div class="d-flex flex-column align-items-center text-center">
                     <div class="tooltip-avatar" data-toggle="tooltip" data-placement="left" title="تغییر پروفایل">
+                        {% if g.user.avatar %}
+                        <img id="avatar" src="../{{ g.user.avatar }}" class="rounded-circle" width="150">
+                        {% else %}
                         <img id="avatar" src="https://bootdey.com/img/Content/avatar/avatar7.png" class="rounded-circle" width="150">
+                        {% endif %}
                     </div>
 
                     <h1>{{ g.user.first_name }}</h1>
@@ -53,21 +56,22 @@
     <div class="content">
         <div class="main-content">
         {% if user_posts %}
+
             {% for post in user_posts %}
             <div class="post">
-                <img src="{{ url_for('static',filename='media/post/{{ post.main_image }}') }}" class="post-image">
+                <img src="../{{ post.main_image }}" class="post-image">
                 <div class="post-preview">
                     <h1>{{ post.title }}</h1>
                     <div class="post-info">
-                        <i class="far fa-thumbs-up icon">{{ post.likes }}</i>
+                        <i class="far fa-thumbs-up icon">{{ post.likes|count }}</i>
                         &nbsp;
-                        <i class="far fa-thumbs-down icon">{{ post.dislike }}</i>
+                        <i class="far fa-thumbs-down icon">{{ post.dislike|count }}</i>
                     </div>
                     <div class="post-content">
-                        <p class="preview-text">{{post.body}}</p>
+                        <p class="preview-text">{{post.body|truncate(250)}}</p>
                     </div>
-                    <a href="#" class="btn more-btn">بیشتر</a>
-                    <a href="#" class="btn edit-btn">ویرایش</a>
+                    <a href="{{ url_for('blog.show_post',seo=post.seo) }}" class="btn more-btn">بیشتر</a>
+                    <a href="{{ url_for('blog.edit_post',seo=post.seo) }}" class="btn edit-btn">ویرایش</a>
                     <a href="#" class="btn btn-danger">حذف</a>
                 </div>
             </div>

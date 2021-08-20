@@ -675,22 +675,27 @@
         })
 
         $("#update").click(function () {
+
             event.preventDefault()
             if ($("#title").val().trim() == "") {
+
                 $("#title").addClass('is-invalid')
                 $("#title_info").addClass('d-block')
             } else {
+
                 let category = []
 
 
-                for (element of $('.category:checkbox:checked')) {
-                    category.push(element.value)
-                    console.log(element.val(), element.value)
-                }
-                for(newly_added_elements of window.cat){
-                    category.push(newly_added_elements)
-                }
+                for (let elem of $('.category:checkbox:checked')) {
+                    category.push(elem.value)
 
+                }
+                alert("here")
+                if (window.cat) {
+                    for (let newly_added_elements of window.cat) {
+                        category.push(newly_added_elements)
+                    }
+                }
 
                 if ($("#publish").is(':checked')) {
                     window.publish = true
@@ -725,7 +730,7 @@
                     seo: seo,
 
                 }
-
+                alert("im here just befor ajax")
                 $.ajax({
                     url: `http://127.0.0.1:5000{{ url_for('blog.create_post_ajax') }}`,
                     type: 'post',
@@ -733,6 +738,7 @@
                     data: JSON.stringify(data),
                     success: function (response) {
                         if (response != 0) {
+                            alert('ajax successfully done')
                             window.post_id = response
                             $("#alert").removeClass('d-none')
                             setTimeout(function () {
@@ -834,16 +840,17 @@
             }
         }
         {% if post %}
-        window.post_id = '{{ post.id }}'
+            window.post_id = '{{ post.id }}'
         {% endif %}
 
         window.cat = []
-        function check_value(elem){
-            if(window.cat.includes(elem.value)){
-                let index =window.cat.indexOf(elem.value)
-                window.cat.splice(index,1)
 
-            }else{
+        function check_value(elem) {
+            if (window.cat.includes(elem.value)) {
+                let index = window.cat.indexOf(elem.value)
+                window.cat.splice(index, 1)
+
+            } else {
                 window.cat.push(elem.value)
             }
         }
