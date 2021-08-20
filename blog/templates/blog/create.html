@@ -685,6 +685,7 @@
 
                 for (element of $('.category:checkbox:checked')) {
                     category.push(element.value)
+                    console.log(element.val(), element.value)
                 }
                 for(newly_added_elements of window.cat){
                     category.push(newly_added_elements)

@@ -20,7 +20,7 @@
     <script src="{{ url_for('static',filename='js/bootstrap.js') }}"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     {% block head %}{% endblock head %}
-    <title>Title</title>
+    <title>{% block title %} {% endblock %}Blogify</title>
 </head>
 <body>
 
@@ -48,10 +48,10 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     {% for category in g.category %}
                         {% if category.parent == None %}
-                            <a class="dropdown-item" href="#">{{ category.title }}</a>
+                            <a class="dropdown-item" href="{{ url_for('blog.category', cat=category.id) }}">{{ category.title }}</a>
                             <div class="dropdown-divider"></div>
-                            {% for children in category.child %}
-                                <a class="dropdown-item" href="#">{{ children.title }}</a>
+                            {% for child in category.child %}
+                                <a class="dropdown-item" href="{{ url_for('blog.category', cat=child.id) }}">{{ child.title }}</a>
 
                             {% endfor %}
                             <br>
