@@ -10,6 +10,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask import abort
 from jinja2 import environment, pass_eval_context
 from werkzeug.utils import secure_filename
 from blog.auth import login_required
@@ -45,7 +46,10 @@ def base_load(view):
 @bp.route("/category/<cat>")
 @base_load
 def category(cat):
-    my_cat = Category.objects(id=ObjectId(cat))
+    try:
+        my_cat = Category.objects(id=ObjectId(cat)).get()
+    except mongoengine.DoesNotExist:
+        abort(404, "This category does not exist")
     return render_template('blog/category.html', posts=Post.objects(category=my_cat), cat=my_cat)
 
 
