@@ -85,8 +85,8 @@
         </ul>
 
         {{ g.user.first_name }}
-        <form class="form-inline my-2 my-lg-0 mr-auto">
-            <input class="form-control mr-sm-2" type="search" placeholder="جست و جو" aria-label="جست و جو">
+        <form class="form-inline my-2 my-lg-0 mr-auto" method="post", action="{{ url_for('blog.search') }}">
+            <input class="form-control mr-sm-2" name="search-box" type="search" placeholder="جست و جو" aria-label="جست و جو">
             <button class="btn btn-outline-secondary my-2 my-sm-0 mr-2" type="submit">جست و جو</button>
         </form>
     </div>
