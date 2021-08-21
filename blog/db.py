@@ -57,12 +57,17 @@ class Category(Document):
     parent = ReferenceField('self')
 
 
+class Tag(EmbeddedDocument):
+    name = StringField(max_length=50)
+
+
 class Comment(EmbeddedDocument):
     user = ReferenceField(User)
     text = StringField(max_length=250)
     likes = ListField(ReferenceField(User))
     dislike = ListField(ReferenceField(User))
     time = DateTimeField(default=datetime.datetime.utcnow)
+    tags = ListField(EmbeddedDocumentField(Tag))
 
 
 class Post(Document):
@@ -82,4 +87,5 @@ class Post(Document):
     slider = BooleanField()
     seo = StringField(max_length=150)
     views = IntField(default=0)
+    tags = ListField(EmbeddedDocumentField(Tag))
 
