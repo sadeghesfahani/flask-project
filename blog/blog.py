@@ -447,27 +447,25 @@ def search():
     index_posts = dict()
 
     if request.method == "POST":
-        serach_word = request.form["search-box"]
+        search_word = request.form["search-box"]
 
         for category in Category.objects(parent=None):
             index_posts[category.title] = list()
             if 'child' in category:
-                posts = Post.objects.filter(title=serach_word)
+                posts = Post.objects.filter(title=search_word)
                 posts = [x for x in posts if x != [] and x.published and x.index]
                 if posts:
                     [index_posts[category.title].append(post) for post in posts]
                 for children in category['child']:
-                    posts = Post.objects.filter(title=serach_word)
+                    posts = Post.objects.filter(title=search_word)
                     posts = [x for x in posts if x != [] and x.published and x.index]
                     if posts:
                         [index_posts[category.title].append(post) for post in posts]
             else:
-                posts = Post.objects.filter(title=serach_word)
+                posts = Post.objects.filter(title=search_word)
                 posts = [x for x in posts if x != [] and x.published and x.index]
                 if posts:
                     [index_posts[category.title].append(post) for post in posts]
-
-
 
         posts = {
             'index': index_posts
