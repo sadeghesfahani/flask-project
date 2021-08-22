@@ -387,10 +387,10 @@ def edit_profile():
             password = request.form['password']
             email = request.form['email']
             user = User.objects(username=g.user.username).get()
-            if first_name not in [None, "", " "] or first_name.isnumeric() == False:
+            if first_name not in [None, "", " "] and first_name.isnumeric() == False:
                 user.first_name = first_name
                 user.save()
-            if last_name not in [None, "", " "] or first_name.isnumeric() == False:
+            if last_name not in [None, "", " "] and first_name.isnumeric() == False:
                 user.last_name = last_name
                 user.save()
             if password not in [None, ""]:
