@@ -455,7 +455,8 @@ def search():
                 all_posts = Post.objects()
                 posts_that_search_word_in_body = [post for post in all_posts if post.body != None and search_word in post.body and post != [] and post.published and post.index]
                 posts_that_search_word_in_title = [post for post in all_posts if post.body != None and search_word in post.title and post != [] and post.published and post.index]
-                posts = posts_that_search_word_in_body + posts_that_search_word_in_title
+                posts_that_search_word_in_author = [post for post in all_posts if post.body != None and search_word in post.user.first_name and post != [] and post.published and post.index]
+                posts = posts_that_search_word_in_body + posts_that_search_word_in_title + posts_that_search_word_in_author
                 if posts:
                     [index_posts[category.title].append(post) for post in posts]
                 for children in category['child']:
@@ -465,7 +466,8 @@ def search():
                 all_posts = Post.objects()
                 posts_that_search_word_in_body = [post for post in all_posts if post.body != None and search_word in post.body and post != [] and post.published and post.index]
                 posts_that_search_word_in_title = [post for post in all_posts if post.body != None and search_word in post.title and post != [] and post.published and post.index]
-                posts = posts_that_search_word_in_body + posts_that_search_word_in_title
+                posts_that_search_word_in_author = [post for post in all_posts if post.body != None and search_word in post.user.first_name and post != [] and post.published and post.index]
+                posts = posts_that_search_word_in_body + posts_that_search_word_in_title + posts_that_search_word_in_author
                 if posts:
                     [index_posts[category.title].append(post) for post in posts]
 
