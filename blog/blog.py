@@ -452,18 +452,20 @@ def search():
         for category in Category.objects(parent=None):
             index_posts[category.title] = list()
             if 'child' in category:
-                posts = Post.objects.filter(title=search_word)
-                posts = [x for x in posts if x != [] and x.published and x.index]
+                all_posts = Post.objects()
+                posts_that_search_word_in_body = [post for post in all_posts if post.body != None and search_word in post.body and post != [] and post.published and post.index]
+                posts_that_search_word_in_title = [post for post in all_posts if post.body != None and search_word in post.title and post != [] and post.published and post.index]
+                posts = posts_that_search_word_in_body + posts_that_search_word_in_title
                 if posts:
                     [index_posts[category.title].append(post) for post in posts]
                 for children in category['child']:
-                    posts = Post.objects.filter(title=search_word)
-                    posts = [x for x in posts if x != [] and x.published and x.index]
                     if posts:
                         [index_posts[category.title].append(post) for post in posts]
             else:
-                posts = Post.objects.filter(title=search_word)
-                posts = [x for x in posts if x != [] and x.published and x.index]
+                all_posts = Post.objects()
+                posts_that_search_word_in_body = [post for post in all_posts if post.body != None and search_word in post.body and post != [] and post.published and post.index]
+                posts_that_search_word_in_title = [post for post in all_posts if post.body != None and search_word in post.title and post != [] and post.published and post.index]
+                posts = posts_that_search_word_in_body + posts_that_search_word_in_title
                 if posts:
                     [index_posts[category.title].append(post) for post in posts]
 
@@ -471,3 +473,35 @@ def search():
             'index': index_posts
         }
         return render_template("blog/index.html", posts=posts)
+
+
+
+
+#
+# @bp.route("/search/tag/<tagname>")
+# def search_by_tag(tagname):
+#     """ When you click a tag name in a post, this function find all posts that have that tag name """
+#
+#     index_posts = dict()
+#     for category in Category.objects(parent=None):
+#         index_posts[category.title] = list()
+#         if 'child' in category:
+#             posts = Post.objects.filter(tags=tagname)
+#             posts = [x for x in posts if x != [] and x.published and x.index]
+#             if posts:
+#                 [index_posts[category.title].append(post) for post in posts]
+#             for children in category['child']:
+#                 posts = Post.objects.filter(tags=tagname)
+#                 posts = [x for x in posts if x != [] and x.published and x.index]
+#                 if posts:
+#                     [index_posts[category.title].append(post) for post in posts]
+#         else:
+#             posts = Post.objects.filter(tags=tagname)
+#             posts = [x for x in posts if x != [] and x.published and x.index]
+#             if posts:
+#                 [index_posts[category.title].append(post) for post in posts]
+#
+#     posts = {
+#         'index': index_posts
+#     }
+#     return render_template("blog/index.html", posts=posts)
