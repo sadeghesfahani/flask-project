@@ -43,6 +43,25 @@ def base_load(view):
 #     user = User.objects(id=ObjectId(user_id)).get()
 #     return user
 
+# ############# NOT USED ################
+# tag finder api
+# @bp.route("/check_tag")
+# def check_tag():
+#     tag_name = request.args.get('tag')
+#     current_app.logger.debug(request.args)
+#     tags = Post.objects(tags=tag_name)
+#     if tags:
+#         return {'tags': tags}
+#         return "tags existed"
+    # return {'new_tag': tag_name}
+# ######################################
+
+@bp.route("/tag/<tag_name>")
+def tag(tag_name):
+
+    return render_template('blog/category.html', posts=Post.objects(tags=tag_name), tag=tag_name)
+
+
 @bp.route("/category/<cat>")
 @base_load
 def category(cat):
@@ -51,7 +70,7 @@ def category(cat):
     except mongoengine.DoesNotExist:
         abort(404, "This  does not exist")
     return render_template('blog/category.html', posts=Post.objects(category=my_cat), cat=my_cat)
-category
+
 
 @bp.route("/")
 @base_load
@@ -254,7 +273,7 @@ def create_post_ajax():
     :return: true if successfull, false if it failed
     """
     decoded_data = request.json
-    print(decoded_data)
+    current_app.logger.debug(decoded_data)
     if 'post_id' in decoded_data:
         print("im here")
         post = Post.objects(id=ObjectId(decoded_data['post_id'])).get()
@@ -266,6 +285,7 @@ def create_post_ajax():
         post.index = decoded_data['index']
         post.seo = decoded_data['seo']
         post.draft = False
+        post.tags = [tag_name for tag_name in decoded_data['tags']]
         post.save()
         return str(post.id)
     else:
@@ -280,6 +300,7 @@ def create_post_ajax():
         new_post.index = decoded_data['index']
         new_post.seo = decoded_data['seo']
         new_post.views = 0
+        new_post.tags = [tag_name for tag_name in decoded_data['tags']]
         new_post.save()
         return str(new_post.id)
 

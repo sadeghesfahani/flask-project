@@ -69,6 +69,7 @@
                     </div>
                     <div class="post-content">
                         <p class="preview-text">{{post.body|truncate(250)}}</p>
+                        <p>tags : {% for tag in post.tags %} <a href="{{ url_for('blog.tag', tag_name=tag) }}">#{{ tag }}, </a> {% endfor %}</p>
                     </div>
                     <a href="{{ url_for('blog.show_post',seo=post.seo) }}" class="btn more-btn">بیشتر</a>
                     <a href="{{ url_for('blog.edit_post',seo=post.seo) }}" class="btn edit-btn">ویرایش</a>

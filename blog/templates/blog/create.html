@@ -185,7 +185,8 @@
                             <div class="card-body">
                                 <form>
                                     <div class="form-group">
-                                        <textarea style="resize: none;" class="form-control" rows="20"
+                                        <textarea style="resize: none;"
+                                                  class="form-control" rows="20"
                                                   id="textarea"></textarea>
                                     </div>
                                 </form>
@@ -279,10 +280,35 @@
 
 
 
-
-
-
     <script>
+        {#document.getElementById("textarea").contentEditable='true';#}
+
+        function check_hashtags() {
+            let myRe = /#+[a-zA-Z0-9(_)^#]{1,}/igdm
+            let txt = $('#textarea').val()
+            let hashtag;
+            let tags = Array();
+            while ((hashtag = myRe.exec(txt)) !== null) {
+                console.log(hashtag)
+                tags.push(hashtag[0].slice(1))
+                {#$.ajax({#}
+                {#    url: `http://127.0.0.1:5000{{ url_for('blog.check_tag') }}`,#}
+                {#    type: 'GET',#}
+                {#    data: {'tag': hashtag[0].slice(1)},#}
+                {#    contentType: false,#}
+                {#    processData: false,#}
+                {#success: function (response) {#}
+                {#    if (response !== 0) {#}
+                {#        console.log(response)#}
+                {#    }#}
+                {# } #}
+                {# }) #}
+            }
+            console.log(tags)
+            return tags
+        }
+
+        $('#textarea').on('keyup')
         window.images = []
 
         function set_link() {
@@ -728,6 +754,7 @@
                     post_id: window.post_id,
                     index: window.index_status,
                     seo: seo,
+                    tags: check_hashtags(),
 
                 }
                 alert("im here just befor ajax")
