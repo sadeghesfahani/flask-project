@@ -45,7 +45,7 @@
                                 {{ post.body|truncate(250) }}
                             </p>
                         {% if post.tags %}
-                            <p>tags : {% for tag in post.tags %} <a href="{{ url_for('blog.tag', tag_name=tag) }}">#{{ tag }}</a> {% endfor %}</p>
+                            <p>{% for tag in post.tags %} <a href="{{ url_for('blog.tag', tag_name=tag) }}"><button class="btn-secondary"> #{{ tag }}</button></a> {% endfor %}</p>
                         {% endif %}
                         </div>
                         <div class="card-footer text-center p-0">
