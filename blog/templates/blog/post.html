@@ -67,10 +67,12 @@
                     {% if g.user in post.dislike %}
                         <span id="dislike"><i class="fa fa-thumbs-down m-1" aria-hidden="true"
                                               style="font-size: 2rem;color: #007bff"
-                                              status="on"></i><span id="dislike_num"> {{ post.dislike|count }} </span></span>
+                                              status="on"></i><span
+                                id="dislike_num"> {{ post.dislike|count }} </span></span>
                     {% else %}
                         <span id="dislike"><i class="fa fa-thumbs-down m-1" aria-hidden="true"
-                                              style="font-size: 2rem" status="off"></i><span id="dislike_num"> {{ post.dislike|count }}</span></span>
+                                              style="font-size: 2rem" status="off"></i><span
+                                id="dislike_num"> {{ post.dislike|count }}</span></span>
                     {% endif %}
                     {% if g.user in post.likes %}
                         <span id="likes"><i class="fa fa-thumbs-up m-1" aria-hidden="true"
@@ -78,7 +80,8 @@
                                             status="on"></i><span id="like_num">{{ post.likes|count }}</span></span>
                     {% else %}
                         <span id="likes"><i class="fa fa-thumbs-up m-1" aria-hidden="true"
-                                            style="font-size: 2rem" status="off"></i><span id="like_num">{{ post.likes|count }}</span></span>
+                                            style="font-size: 2rem" status="off"></i><span
+                                id="like_num">{{ post.likes|count }}</span></span>
                     {% endif %}
                 </div>
 
@@ -111,12 +114,9 @@
                                 ></th>
                                 <th>{{ comment.user.first_name }}</th>
                                 <th class="text-left">۵ دقیقه پیش</th>
-
                             </tr>
-
                             <tr>
                                 <td colspan="2">
-
                                     <div class="card border-0">
                                         <div class="card-header">
                                             <h5 class="mb-0">
@@ -124,15 +124,14 @@
                                                 {{ comment.text }}
 
                                             </h5>
+                                        <br>
+                                            {% if comment.tags %}
+                                                <p>{% for tag in comment.tags %} <a href="{{ url_for('blog.tag', tag_name=tag) }}"><button class="btn-secondary"> #{{ tag }}</button></a> {% endfor %}</p>
+                                            {% endif %}
                                         </div>
-
                                     </div>
-
-
                                 </td>
                             </tr>
-
-
                         </table>
                     {% endfor %}
 
@@ -181,22 +180,51 @@
             } else {
 
 
-
                 $.post("http://127.0.0.1:5000{{ url_for('blog.add_dislike') }}", {
-                        post_id: '{{ post.id }}'
-                    }, function (data) {
-                        $("#dislike i").attr('status', 'on')
-                        $("#dislike i").css('color', '#007bff')
-                        $("#dislike_num").text(Number($("#dislike_num").text()) + 1)
-                        if ($("#likes i").attr('status') == 'on') {
-                            $("#likes i").attr('status', 'off')
-                            $("#likes i").css('color', 'black')
-                            $("#like_num").text(Number($("#like_num").text()) - 1)
-                        }
-                    })
+                    post_id: '{{ post.id }}'
+                }, function (data) {
+                    $("#dislike i").attr('status', 'on')
+                    $("#dislike i").css('color', '#007bff')
+                    $("#dislike_num").text(Number($("#dislike_num").text()) + 1)
+                    if ($("#likes i").attr('status') == 'on') {
+                        $("#likes i").attr('status', 'off')
+                        $("#likes i").css('color', 'black')
+                        $("#like_num").text(Number($("#like_num").text()) - 1)
+                    }
+                })
             }
         })
 
+        function check_hashtags() {
+            let myRe = /#+[a-zA-Z0-9(_)^#]{1,}/igdm
+            let faRe = /#+[\u0622\u0627\u0628\u067E\u062A-\u062C\u0686\u062D-\u0632\u0698\u0633-\u063A\u0641\u0642\u06A9\u06AF\u0644-\u0648\u06CC]+$/igdm
+            let txt = $('#comment').val()
+            let hashtag;
+            let tags = Array();
+            while ((hashtag = faRe.exec(txt)) !== null) {
+                console.log(hashtag)
+                tags.push(hashtag[0].slice(1))
+            }
+            while ((hashtag = myRe.exec(txt)) !== null) {
+                console.log(hashtag)
+                tags.push(hashtag[0].slice(1))
+                {# TODO : make blue links with hashtags instantly #}
+                {#$.ajax({#}
+                {#    url: `http://127.0.0.1:5000{{ url_for('blog.check_tag') }}`,#}
+                {#    type: 'GET',#}
+                {#    data: {'tag': hashtag[0].slice(1)},#}
+                {#    contentType: false,#}
+                {#    processData: false,#}
+                {#success: function (response) {#}
+                {#    if (response !== 0) {#}
+                {#        console.log(response)#}
+                {#    }#}
+                {# } #}
+                {# }) #}
+            }
+            console.log(tags)
+            return tags
+        }
 
         $("#submut_comment").click(function () {
 
@@ -204,10 +232,18 @@
                 $("#comment").addClass('is-invalid')
                 $("#comment_info").addClass('d-block')
             } else {
-                $.post("http://127.0.0.1:5000{{ url_for('blog.add_comment') }}", {
-                        comment: $("#comment").val(),
-                        post_id: '{{ post.id }}'
-                    }, function (data) {
+                let data = {
+                    comment: $("#comment").val(),
+                    post_id: '{{ post.id }}',
+                    tags: check_hashtags()
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:5000{{ url_for('blog.add_comment') }}",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(data),
+                    success: function (data, status) {
+                        if (status !== 0) {
                         let new_comment = `<table class="table  mr-4 table-borderless">
                             <tr>
                                 <th rowspan="3" class="text-center m-0 p-0" style="width: 5%"><img
@@ -228,6 +264,10 @@
                                                 ${$("#comment").val()}
 
                                             </h5>
+                                            <br>
+                                            {% if comment.tags %}
+                                                <p>{% for tag in comment.tags %} <a href="{{ url_for('blog.tag', tag_name=tag) }}"><button class="btn-secondary"> #{{ tag }}</button></a> {% endfor %}</p>
+                                            {% endif %}
                                         </div>
 
                                     </div>
@@ -238,9 +278,50 @@
 
 
                         </table>`
-                        $("#comment_container").prepend(new_comment)
+                        $("#comment_container").prepend(new_comment)}
+                        else {alert("something went wrong")}
                     }
-                )
+                });
+                {# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ REPLACED CODE $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ #}
+                {#$.post("http://127.0.0.1:5000{{ url_for('blog.add_comment') }}", {#}
+                {#        comment: $("#comment").val(),#}
+                {#        post_id: '{{ post.id }}',#}
+                {#        tags: check_hashtags()#}
+                {#    }, function (data) {#}
+                {#        let new_comment = `<table class="table  mr-4 table-borderless">#}
+                {#            <tr>#}
+                {#                <th rowspan="3" class="text-center m-0 p-0" style="width: 5%"><img#}
+                {#                        class=" rounded-circle w-100 m-0"#}
+                {#                        src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}"#}
+                {#                ></th>#}
+                {#                <th>{{ g.user.first_name }}</th>#}
+                {#                <th class="text-left">۵ دقیقه پیش</th>#}
+                {#            </tr>#}
+                {##}
+                {#                            <tr>#}
+                {#                                <td colspan="2">#}
+                {##}
+                {#                                    <div class="card border-0">#}
+                {#                                        <div class="card-header">#}
+                {#                                            <h5 class="mb-0">#}
+                {##}
+                {#                                                ${$("#comment").val()}#}
+                {##}
+                {#                                            </h5>#}
+                {#                                        </div>#}
+                {##}
+                {#                                    </div>#}
+                {##}
+                {##}
+                {#                                </td>#}
+                {#                            </tr>#}
+                {##}
+                {##}
+                {#                        </table>`#}
+                {#                        $("#comment_container").prepend(new_comment)#}
+                {#                    }#}
+                {#                )#}
+                {# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ #}
             }
         })
         $("#comment").click(function () {

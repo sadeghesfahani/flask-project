@@ -357,19 +357,22 @@ def show_post(seo):
     return render_template("blog/post.html", post=post, count=all_posts_count)
 
 
-@bp.route("/post/comment/add/ajax",methods=("GET", "POST"))
+@bp.route("/post/comment/add/ajax", methods=["GET", "POST"])
 def add_comment():
-    comment = request.form['comment']
+    decoded_data = request.json
+    current_app.logger.debug(decoded_data)
+    comment = decoded_data['comment']
     comment_user = g.user
-    post = request.form['post_id']
+    post = decoded_data['post_id']
     new_comment = Comment()
     new_comment.user = comment_user
     new_comment.text = comment
+    new_comment.tags = [tag_name for tag_name in decoded_data['tags']]
     post = Post.objects(id=post).get()
     post.comment.append(new_comment)
     post.save()
-    print(comment,post,comment_user.username)
     return "done"
+
 
 @bp.route("/profile/")
 @login_required
@@ -424,7 +427,6 @@ def edit_profile():
             return render_template("user_doshboard.html")
     else:
         return render_template("user_doshboard.html")
-
 
 
 @bp.route("/post/like/add/ajax", methods=("GET", "POST"))
