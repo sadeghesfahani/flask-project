@@ -17,6 +17,7 @@ from blog.auth import login_required
 from blog.db import Category, User, Post, Comment
 import json
 from datetime import datetime
+from mongoengine.queryset.visitor import Q
 
 bp = Blueprint("blog", __name__)
 UPLOADS_PATH = 'static/media'
@@ -43,6 +44,25 @@ def base_load(view):
 #     user = User.objects(id=ObjectId(user_id)).get()
 #     return user
 
+# ############# NOT USED ################
+# tag finder api
+# @bp.route("/check_tag")
+# def check_tag():
+#     tag_name = request.args.get('tag')
+#     current_app.logger.debug(request.args)
+#     tags = Post.objects(tags=tag_name)
+#     if tags:
+#         return {'tags': tags}
+#         return "tags existed"
+    # return {'new_tag': tag_name}
+# ######################################
+
+@bp.route("/tag/<tag_name>")
+def tag(tag_name):
+
+    return render_template('blog/category.html', posts=Post.objects(tags=tag_name), tag=tag_name)
+
+
 @bp.route("/category/<cat>")
 @base_load
 def category(cat):
@@ -51,7 +71,7 @@ def category(cat):
     except mongoengine.DoesNotExist:
         abort(404, "This  does not exist")
     return render_template('blog/category.html', posts=Post.objects(category=my_cat), cat=my_cat)
-category
+
 
 @bp.route("/")
 @base_load
@@ -254,7 +274,7 @@ def create_post_ajax():
     :return: true if successfull, false if it failed
     """
     decoded_data = request.json
-    print(decoded_data)
+    current_app.logger.debug(decoded_data)
     if 'post_id' in decoded_data:
         print("im here")
         post = Post.objects(id=ObjectId(decoded_data['post_id'])).get()
@@ -266,6 +286,7 @@ def create_post_ajax():
         post.index = decoded_data['index']
         post.seo = decoded_data['seo']
         post.draft = False
+        post.tags = [tag_name for tag_name in decoded_data['tags']]
         post.save()
         return str(post.id)
     else:
@@ -280,6 +301,7 @@ def create_post_ajax():
         new_post.index = decoded_data['index']
         new_post.seo = decoded_data['seo']
         new_post.views = 0
+        new_post.tags = [tag_name for tag_name in decoded_data['tags']]
         new_post.save()
         return str(new_post.id)
 
@@ -453,10 +475,10 @@ def search():
             index_posts[category.title] = list()
             if 'child' in category:
                 all_posts = Post.objects()
-                posts_that_search_word_in_body = [post for post in all_posts if post.body != None and search_word in post.body and post != [] and post.published and post.index]
-                posts_that_search_word_in_title = [post for post in all_posts if post.body != None and search_word in post.title and post != [] and post.published and post.index]
-                posts_that_search_word_in_author = [post for post in all_posts if post.body != None and search_word in post.user.first_name and post != [] and post.published and post.index]
-                posts = posts_that_search_word_in_body + posts_that_search_word_in_title + posts_that_search_word_in_author
+                posts = Post.objects((Q(body__icontains=search_word) | Q(tags=search_word) | Q(title=search_word)))
+                posts = [post for post in posts if post != [] and post.published and post.index]
+                posts_that_search_word_in_author = [post for post in all_posts if post not in posts and post.body != None and search_word in post.user.first_name and post != [] and post.published and post.index]
+                posts = posts + posts_that_search_word_in_author
                 if posts:
                     [index_posts[category.title].append(post) for post in posts]
                 for children in category['child']:
@@ -464,10 +486,10 @@ def search():
                         [index_posts[category.title].append(post) for post in posts]
             else:
                 all_posts = Post.objects()
-                posts_that_search_word_in_body = [post for post in all_posts if post.body != None and search_word in post.body and post != [] and post.published and post.index]
-                posts_that_search_word_in_title = [post for post in all_posts if post.body != None and search_word in post.title and post != [] and post.published and post.index]
-                posts_that_search_word_in_author = [post for post in all_posts if post.body != None and search_word in post.user.first_name and post != [] and post.published and post.index]
-                posts = posts_that_search_word_in_body + posts_that_search_word_in_title + posts_that_search_word_in_author
+                posts = Post.objects((Q(body__icontains=search_word) | Q(tags=search_word) | Q(title=search_word)))
+                posts = [post for post in posts if post != [] and post.published and post.index]
+                posts_that_search_word_in_author = [post for post in all_posts if post not in posts and post.body != None and search_word in post.user.first_name and post != [] and post.published and post.index]
+                posts = posts + posts_that_search_word_in_author
                 if posts:
                     [index_posts[category.title].append(post) for post in posts]
 
@@ -477,33 +499,3 @@ def search():
         return render_template("blog/index.html", posts=posts)
 
 
-
-
-#
-# @bp.route("/search/tag/<tagname>")
-# def search_by_tag(tagname):
-#     """ When you click a tag name in a post, this function find all posts that have that tag name """
-#
-#     index_posts = dict()
-#     for category in Category.objects(parent=None):
-#         index_posts[category.title] = list()
-#         if 'child' in category:
-#             posts = Post.objects.filter(tags=tagname)
-#             posts = [x for x in posts if x != [] and x.published and x.index]
-#             if posts:
-#                 [index_posts[category.title].append(post) for post in posts]
-#             for children in category['child']:
-#                 posts = Post.objects.filter(tags=tagname)
-#                 posts = [x for x in posts if x != [] and x.published and x.index]
-#                 if posts:
-#                     [index_posts[category.title].append(post) for post in posts]
-#         else:
-#             posts = Post.objects.filter(tags=tagname)
-#             posts = [x for x in posts if x != [] and x.published and x.index]
-#             if posts:
-#                 [index_posts[category.title].append(post) for post in posts]
-#
-#     posts = {
-#         'index': index_posts
-#     }
-#     return render_template("blog/index.html", posts=posts)
