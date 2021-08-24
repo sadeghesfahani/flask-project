@@ -399,6 +399,7 @@ def edit_profile():
             if email not in [None, ""]:
                 user.email = email
                 user.save()
+        # elif request.form['info'] == 'delete':
 
             return render_template("user_doshboard.html")
     else:
@@ -440,3 +441,30 @@ def add_dislike():
 
     post.save()
     return "done"
+
+
+
+@bp.route("/post/delete/post/ajax", methods=("GET", "POST"))
+def delete():
+    if request.method == 'POST':
+        post_id = request.form['post_id']
+        try:
+            post = Post.objects(id=ObjectId(post_id)).get()
+            post.title.remove()
+            post.body.remove()
+            post.user.remove()
+            post.category.remove()
+            post.main_image.remove()
+            post.images.remove()
+            post.likes.remove()
+            post.dislike.remove()
+            post.time.remove()
+            post.comment.remove()
+            post.draft.remove()
+            post.published.remove()
+            post.index.remove()
+            post.slider.remove()
+            post.seo.remove()
+            post.save()
+        except mongoengine.DoesNotExist:
+            print('failed')
