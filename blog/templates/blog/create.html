@@ -285,7 +285,7 @@
 
         function check_hashtags() {
             let myRe = /#+[a-zA-Z0-9(_)^#]{1,}/igdm
-            let faRe = /#+[\u0622\u0627\u0628\u067E\u062A-\u062C\u0686\u062D-\u0632\u0698\u0633-\u063A\u0641\u0642\u06A9\u06AF\u0644-\u0648\u06CC]{1,}$/igdm
+            let faRe = /#[\u0622\u0627\u0628\u067E\u062A-\u062C\u0686\u062D-\u0632\u0698\u0633-\u063A\u0641\u0642\u06A9\u06AF\u0644-\u0648\u06CC_\u06F0-\u06F9\u202C\u064B\u064C\u064E-\u0652^#]{1,}/igdm
             let txt = $('#textarea').val()
             let hashtag;
             let tags = Array();

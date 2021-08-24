@@ -90,6 +90,10 @@
             <div class="card-body">
                 <h5>{{ post.title }}</h5>
                 <div id="body"></div>
+                <br>
+                {% if post.tags %}
+                    <p>{% for tag in post.tags %} <a href="{{ url_for('blog.tag', tag_name=tag) }}"><button class="btn-secondary"> #{{ tag }}</button></a> {% endfor %}</p>
+                {% endif %}
             </div>
 
             <div class="card-footer">
@@ -125,6 +129,7 @@
 
                                             </h5>
                                         <br>
+
                                             {% if comment.tags %}
                                                 <p>{% for tag in comment.tags %} <a href="{{ url_for('blog.tag', tag_name=tag) }}"><button class="btn-secondary"> #{{ tag }}</button></a> {% endfor %}</p>
                                             {% endif %}
@@ -197,7 +202,7 @@
 
         function check_hashtags() {
             let myRe = /#+[a-zA-Z0-9(_)^#]{1,}/igdm
-            let faRe = /#+[\u0622\u0627\u0628\u067E\u062A-\u062C\u0686\u062D-\u0632\u0698\u0633-\u063A\u0641\u0642\u06A9\u06AF\u0644-\u0648\u06CC]+$/igdm
+            let faRe = /#[\u0622\u0627\u0628\u067E\u062A-\u062C\u0686\u062D-\u0632\u0698\u0633-\u063A\u0641\u0642\u06A9\u06AF\u0644-\u0648\u06CC_\u06F0-\u06F9\u202C\u064B\u064C\u064E-\u0652^#]{1,}/igdm
             let txt = $('#comment').val()
             let hashtag;
             let tags = Array();
@@ -242,45 +247,7 @@
                     url: "http://127.0.0.1:5000{{ url_for('blog.add_comment') }}",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(data),
-                    success: function (data, status) {
-                        if (status !== 0) {
-                        let new_comment = `<table class="table  mr-4 table-borderless">
-                            <tr>
-                                <th rowspan="3" class="text-center m-0 p-0" style="width: 5%"><img
-                                        class=" rounded-circle w-100 m-0"
-                                        src="{{ url_for('static',filename='media/user/photo5773978910202115554.jpg') }}"
-                                ></th>
-                                <th>{{ g.user.first_name }}</th>
-                                <th class="text-left">۵ دقیقه پیش</th>
-                            </tr>
-
-                            <tr>
-                                <td colspan="2">
-
-                                    <div class="card border-0">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">
-
-                                                ${$("#comment").val()}
-
-                                            </h5>
-                                            <br>
-                                            {% if comment.tags %}
-                                                <p>{% for tag in comment.tags %} <a href="{{ url_for('blog.tag', tag_name=tag) }}"><button class="btn-secondary"> #{{ tag }}</button></a> {% endfor %}</p>
-                                            {% endif %}
-                                        </div>
-
-                                    </div>
-
-
-                                </td>
-                            </tr>
-
-
-                        </table>`
-                        $("#comment_container").prepend(new_comment)}
-                        else {alert("something went wrong")}
-                    }
+                    success: function(){location.reload()}
                 });
                 {# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ REPLACED CODE $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ #}
                 {#$.post("http://127.0.0.1:5000{{ url_for('blog.add_comment') }}", {#}
