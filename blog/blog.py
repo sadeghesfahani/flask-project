@@ -444,8 +444,8 @@ def add_dislike():
 
 
 
-@bp.route("/post/delete/post/ajax", methods=("GET", "POST"))
-def postdelete():
+@bp.route("/post/delete/", methods=("GET", "POST"))
+def post_delete():
     if request.method == 'POST':
         post_id = request.form['post_id']
         try:
@@ -480,5 +480,6 @@ def postdelete():
             post.save()
             post.seo.remove()
             post.save()
+            return render_template("user_doshboard.html")
         except mongoengine.DoesNotExist:
             print('failed')
