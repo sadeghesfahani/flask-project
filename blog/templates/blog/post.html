@@ -247,7 +247,13 @@
                     url: "http://127.0.0.1:5000{{ url_for('blog.add_comment') }}",
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify(data),
-                    success: function(){location.reload()}
+                    success: function(){
+                        {# TODO : clear textarea after submiting comment, Don't know why none of these doesn't work #}
+                        {#$('#comment').html("");#}
+                        {#$('#comment').val("");#}
+                        {#$('#comment').empty("");#}
+                        {#$('#comment').text(""); #}
+                        location.reload()}
                 });
                 {# $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ REPLACED CODE $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ #}
                 {#$.post("http://127.0.0.1:5000{{ url_for('blog.add_comment') }}", {#}
