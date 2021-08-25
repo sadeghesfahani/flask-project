@@ -185,7 +185,8 @@
                             <div class="card-body">
                                 <form>
                                     <div class="form-group">
-                                        <textarea style="resize: none;" class="form-control" rows="20"
+                                        <textarea style="resize: none;"
+                                                  class="form-control" rows="20"
                                                   id="textarea"></textarea>
                                     </div>
                                 </form>
@@ -279,10 +280,40 @@
 
 
 
-
-
-
     <script>
+        {#document.getElementById("textarea").contentEditable='true';#}
+
+        function check_hashtags() {
+            let myRe = /#+[a-zA-Z0-9(_)^#]{1,}/igdm
+            let faRe = /#[\u0622\u0627\u0628\u067E\u062A-\u062C\u0686\u062D-\u0632\u0698\u0633-\u063A\u0641\u0642\u06A9\u06AF\u0644-\u0648\u06CC_\u06F0-\u06F9\u202C\u064B\u064C\u064E-\u0652^#]{1,}/igdm
+            let txt = $('#textarea').val()
+            let hashtag;
+            let tags = Array();
+            while((hashtag = faRe.exec(txt)) !== null){
+                console.log(hashtag)
+                tags.push(hashtag[0].slice(1))
+            }
+            while ((hashtag = myRe.exec(txt)) !== null) {
+                console.log(hashtag)
+                tags.push(hashtag[0].slice(1))
+                {# TODO : make blue links with hashtags instantly #}
+                {#$.ajax({#}
+                {#    url: `http://127.0.0.1:5000{{ url_for('blog.check_tag') }}`,#}
+                {#    type: 'GET',#}
+                {#    data: {'tag': hashtag[0].slice(1)},#}
+                {#    contentType: false,#}
+                {#    processData: false,#}
+                {#success: function (response) {#}
+                {#    if (response !== 0) {#}
+                {#        console.log(response)#}
+                {#    }#}
+                {# } #}
+                {# }) #}
+            }
+            console.log(tags)
+            return tags
+        }
+
         window.images = []
 
         function set_link() {
@@ -728,6 +759,7 @@
                     post_id: window.post_id,
                     index: window.index_status,
                     seo: seo,
+                    tags: check_hashtags(),
 
                 }
                 alert("im here just befor ajax")
