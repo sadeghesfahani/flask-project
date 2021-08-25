@@ -56,7 +56,6 @@
     <div class="content">
         <div class="main-content">
         {% if user_posts %}
-
             {% for post in user_posts %}
             <div class="post">
                 <img src="../{{ post.main_image }}" class="post-image">
@@ -72,7 +71,8 @@
                     </div>
                     <a href="{{ url_for('blog.show_post',seo=post.seo) }}" class="btn more-btn">بیشتر</a>
                     <a href="{{ url_for('blog.edit_post',seo=post.seo) }}" class="btn edit-btn">ویرایش</a>
-                    <a href="#" class="btn btn-danger">حذف</a>
+                    <a href="{{ url_for('blog.post_delete') }}" class="btn btn-danger">حذف</a>
+                    <input type="text" value="{{ post.id }}" class="d-none" name="post_id">
                 </div>
             </div>
             {% endfor %}

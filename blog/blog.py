@@ -92,7 +92,7 @@ def index():
     return render_template("blog/index.html", posts=posts)
 
 
-@bp.route("/create")
+@bp.route("/create/")
 @login_required
 @base_load
 def create_post():
@@ -444,42 +444,27 @@ def add_dislike():
 
 
 
-@bp.route("/post/delete/", methods=("GET", "POST"))
+@bp.route("/post/delete/")
 def post_delete():
-    if request.method == 'POST':
-        post_id = request.form['post_id']
-        try:
-            post = Post.objects(id=ObjectId(post_id)).get()
-            post.title.remove()
-            post.save()
-            post.body.remove()
-            post.save()
-            post.user.remove()
-            post.save()
-            post.category.remove()
-            post.save()
-            post.main_image.remove()
-            post.save()
-            post.images.remove()
-            post.save()
-            post.likes.remove()
-            post.save()
-            post.dislike.remove()
-            post.save()
-            post.time.remove()
-            post.save()
-            post.comment.remove()
-            post.save()
-            post.draft.remove()
-            post.save()
-            post.published.remove()
-            post.save()
-            post.index.remove()
-            post.save()
-            post.slider.remove()
-            post.save()
-            post.seo.remove()
-            post.save()
-            return render_template("user_doshboard.html")
-        except mongoengine.DoesNotExist:
-            print('failed')
+    post_id = request.form['post_id']
+    try:
+        post = Post.objects(id=ObjectId(post_id)).get()
+        post.title.remove()
+        post.body.remove()
+        post.user.remove()
+        post.category.remove()
+        post.main_image.remove()
+        post.images.remove()
+        post.likes.remove()
+        post.dislike.remove()
+        post.time.remove()
+        post.comment.remove()
+        post.draft.remove()
+        post.published.remove()
+        post.index.remove()
+        post.slider.remove()
+        post.seo.remove()
+        post.save()
+        return render_template("user_doshboard.html")
+    except mongoengine.DoesNotExist:
+        print('failed')
