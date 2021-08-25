@@ -1,6 +1,8 @@
 import ast
 import functools
 import os
+from pprint import pprint
+
 import mongoengine
 from bson import ObjectId
 from flask import Blueprint, session, app, current_app
@@ -15,6 +17,7 @@ from jinja2 import environment, pass_eval_context
 from werkzeug.utils import secure_filename
 from blog.auth import login_required
 from blog.db import Category, User, Post, Comment
+from mongoengine.queryset.visitor import Q
 import json
 from datetime import datetime
 
@@ -58,8 +61,18 @@ def base_load(view):
 
 @bp.route("/tag/<tag_name>")
 def tag(tag_name):
+    posts = Post.objects(tags=tag_name)
 
-    return render_template('blog/category.html', posts=Post.objects(tags=tag_name), tag=tag_name)
+    # TODO: querying for comments with that tag
+    # ###### DOES NO WORK LIKE THIS ##########
+    # for post in Post.objects:
+    #     for comment in post.comment:
+    #         current_app.logger.debug(comment)
+    #         if tag_name in comment.tags:
+    #             posts.append(comment)
+    # ##########################################
+
+    return render_template('blog/category.html', posts=posts, tag=tag_name)
 
 
 @bp.route("/category/<cat>")
