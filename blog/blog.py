@@ -92,7 +92,7 @@ def index():
     return render_template("blog/index.html", posts=posts)
 
 
-@bp.route("/create")
+@bp.route("/create/")
 @login_required
 @base_load
 def create_post():
@@ -387,10 +387,10 @@ def edit_profile():
             password = request.form['password']
             email = request.form['email']
             user = User.objects(username=g.user.username).get()
-            if first_name not in [None, "", " "] or first_name.isnumeric() == False:
+            if first_name not in [None, "", " "] and first_name.isnumeric() == False:
                 user.first_name = first_name
                 user.save()
-            if last_name not in [None, "", " "] or first_name.isnumeric() == False:
+            if last_name not in [None, "", " "] and first_name.isnumeric() == False:
                 user.last_name = last_name
                 user.save()
             if password not in [None, ""]:
@@ -440,3 +440,31 @@ def add_dislike():
 
     post.save()
     return "done"
+
+@bp.route("/post-delete/", methods=("GET", "POST"))
+def post_delete():
+    if request.method == 'POST':
+        try:
+            post_id = request.form['post_id']
+            print(post_id)
+            post = Post.objects(id=ObjectId(post_id)).get()
+            post.delete()
+            # post.title.remove()
+            # post.body.remove()
+            # post.user.remove()
+            # post.category.remove()
+            # post.main_image.remove()
+            # post.images.remove()
+            # post.likes.remove()
+            # post.dislike.remove()
+            # post.time.remove()
+            # post.comment.remove()
+            # post.draft.remove()
+            # post.published.remove()
+            # post.index.remove()
+            # post.slider.remove()
+            # post.seo.remove()
+            # post.save()
+            return render_template("user_doshboard.html")
+        except mongoengine.DoesNotExist:
+            print('failed')
