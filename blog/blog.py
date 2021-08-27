@@ -503,4 +503,39 @@ def post_delete():
             # post.save()
             return render_template("user_doshboard.html")
         except mongoengine.DoesNotExist:
-            print('failed')
+            abort(404, "Post Doesn't exist")
+
+
+@bp.route("/search", methods=("GET", "POST"))
+def search():
+    index_posts = dict()
+
+    if request.method == "POST":
+        search_word = request.form["search-box"]
+
+        for category in Category.objects(parent=None):
+            index_posts[category.title] = list()
+            if 'child' in category:
+                all_posts = Post.objects()
+                posts = Post.objects((Q(body__icontains=search_word) | Q(tags=search_word) | Q(title=search_word)))
+                posts = [post for post in posts if post != [] and post.published and post.index]
+                posts_that_search_word_in_author = [post for post in all_posts if post not in posts and post.body != None and search_word in post.user.first_name and post != [] and post.published and post.index]
+                posts = posts + posts_that_search_word_in_author
+                if posts:
+                    [index_posts[category.title].append(post) for post in posts]
+                for children in category['child']:
+                    if posts:
+                        [index_posts[category.title].append(post) for post in posts]
+            else:
+                all_posts = Post.objects()
+                posts = Post.objects((Q(body__icontains=search_word) | Q(tags=search_word) | Q(title=search_word)))
+                posts = [post for post in posts if post != [] and post.published and post.index]
+                posts_that_search_word_in_author = [post for post in all_posts if post not in posts and post.body != None and search_word in post.user.first_name and post != [] and post.published and post.index]
+                posts = posts + posts_that_search_word_in_author
+                if posts:
+                    [index_posts[category.title].append(post) for post in posts]
+
+        posts = {
+            'index': index_posts
+        }
+        return render_template("blog/index.html", posts=posts)
