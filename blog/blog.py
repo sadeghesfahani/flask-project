@@ -1,6 +1,8 @@
 import ast
 import functools
 import os
+from pprint import pprint
+
 import mongoengine
 from bson import ObjectId
 from flask import Blueprint, session, app, current_app
@@ -15,9 +17,9 @@ from jinja2 import environment, pass_eval_context
 from werkzeug.utils import secure_filename
 from blog.auth import login_required
 from blog.db import Category, User, Post, Comment
+from mongoengine.queryset.visitor import Q
 import json
 from datetime import datetime
-from mongoengine.queryset.visitor import Q
 
 bp = Blueprint("blog", __name__)
 UPLOADS_PATH = 'static/media'
@@ -59,8 +61,18 @@ def base_load(view):
 
 @bp.route("/tag/<tag_name>")
 def tag(tag_name):
+    posts = Post.objects(tags=tag_name)
 
-    return render_template('blog/category.html', posts=Post.objects(tags=tag_name), tag=tag_name)
+    # TODO: querying for comments with that tag
+    # ###### DOES NO WORK LIKE THIS ##########
+    # for post in Post.objects:
+    #     for comment in post.comment:
+    #         current_app.logger.debug(comment)
+    #         if tag_name in comment.tags:
+    #             posts.append(comment)
+    # ##########################################
+
+    return render_template('blog/category.html', posts=posts, tag=tag_name)
 
 
 @bp.route("/category/<cat>")
@@ -112,7 +124,7 @@ def index():
     return render_template("blog/index.html", posts=posts)
 
 
-@bp.route("/create")
+@bp.route("/create/")
 @login_required
 @base_load
 def create_post():
@@ -358,19 +370,22 @@ def show_post(seo):
     return render_template("blog/post.html", post=post, count=all_posts_count)
 
 
-@bp.route("/post/comment/add/ajax",methods=("GET", "POST"))
+@bp.route("/post/comment/add/ajax", methods=["GET", "POST"])
 def add_comment():
-    comment = request.form['comment']
+    decoded_data = request.json
+    current_app.logger.debug(decoded_data)
+    comment = decoded_data['comment']
     comment_user = g.user
-    post = request.form['post_id']
+    post = decoded_data['post_id']
     new_comment = Comment()
     new_comment.user = comment_user
     new_comment.text = comment
+    new_comment.tags = [tag_name for tag_name in decoded_data['tags']]
     post = Post.objects(id=post).get()
     post.comment.append(new_comment)
     post.save()
-    print(comment,post,comment_user.username)
     return "done"
+
 
 @bp.route("/profile/")
 @login_required
@@ -409,10 +424,10 @@ def edit_profile():
             password = request.form['password']
             email = request.form['email']
             user = User.objects(username=g.user.username).get()
-            if first_name not in [None, "", " "] or first_name.isnumeric() == False:
+            if first_name not in [None, "", " "] and first_name.isnumeric() == False:
                 user.first_name = first_name
                 user.save()
-            if last_name not in [None, "", " "] or first_name.isnumeric() == False:
+            if last_name not in [None, "", " "] and first_name.isnumeric() == False:
                 user.last_name = last_name
                 user.save()
             if password not in [None, ""]:
@@ -425,7 +440,6 @@ def edit_profile():
             return render_template("user_doshboard.html")
     else:
         return render_template("user_doshboard.html")
-
 
 
 @bp.route("/post/like/add/ajax", methods=("GET", "POST"))
@@ -463,6 +477,33 @@ def add_dislike():
     post.save()
     return "done"
 
+@bp.route("/post-delete/", methods=("GET", "POST"))
+def post_delete():
+    if request.method == 'POST':
+        try:
+            post_id = request.form['post_id']
+            print(post_id)
+            post = Post.objects(id=ObjectId(post_id)).get()
+            post.delete()
+            # post.title.remove()
+            # post.body.remove()
+            # post.user.remove()
+            # post.category.remove()
+            # post.main_image.remove()
+            # post.images.remove()
+            # post.likes.remove()
+            # post.dislike.remove()
+            # post.time.remove()
+            # post.comment.remove()
+            # post.draft.remove()
+            # post.published.remove()
+            # post.index.remove()
+            # post.slider.remove()
+            # post.seo.remove()
+            # post.save()
+            return render_template("user_doshboard.html")
+        except mongoengine.DoesNotExist:
+            print('failed')
 
 @bp.route("/search", methods=("GET", "POST"))
 def search():
