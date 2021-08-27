@@ -50,7 +50,10 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = User.objects(id=ObjectId(user_id)).get()
+        try:
+            g.user = User.objects(id=ObjectId(user_id)).get()
+        except mongoengine.DoesNotExist:
+            g.user = None
 
 
 @base_load
@@ -61,7 +64,10 @@ def register():
             new_user = create_user(request.form["username"], request.form["password"], request.form["first_name"],
                                    request.form["last_name"], request.form["email"], request.form["address"],
                                    request.form["instagram"], request.form["telegram"])
-            os.mkdir(os.path.join(os.getcwd(), 'blog', 'static', 'users', request.form["username"]), mode=0o777)
+            try:
+                os.mkdir(os.path.join(os.getcwd(), 'blog', 'static', 'users', request.form["username"]), mode=0o777)
+            except FileExistsError:
+                pass
             if new_user:
                 session['user_id'] = str(new_user.id)
             return redirect(url_for('index'))
